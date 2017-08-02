@@ -32,8 +32,6 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
 
     var options = ${options};
 
-    // When animations are supported by the viewer, the value 'false'
-    // will be replaced with an option set in Python by the user
     var animate = false; // options.animate;
 
     var b = ${bounds}; // bounds

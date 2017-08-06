@@ -2,7 +2,7 @@
 
 Interactive mathematics in the browser
 
-This library and [math.js](https://github.com/paulmasson/math) power the pure JavaScript interactive elements of http://analyticphysics.com.
+This library and [Math](https://github.com/paulmasson/math) power the pure JavaScript interactive elements of http://analyticphysics.com.
 
 ### Usage ###
 

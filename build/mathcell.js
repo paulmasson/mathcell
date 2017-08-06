@@ -105,7 +105,7 @@ function graphic( id, data, config ) {
 
     case 'text':
 
-      return `<div style="white-space: nowrap; overflow-x: auto">${data}</div>`;
+      return `<div style="white-space: nowrap; overflow-x: auto">${JSON.stringify(data)}</div>`;
 
     case 'matrix':
 

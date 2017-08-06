@@ -2,6 +2,8 @@
 
 Interactive mathematics in the browser
 
+This library and [math.js](https://github.com/paulmasson/math) power the pure JavaScript interactive elements of http://analyticphysics.com.
+
 ### Usage ###
 
 Download the complete [library](https://raw.githubusercontent.com/paulmasson/mathcell/master/build/mathcell.js) and include it in the body of a page:

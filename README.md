@@ -10,4 +10,4 @@ Interactive mathematics in the browser
 
 ### Implementation ###
 
-See the <a href="docs/index.html">documentation</a> for details
+See the <a href="https://paulmasson.github.io/mathcell/">documentation</a> for details

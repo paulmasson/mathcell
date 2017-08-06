@@ -1,0 +1,50 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style></style>
+</head>
+
+<body>
+
+<p>MathCell is a simple straightforward way to include interactive mathematics in a web page. First copy this template into the body of the page:</p>
+
+<pre style="margin-left: .5in; background-color: #f9f9f9">
+&lt;div class="mathcell" style="height: 4in">
+&lt;script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: '' } ] );
+
+parent.update = function( id ) {
+
+  var x = +document.getElementById( id + 'x' ).value;
+
+  var data = [];
+
+  var config = { type: '' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+&lt;/script>
+&lt;/div>
+</pre>
+
+<p>Interactive elements are specified in the dictionary inside the <code>MathCell()</code> command. The output elment is specified in the <code>config</code> dictionary inside the <code>update</code> function.</p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+</body>
+</html>

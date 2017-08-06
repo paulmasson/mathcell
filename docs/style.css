@@ -1,0 +1,31 @@
+
+body {
+
+	margin: auto;
+	padding: .5in;
+	max-width: 7in;
+	text-align: justify;
+
+}
+
+h1 {
+
+	font-size: medium;
+	font-weight: bold;
+	color: rgb(0,127,255);
+
+}
+
+a:link, a:visited {
+
+	color: rgb(255,45,85);
+	text-decoration: none;
+	
+}
+
+pre {
+
+	 margin-left: 1in
+
+}
+

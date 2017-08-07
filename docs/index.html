@@ -2,14 +2,80 @@
 <head>
 <title></title>
 <link rel="stylesheet" type="text/css" href="style.css">
-<style></style>
+<style>
+
+	ul { list-style-type: none; padding: 0px; color: rgb(0,127,255);
+             line-height: 2}
+	ul div { display: none; color: black; line-height: normal }
+        .sideGraphic:before { content: "+\a0\a0" }
+        .downGraphic:before { content: "\2212\a0\a0" }
+
+</style>
 </head>
 
 <body>
 
-<p>MathCell is a simple straightforward way to include interactive mathematics in a web page. First copy this template into the body of the page:</p>
+<script>
 
-<pre style="margin-left: .5in; background-color: #f9f9f9">
+function toggle( list ) {
+
+  if ( list.className === 'downGraphic' ) {
+
+    list.className = 'sideGraphic';
+    list.children[0].style.display = 'none';
+
+  } else {
+
+    var d = document.querySelectorAll( '.downGraphic' );
+    for ( var i = 0 ; i < d.length ; i++ ) {
+      d[i].className = 'sideGraphic';
+      d[i].children[0].style.display = 'none';
+    }
+    list.className = 'downGraphic';
+    list.children[0].style.display = 'block';
+
+  }
+
+}
+
+</script>
+
+<p style="text-align: center; line-height: 2"><span style="font-size: 20pt">MathCell</span><br/>
+a simple straightforward way to include interactive mathematics in a web page</p>
+
+<ul>
+
+<li class="sideGraphic" onclick="toggle(this)">Why would I want to use MathCell?
+<div>
+<p>The ubiquity now of web browsers provides an incredible opportunity to move beyond the static world of paper for the presentation of interactive mathematics. The default language of the browser is JavaScript and modern presentations use that language. MathCell provides a quick way to set up interactive elements for input into your code, as well as outputs for visualizing the results of calculations.</p>
+</div>
+</li>
+
+<li class="sideGraphic" onclick="toggle(this)">How do I get MathCell?
+<div>
+
+<p>MathCell is free and open source, and the code is available on <a href="https://github.com/paulmasson/mathcell">GitHub</a>. You can download the complete <a href="https://raw.githubusercontent.com/paulmasson/mathcell/master/build/mathcell.js">library</a> to your web server and include it in the body of a page with a <code>script</code> tag:
+
+<pre>
+&lt;script src="mathcell.js">&lt;/script>
+</pre>
+
+If you do not want to download the file, a free online content delivery network can also be used to access the library:
+
+<pre style="overflow-x: scroll">
+&lt;script src="https://cdn.rawgit.com/paulmasson/mathcell/master/build/mathcell.js">&lt;/script>
+</pre>
+</p>
+
+</div>
+</li>
+
+<li class="sideGraphic" onclick="toggle(this)">How do I start a MathCell?
+<div>
+
+<p>First copy this template into the body of the page:</p>
+
+<pre>
 &lt;div class="mathcell" style="height: 4in">
 &lt;script>
 
@@ -23,6 +89,8 @@ MathCell( id, [ { type: '' } ] );
 parent.update = function( id ) {
 
   var x = +document.getElementById( id + 'x' ).value;
+
+  ( additional JavaScript here )
 
   var data = [];
 
@@ -38,13 +106,46 @@ parent.update( id );
 &lt;/div>
 </pre>
 
-<p>Interactive elements are specified in the dictionary inside the <code>MathCell()</code> command. The output elment is specified in the <code>config</code> dictionary inside the <code>update</code> function.</p>
+<p>The template automatically assigns an <code>id</code> to each cell, which is then available to the interactive input elements that are added to the cell. This relieves the end user of the need to manually track which inputs affect which cells.</p>
+
+<p>Input elements are specified in the dictionary inside the <code>MathCell()</code> command. Code for processing the input is added to the body of the <code>update</code> function. The output element is specified in the <code>config</code> dictionary inside the <code>update</code> function.</p>
+
+</div>
+</li>
+
+<li class="sideGraphic" onclick="toggle(this)">What interactive inputs are available?
+<div>
+
+<p>There are currently three kinds of inputs: <code>slider</code>, <code>buttons</code> and <code>checkbox</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these values.</p>
+
+<p></p>
+
+<p>NOTE: for inputs that are intended to provide numeric values, be sure to include the plus signs appearing here. This unary operator invokes the <code>Number</code> object and ensures that the value will truly be numeric.</p>
+
+</div>
+</li>
+
+<li class="sideGraphic" onclick="toggle(this)">What visualization outputs are available?
+<div>
+
+<p>There are currently four kinds of inputs: <code>svgplot</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these values.</p>
 
 <p></p>
 
 <p></p>
 
-<p></p>
+</div>
+</li>
+
+<li class="sideGraphic" onclick="toggle(this)">What if I want higher-level mathematics as well?
+<div>
+
+<p>A pure 100% JavaScript library of special functions and common mathematical operations has been initiated and is entitled simply <a href="https://github.com/paulmasson/math">Math</a>. It provides higher-level mathematics not available by default in JavaScript.</p>
+
+</div>
+</li>
+
+</ul>
 
 </body>
 </html>

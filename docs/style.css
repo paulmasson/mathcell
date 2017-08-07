@@ -25,7 +25,9 @@ a:link, a:visited {
 
 pre {
 
-	 margin-left: 1in
+	margin-left: .25in;
+	margin-right: .25in;
+	background-color: #f9f9f9;
 
 }
 

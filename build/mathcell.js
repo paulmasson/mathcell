@@ -5,11 +5,11 @@ function MathCell( id, inputArray ) {
   var s = '';
     for ( var i = 0 ; i < inputArray.length ; i++ ) {
       var input = inputArray[i];
-      if ( input.label.length === 1 ) input.label = `<i>${input.label}</i>`;
+      var label = 'label' in input ? input.label : '';
+      if ( label.length === 1 ) label = `<i>${label}</i>`;
         s += `
 <div style="white-space: nowrap">
-<div style="min-width: .5in; display: inline-block">
-  ${input.label} </div>
+<div style="min-width: .5in; display: inline-block">${label}</div>
 <div style="width: 100%; display: inline-block; white-space: nowrap">
   ${interact( id, input )} </div>
 </div>

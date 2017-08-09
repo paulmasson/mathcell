@@ -20,4 +20,4 @@ A free online content delivery network can also be used to access the library:
 
 ### Implementation ###
 
-See the [documentation](https://paulmasson.github.io/mathcell/) for details
+See the [documentation](https://paulmasson.github.io/mathcell/docs/) for details.

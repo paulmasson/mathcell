@@ -1,0 +1,122 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="https://cdn.rawgit.com/paulmasson/mathcell/master/build/mathcell.js"></script>
+<script src="../../build/mathcell.js"></script>
+
+<p>Two sine waves, alone or combined. The frequency of one is controlled by buttons, the other by a slided. The checkbox determines whether the two waves are added together before display.</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'buttons', list: [1,2,3,4,5], name: 'omega1',
+                                    label: '&omega;<sub>1</sub>' },
+                { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega2',
+                                    label: '&omega;<sub>2</sub>' },
+                { type: 'checkbox', name: 'combine',
+                                    label: 'Combine the two plots?' } ] );
+
+parent.update = function( id ) {
+
+  var omega1 = +document.querySelector( 'input[name=' + id + 'omega1]:checked' ).value;
+  var omega2 = +document.getElementById( id + 'omega2' ).value;
+  var combine = document.getElementById( id + 'combine' ).checked;
+
+  function sine1( x ) { return Math.sin( omega1 * x ); }
+
+  function sine2( x ) { return Math.sin( omega2 * x ); }
+
+  var data = [];
+
+  if ( combine === true ) {
+    var plot = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot.push( [ x, sine1(x) + sine2(x) ] ) ); 
+    data.push( plot );
+  } else {
+    var plot1 = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot1.push( [ x, sine1(x) ] ) ); 
+    data.push( plot1 );
+    var plot2 = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot2.push( [ x, sine2(x) ] ) ); 
+    data.push( plot2 );
+  }
+
+  var config = { type: 'svgplot', colors: [ 'rgb(0,127,255)', 'red' ] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre>
+&lt;div class="mathcell" style="height: 4.5in">
+&lt;script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'buttons', list: [1,2,3,4,5], name: 'omega1',
+                                    label: '&omega;<sub>1</sub>' },
+                { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega2',
+                                    label: '&omega;<sub>2</sub>' },
+                { type: 'checkbox', name: 'combine',
+                                    label: 'Combine the two plots?' } ] );
+
+parent.update = function( id ) {
+
+  var omega1 = +document.querySelector( 'input[name=' + id + 'omega1]:checked' ).value;
+  var omega2 = +document.getElementById( id + 'omega2' ).value;
+  var combine = document.getElementById( id + 'combine' ).checked;
+
+  function sine1( x ) { return Math.sin( omega1 * x ); }
+
+  function sine2( x ) { return Math.sin( omega2 * x ); }
+
+  var data = [];
+
+  if ( combine === true ) {
+    var plot = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot.push( [ x, sine1(x) + sine2(x) ] ) ); 
+    data.push( plot );
+  } else {
+    var plot1 = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot1.push( [ x, sine1(x) ] ) ); 
+    data.push( plot1 );
+    var plot2 = [];
+    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot2.push( [ x, sine2(x) ] ) ); 
+    data.push( plot2 );
+  }
+
+  var config = { type: 'svgplot', colors: [ 'rgb(0,127,255)', 'red' ] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+&lt;/script>
+&lt;/div>
+</pre>
+
+</body>
+</html>

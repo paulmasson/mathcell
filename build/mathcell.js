@@ -76,11 +76,11 @@ function interact( id, input ) {
     case 'checkbox':
 
       var name = 'name' in input ? input.name : '';
-      var value = 'default' in input ? input.default : false;
+      var checked = 'default' in input ? input.default : '';
 
       return `
-<input id=${id + name} type=checkbox value=${value}
-       onchange="this.value=this.checked?true:false;${id}.update('${id}')"/>
+<input id=${id + name} type=checkbox ${checked?'checked':''}
+       onchange="${id}.update('${id}')"/>
       `;
 
     default:

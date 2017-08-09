@@ -76,6 +76,7 @@ function interact( id, input ) {
     case 'checkbox':
 
       var name = 'name' in input ? input.name : '';
+      var value = 'default' in input ? input.default : false;
 
       return `
 <input id=${id + name} type=checkbox value=${value}

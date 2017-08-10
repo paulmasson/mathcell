@@ -12,6 +12,4 @@ Download the complete [library](https://raw.githubusercontent.com/paulmasson/mat
 <script src="mathcell.js"></script>
 ```
 
-### Implementation ###
-
-See the [documentation](https://paulmasson.github.io/mathcell/docs/) for details.
+See the [documentation](https://paulmasson.github.io/mathcell/docs/) for details of implementation.

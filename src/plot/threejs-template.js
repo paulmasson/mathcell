@@ -17,8 +17,8 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
 
 <body>
 
-<script src="http://cdn.rawgit.com/mrdoob/three.js/r80/build/three.js"></script>
-<script src="http://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r80/build/three.js"></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 

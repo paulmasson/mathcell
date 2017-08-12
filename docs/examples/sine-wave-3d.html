@@ -26,7 +26,7 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  function z(x,y) { return Math.sin( omega * x * y ) }
+  function z(x,y) { return Math.sin( omega * x * y ); }
 
   var plot = parametric( z, [-1,1,50], [-1,1,50], 'pink', 1 );
 
@@ -61,7 +61,7 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  function z(x,y) { return Math.sin( omega * x * y ) }
+  function z(x,y) { return Math.sin( omega * x * y ); }
 
   var plot = parametric( z, [-1,1,50], [-1,1,50], 'pink', 1 );
 

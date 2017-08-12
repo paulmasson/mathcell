@@ -1,0 +1,83 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A single tangent with frequency controlled by a slider. Minimum and maximum vertical values are set manually to improve the appearance of the plot.</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega',
+                                    label: '&omega;' } ] );
+
+parent.update = function( id ) {
+
+  var omega = +document.getElementById( id + 'omega' ).value;
+
+  var data = [];
+
+  var plot = [];
+  linspace( -Math.PI, Math.PI, 200 ).forEach( x => plot.push( [ x, Math.tan( omega * x ) ] ) ); 
+  data.push( plot );
+
+  var config = { type: 'svgplot', colors: [ 'green' ], yMin: -5, yMax: 5 };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre>
+&lt;div class="mathcell" style="height: 4.5in">
+&lt;script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega',
+                                    label: '&amp;omega;' } ] );
+
+parent.update = function( id ) {
+
+  var omega = +document.getElementById( id + 'omega' ).value;
+
+  var data = [];
+
+  var plot = [];
+  linspace( -Math.PI, Math.PI, 200 ).forEach( x => plot.push( [ x, Math.tan( omega * x ) ] ) ); 
+  data.push( plot );
+
+  var config = { type: 'svgplot', colors: [ 'green' ], yMin: -5, yMax: 5 };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+&lt;/script>
+&lt;/div>
+</pre>
+
+</body>
+</html>

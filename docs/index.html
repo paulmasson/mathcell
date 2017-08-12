@@ -19,6 +19,17 @@
 
 <script>
 
+window.onload = function() {
+
+  // to leave active submenu open when navigate
+
+  var links = document.getElementsByTagName( 'a' );
+  for ( var i = 0 ; i < links.length ; i++ ) {
+    links[i].onclick = function(e) { e.stopPropagation(); }
+  }
+
+};
+
 function toggle( list ) {
 
   if ( list.className === 'downGraphic' ) {
@@ -219,10 +230,14 @@ var name = document.getElementById( id + 'name' ).checked;
 </div>
 </li>
 
-<li class="sideGraphic" onclick="toggle(this)">How about a complete example?
+<li class="sideGraphic" onclick="toggle(this)">How about some complete examples?
 <div>
 
-<p>Here&rsquo;s a pair of <a href="examples/sine-waves.html">sine waves</a> to show all three inputs in action.</p>
+<p>A single <a href="examples/tangent.html">tangent</a> with a slider and vertical cropping</p>
+
+<p>A pair of <a href="examples/sine-waves.html">sine waves</a> to show all three inputs in action</p>
+
+<p>A three-dimensional <a href="examples/sine-wave-3d.html">sine wave</a> with a slider</p>
 
 </div>
 </li>

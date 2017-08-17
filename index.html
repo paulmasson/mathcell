@@ -11,9 +11,12 @@
 
 <p style="text-align: center; line-height: 2"><span style="font-size: 20pt">MathCell</span></p>
 
-<p style="text-align: center"><a href="docs/index.html">documentation</a></p>
+<p style="text-align: center">
+<a href="docs/index.html">documentation</a> &middot;
+<a id="example" href="">this example</a>
+</p>
 
-<iframe id="content" style="width: 100%; height: 4.5in; border: 0" scrolling="no"
+<iframe id="view" style="width: 100%; height: 4.5in; border: 0" scrolling="no"
         onload="this.style.height=this.contentWindow.document.body.scrollHeight+50"></iframe>
 
 <script>
@@ -29,8 +32,10 @@ xhr.onload = function() {
   for ( var i = 0 ; i < files.length ; i++ ) fileList.push( files[i].name );
 
   var index = Math.floor( fileList.length * Math.random() );
+  example.href = 'docs/examples/' + fileList[index];
+
   var url = 'https://raw.githubusercontent.com/paulmasson/mathcell/master/docs/examples/'
-            + fileList[index]
+            + fileList[index];
 
   xhr.open( 'GET', url, true );
 
@@ -38,13 +43,11 @@ xhr.onload = function() {
 
     var parser = new DOMParser();
     var dom = parser.parseFromString( xhr.response, 'text/html' );
-    var cells = dom.getElementsByClassName( 'mathcell' );
+    var cell = dom.getElementsByClassName( 'mathcell' );
 
-    var content = document.getElementById( 'content' );
-
-    content.srcdoc = '<html><body>'
-                     + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
-                     + cells[0].outerHTML + '</body></html>';
+    view.srcdoc = '<html><body>'
+                  + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
+                  + cell[0].outerHTML + '</body></html>';
  
   }
 

@@ -45,6 +45,7 @@ xhr.onload = function() {
     var dom = parser.parseFromString( xhr.response, 'text/html' );
     var cell = dom.getElementsByClassName( 'mathcell' );
 
+    var view = document.getElementById( 'view' );
     view.srcdoc = '<html><body>'
                   + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
                   + cell[0].outerHTML + '</body></html>';

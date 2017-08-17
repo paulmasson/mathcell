@@ -13,7 +13,8 @@
 
 <p style="text-align: center"><a href="docs/index.html">documentation</a></p>
 
-<iframe id="content" style="width: 100%; height: 7in; border: 0" scrolling="no"></iframe>
+<iframe id="content" style="width: 100%; height: 4.5in; border: 0" scrolling="no"
+        onload="this.style.height=this.contentWindow.document.body.scrollHeight+50"></iframe>
 
 <script>
 
@@ -40,6 +41,7 @@ xhr.onload = function() {
     var cells = dom.getElementsByClassName( 'mathcell' );
 
     var content = document.getElementById( 'content' );
+
     content.srcdoc = '<html><body>'
                      + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
                      + cells[0].outerHTML + '</body></html>';
@@ -53,7 +55,6 @@ xhr.onload = function() {
 xhr.send();
 
 </script>
-
 
 </body>
 </html>

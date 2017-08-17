@@ -1,0 +1,55 @@
+<html>
+<head>
+<title>MathCell</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style> td { text-align: center } </style>
+</head>
+
+<body>
+
+<p>There are currently three kinds of inputs: <code>slider</code>, <code>buttons</code> and <code>checkbox</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these values followed by a comma-separated list of optional attributes.</p>
+
+<p>All inputs have two text options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
+
+<p>A <code>slider</code> input has four numeric options with default values</p>
+
+<table style="width: 2in; margin-left: 2in"><tr><td>
+  <code>min</code></td><td>0
+</td></tr><tr><td>
+  <code>max</code></td><td>1<br/>
+</td></tr><tr><td>
+  <code>step</code></td><td>.01<br/>
+</td></tr><tr><td>
+  <code>default</code></td><td><code>min</code>
+</td></tr></table>
+
+<p>and the variable is assigned in code using</p>
+
+<pre>
+var name = +document.getElementById( id + 'name' ).value;
+</pre>
+
+<p>A <code>buttons</code> input has two additional options, one an array and the other numeric, with default values</p>
+
+<table style="width: 2in; margin-left: 2in"><tr><td>
+  <code>list</code></td><td>[1,2,3]
+</td></tr><tr><td>
+  <code>default</code></td><td><code>list[0]</code>
+</td></tr></table>
+
+<p>and the variable is assigned in code using</p>
+
+<pre>
+var name = +document.querySelector( 'input[name=' + id + 'name]:checked' ).value;
+</pre>
+
+<p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked. The variable is assigned in code using</p>
+
+<pre>
+var name = document.getElementById( id + 'name' ).checked;
+</pre>
+
+<p>IMPORTANT: for inputs that are intended to provide numeric values, be sure to include the plus signs appearing here. This unary operator invokes the <code>Number</code> object and ensures that the value will truly be numeric.</p>
+
+</body>
+</html>

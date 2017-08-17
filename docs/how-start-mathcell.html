@@ -1,0 +1,48 @@
+<html>
+<head>
+<title>MathCell</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style></style>
+</head>
+
+<body>
+
+<p>First copy this template into the body of the page:</p>
+
+<pre>
+&lt;div class="mathcell" style="height: 4in">
+&lt;script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: '' } ] );
+
+parent.update = function( id ) {
+
+  var name = +document.getElementById( id + 'name' ).value;
+
+  ( additional JavaScript here )
+
+  var data = [];
+
+  var config = { type: '' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+&lt;/script>
+&lt;/div>
+</pre>
+
+<p>The template automatically assigns an <code>id</code> to each cell, which is then available to the interactive input elements that are added to the cell. This relieves the end user of the need to manually add tags to cells.</p>
+
+<p>Input elements are specified as an array of dictionaries inside the <code>MathCell()</code> command. Code for processing the input is added to the body of the <code>update</code> function. The output element is specified in the <code>config</code> dictionary inside the <code>update</code> function.</p>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>MathCell</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style> td { text-align: center } </style>
+</head>
+
+<body>
+
+<p>There are currently four kinds of outputs: <code>svgplot</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these values.</p>
+
+<p>An <code>svgplot</code> output displays a two-dimensional plot of the data. The input data should be an array of arrays of data points, <i>i.e.</i> a three-dimensional array. An <code>svgplot</code> has options and default values</p>
+
+<table style="width: 3in; margin-left: 1.5in"><tr><td>
+<code>xMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>xMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>ticks</code></td><td><code>auto</code>
+</td></tr><tr><td>
+  <code>axesLabels</code><td>none
+</td></tr><tr><td>
+  <code>colors</code></td><td>black
+</td></tr><tr><td>
+  <code>includeOrigin</code></td><td><code>false</code>
+</td></tr><tr><td>
+  <code>includeVerticals</code></td><td><code>false</code>
+</td></tr></table>
+
+<p><code>ticks</code> can be set to an array with two numbers determining distances between ticks. <code>colors</code> is an array specifying the color of each array in the input data, with each given by standard HTML color codes.</p>
+
+<p>A <code>threejs</code> output displays a three-dimensional plot of the input data with the options and default values</p>
+
+<table style="width: 3in; margin-left: 1.5in"><tr><td>
+<code>xMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>xMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>zMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>zMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>aspectRatio</code></td><td>[1,1,1]
+</td></tr><tr><td>
+  <code>axes</code></td><td><code>false</code>
+</td></tr><tr><td>
+  <code>axesLabels</code></td><td>['x','y','z']
+</td></tr><tr><td>
+  <code>decimals</code></td><td>2
+</td></tr><tr><td>
+  <code>frame</code></td><td><code>true</code></td></tr></table>
+
+<p>A <code>matrix</code> output displays the contents of a two-dimensional array in matrix form. You may need to adjust the width and height of the MathCell to show the entire array properly.</p>
+
+<p>A <code>text</code> output displays the result of a calculation in raw form. The data for this output can be a number, a string or an array as desired.</p>
+
+</body>
+</html>

@@ -4,261 +4,57 @@
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
 
-	ul { list-style-type: none; padding: 0px; color: rgb(0,127,255);
-             line-height: 2}
-	ul div { display: none; color: black; line-height: normal }
-        .sideGraphic:before { content: "+\a0\a0" }
-        .downGraphic:before { content: "\2212\a0\a0" }
+	#index, #content {
+		box-sizing: border-box;
+		height: 100%;
+		top: 0;
+		overflow: auto;
+	}
 
-	td { text-align: center }
+	#index {
+		width: 2.5in;
+		position: fixed;
+		left: 0;
+		padding: .25in;
+		background-color: #fafafa;
+		text-align: left;
+	}
+
+	#content {
+		width: calc(100% - 2.5in);
+		position: absolute;
+		right: 0;
+		border: 0;
+	}
 
 </style>
 </head>
 
 <body>
 
-<script>
+<div id="index">
 
-window.onload = function() {
+<p><a href="introduction.html" target="content">Introduction</a></p>
 
-  // to leave active submenu open when navigate
+<p><a href="why-use-mathcell.html" target="content">Why would I want to use MathCell?</a></p>
 
-  var links = document.getElementsByTagName( 'a' );
-  for ( var i = 0 ; i < links.length ; i++ ) {
-    links[i].onclick = function(e) { e.stopPropagation(); }
-  }
+<p><a href="how-get-mathcell.html" target="content">How do I get MathCell?</a></p>
 
-};
+<p><a href="how-start-mathcell.html" target="content">How do I start a MathCell?</a></p>
 
-function toggle( list ) {
+<p><a href="mathcell-inputs.html" target="content">What interactive inputs are available?</a></p>
 
-  if ( list.className === 'downGraphic' ) {
+<p><a href="mathcell-outputs.html" target="content">What visualization outputs are available?</a></p>
 
-    list.className = 'sideGraphic';
-    list.children[0].style.display = 'none';
+<p><a href="mathcell-examples.html" target="content">How about some complete examples?</a></p>
 
-  } else {
+<p><a href="mathcell-style.html" target="content">Why does my MathCell look strange?</a></p>
 
-    var d = document.querySelectorAll( '.downGraphic' );
-    for ( var i = 0 ; i < d.length ; i++ ) {
-      d[i].className = 'sideGraphic';
-      d[i].children[0].style.display = 'none';
-    }
-    list.className = 'downGraphic';
-    list.children[0].style.display = 'block';
-
-  }
-
-}
-
-</script>
-
-<p style="text-align: center; line-height: 2"><span style="font-size: 20pt">MathCell</span><br/>
-a simple straightforward way to include interactive mathematics in a web page</p>
-
-<ul>
-
-<li class="sideGraphic" onclick="toggle(this)">Why would I want to use MathCell?
-<div>
-<p>The ubiquity of web browsers provides an incredible opportunity to move beyond the static world of paper for the presentation of mathematics. The default language of the browser is JavaScript and modern presentations use that language. MathCell provides a quick way to set up interactive elements for input into your code, as well as outputs for visualizing the results of calculations.</p>
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">How do I get MathCell?
-<div>
-
-<p>MathCell is free and open source, and the code is available on <a href="https://github.com/paulmasson/mathcell">GitHub</a>. You can download the complete <a href="https://raw.githubusercontent.com/paulmasson/mathcell/master/build/mathcell.js">library</a> to your web server and include it in the body of a page with a <code>script</code> tag:
-
-<pre>
-&lt;script src="mathcell.js">&lt;/script>
-</pre>
+<p><a href="how-use-math.html" target="content">What if I want higher-level mathematics as well?</a></p>
 
 </div>
-</li>
 
-<li class="sideGraphic" onclick="toggle(this)">How do I start a MathCell?
-<div>
-
-<p>First copy this template into the body of the page:</p>
-
-<pre>
-&lt;div class="mathcell" style="height: 4in">
-&lt;script>
-
-var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
-
-var id = 'id' + document.scripts.length;
-parent.id = id;
-
-MathCell( id, [ { type: '' } ] );
-
-parent.update = function( id ) {
-
-  var name = +document.getElementById( id + 'name' ).value;
-
-  ( additional JavaScript here )
-
-  var data = [];
-
-  var config = { type: '' };
-
-  evaluate( id, data, config );
-
-}
-
-parent.update( id );
-
-&lt;/script>
-&lt;/div>
-</pre>
-
-<p>The template automatically assigns an <code>id</code> to each cell, which is then available to the interactive input elements that are added to the cell. This relieves the end user of the need to manually add tags to cells.</p>
-
-<p>Input elements are specified as an array of dictionaries inside the <code>MathCell()</code> command. Code for processing the input is added to the body of the <code>update</code> function. The output element is specified in the <code>config</code> dictionary inside the <code>update</code> function.</p>
-
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">What interactive inputs are available?
-<div>
-
-<p>There are currently three kinds of inputs: <code>slider</code>, <code>buttons</code> and <code>checkbox</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these values followed by a comma-separated list of optional attributes.</p>
-
-<p>All inputs have two text options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
-
-<p>A <code>slider</code> input has four numeric options with default values</p>
-
-<table style="width: 2in; margin-left: 2in"><tr><td>
-  <code>min</code></td><td>0
-</td></tr><tr><td>
-  <code>max</code></td><td>1<br/>
-</td></tr><tr><td>
-  <code>step</code></td><td>.01<br/>
-</td></tr><tr><td>
-  <code>default</code></td><td><code>min</code>
-</td></tr></table>
-
-<p>and the variable is assigned in code using</p>
-
-<pre>
-var name = +document.getElementById( id + 'name' ).value;
-</pre>
-
-<p>A <code>buttons</code> input has two additional options, one an array and the other numeric, with default values</p>
-
-<table style="width: 2in; margin-left: 2in"><tr><td>
-  <code>list</code></td><td>[1,2,3]
-</td></tr><tr><td>
-  <code>default</code></td><td><code>list[0]</code>
-</td></tr></table>
-
-<p>and the variable is assigned in code using</p>
-
-<pre>
-var name = +document.querySelector( 'input[name=' + id + 'name]:checked' ).value;
-</pre>
-
-<p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked. The variable is assigned in code using</p>
-
-<pre>
-var name = document.getElementById( id + 'name' ).checked;
-</pre>
-
-<p>IMPORTANT: for inputs that are intended to provide numeric values, be sure to include the plus signs appearing here. This unary operator invokes the <code>Number</code> object and ensures that the value will truly be numeric.</p>
-
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">What visualization outputs are available?
-<div>
-
-<p>There are currently four kinds of outputs: <code>svgplot</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these values.</p>
-
-<p>An <code>svgplot</code> output displays a two-dimensional plot of the data. The input data should be an array of arrays of data points, <i>i.e.</i> a three-dimensional array. An <code>svgplot</code> has options and default values</p>
-
-<table style="width: 3in; margin-left: 1.5in"><tr><td>
-<code>xMin</code></td><td>calculated
-</td></tr><tr><td>
-  <code>xMax</code></td><td>calculated
-</td></tr><tr><td>
-  <code>yMin</code></td><td>calculated
-</td></tr><tr><td>
-  <code>yMax</code></td><td>calculated
-</td></tr><tr><td>
-  <code>ticks</code></td><td><code>auto</code>
-</td></tr><tr><td>
-  <code>axesLabels</code><td>none
-</td></tr><tr><td>
-  <code>colors</code></td><td>black
-</td></tr><tr><td>
-  <code>includeOrigin</code></td><td><code>false</code>
-</td></tr><tr><td>
-  <code>includeVerticals</code></td><td><code>false</code>
-</td></tr></table>
-
-<p><code>ticks</code> can be set to an array with two numbers determining distances between ticks. <code>colors</code> is an array specifying the color of each array in the input data, with each given by standard HTML color codes.</p>
-
-<p>A <code>threejs</code> output displays a three-dimensional plot of the input data with the options and default values</p>
-
-<table style="width: 3in; margin-left: 1.5in"><tr><td>
-<code>xMin</code></td><td>calculated
-</td></tr><tr><td>
-  <code>xMax</code></td><td>calculated
-</td></tr><tr><td>
-  <code>yMin</code></td><td>calculated
-</td></tr><tr><td>
-  <code>yMax</code></td><td>calculated
-</td></tr><tr><td>
-  <code>zMin</code></td><td>calculated
-</td></tr><tr><td>
-  <code>zMax</code></td><td>calculated
-</td></tr><tr><td>
-  <code>aspectRatio</code></td><td>[1,1,1]
-</td></tr><tr><td>
-  <code>axes</code></td><td><code>false</code>
-</td></tr><tr><td>
-  <code>axesLabels</code></td><td>['x','y','z']
-</td></tr><tr><td>
-  <code>decimals</code></td><td>2
-</td></tr><tr><td>
-  <code>frame</code></td><td><code>true</code></td></tr></table>
-
-<p>A <code>matrix</code> output displays the contents of a two-dimensional array in matrix form. You may need to adjust the width and height of the MathCell to show the entire array properly.</p>
-
-<p>A <code>text</code> output displays the result of a calculation in raw form. The data for this output can be a number, a string or an array as desired.</p>
-
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">How about some complete examples?
-<div>
-
-<p>A single <a href="examples/tangent.html">tangent</a> with a slider and vertical cropping</p>
-
-<p>A pair of <a href="examples/sine-waves.html">sine waves</a> to show all three inputs in action</p>
-
-<p>A three-dimensional <a href="examples/sine-wave-3d.html">sine wave</a> with a slider</p>
-
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">Why does my MathCell look strange?
-<div>
-
-<p>MathCell by default includes CSS styling to standardize the appearance of interactive elements across browsers. The one piece of this that is not set automatically is the height of the cell, since the number of inputs and the type of output is not known in advance. While this may be automated to some extent in the future, it is simpler to have the end user manually set the height in the <code>style</code> attribute on the first line of the cell as needed.</p>
-
-</div>
-</li>
-
-<li class="sideGraphic" onclick="toggle(this)">What if I want higher-level mathematics as well?
-<div>
-
-<p>A JavaScript library of special functions and common mathematical operations has been initiated, entitled simply <a href="https://github.com/paulmasson/math">Math</a>. It provides higher-level mathematics not available by default in JavaScript.</p>
-
-</div>
-</li>
-
-</ul>
+<iframe id="content" name="content" src="introduction.html"></iframe>
 
 </body>
 </html>

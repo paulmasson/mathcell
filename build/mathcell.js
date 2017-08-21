@@ -20,16 +20,8 @@ function MathCell( id, inputArray ) {
 <div id=${id}wrap style="width: 100%; flex: 1; position: relative">
 <div id=${id}output style="width: 100%; height: 100%;
                            position: absolute; top: 0; left: 0"></div>
-<div id=${id}busy
-     style="width: 100%; height: 100%; z-index: 1;
-            position: absolute; top: 0; left: 0; visibility: hidden;
-            background: url(http://analyticphysics.com/www/math/reload.svg?${Math.random()})
-                        center no-repeat;
-            background-size: auto 50%"></div>
 </div>
   `;
-
-  // Appended random number forces Safari to refresh for animation on page reload
 
   var cell = document.createRange().createContextualFragment( s )
   document.getElementById( id ).appendChild( cell );

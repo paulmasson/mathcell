@@ -1,0 +1,91 @@
+<html>
+<head>
+<title></title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A three-dimensional superellipsoid with corner sharpness controlled by a slider. The width and height of the MathCell have been increased to show the graphic more clearly. The isosurface is generated using marching cubes.</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = +document.getElementById( id + 'n' ).value;
+
+  function f( x, y, z ) {
+
+    return Math.abs(x)**n + Math.abs(y)**n + Math.abs(z)**n - 1;
+
+  }
+
+  var plot = isosurface( f, [-1,1], [-1,1], [-1,1] );
+
+  var data = { 'surfaces': [ plot ] };
+
+  var config = { type: 'threejs' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre>
+&lt;div class="mathcell" style="width: 6in; height: 6in">
+&lt;script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = +document.getElementById( id + 'n' ).value;
+
+  function f( x, y, z ) {
+
+    return Math.abs(x)**n + Math.abs(y)**n + Math.abs(z)**n - 1;
+
+  }
+
+  var plot = isosurface( f, [-1,1], [-1,1], [-1,1] );
+
+  var data = { 'surfaces': [ plot ] };
+
+  var config = { type: 'threejs' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+&lt;/script>
+&lt;/div>
+</pre>
+
+</body>
+</html>

@@ -129,15 +129,12 @@ function evaluate( id, data, config ) {
   var output = document.getElementById( id + 'output' );
   output.innerHTML = graphic( id, data, config );
 
-  for ( var i = 0 ; i < output.children.length ; i++ ) {
+  if ( config.type === 'threejs' && /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
 
-    var view = output.children[i];
-    if ( view.tagName === 'IFRAME' && /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+    var iframe = output.getElementsByTagName( 'iframe' );
+    iframe[0].style.width = getComputedStyle( view ).width;
+    iframe[0].style.height = getComputedStyle( view ).height;
 
-	view.style.width = getComputedStyle( view ).width;
-	view.style.height = getComputedStyle( view ).height;
-
-    }
   }
 
 }

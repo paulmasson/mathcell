@@ -19,8 +19,8 @@ var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 var id = 'id' + document.scripts.length;
 parent.id = id;
 
-MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega',
-                                    label: '&omega;' } ] );
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
+                                  name: 'omega', label: '&omega;' } ] );
 
 parent.update = function( id ) {
 
@@ -54,8 +54,8 @@ var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 var id = 'id' + document.scripts.length;
 parent.id = id;
 
-MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega',
-                                    label: '&amp;omega;' } ] );
+MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
+                                  name: 'omega', label: '&amp;omega;' } ] );
 
 parent.update = function( id ) {
 

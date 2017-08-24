@@ -35,7 +35,7 @@ function parametric( z, xRange, yRange, color, opacity ) {
   var xStep = ( xRange[1] - xRange[0] ) / slices;
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
-  var vertices = []
+  var vertices = [];
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {

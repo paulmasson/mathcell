@@ -1,1 +1,1 @@
-copy /b src\*.js + src\plot\*.js build\mathcell.js
+copy /b src\*.js + src\plot\*.js + src\march\*.js build\mathcell.js

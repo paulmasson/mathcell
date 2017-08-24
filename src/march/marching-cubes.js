@@ -44,14 +44,14 @@ function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0
     for ( var j = 0 ; j < d[i].length - 1 ; j++ ) {
       for ( var k = 0 ; k < d[i][j].length - 1 ; k++ ) {
 
-        v0 = d[i][j][k];
-        v1 = d[i][j+1][k];
-        v2 = d[i+1][j+1][k];
-        v3 = d[i+1][j][k];
-        v4 = d[i][j][k+1];
-        v5 = d[i][j+1][k+1];
-        v6 = d[i+1][j+1][k+1];
-        v7 = d[i+1][j][k+1];
+        var v0 = d[i][j][k];
+        var v1 = d[i][j+1][k];
+        var v2 = d[i+1][j+1][k];
+        var v3 = d[i+1][j][k];
+        var v4 = d[i][j][k+1];
+        var v5 = d[i][j+1][k+1];
+        var v6 = d[i+1][j+1][k+1];
+        var v7 = d[i+1][j][k+1];
 
         var v = []; // temp list of vertices
         var index = 0;

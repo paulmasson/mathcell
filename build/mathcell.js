@@ -131,9 +131,10 @@ function evaluate( id, data, config ) {
 
   if ( config.type === 'threejs' && /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
 
-    var iframe = output.getElementsByTagName( 'iframe' );
-    iframe[0].style.width = getComputedStyle( view ).width;
-    iframe[0].style.height = getComputedStyle( view ).height;
+    var iframe = output.children[0];
+    iframe.style.width = getComputedStyle( iframe ).width;
+    iframe.style.height = getComputedStyle( iframe ).height;
+    iframe.srcdoc = iframe.srcdoc;
 
   }
 

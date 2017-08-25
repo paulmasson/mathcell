@@ -40,10 +40,14 @@ function svgPlot( id, data, config ) {
   var height = document.getElementById( id + 'output' ).offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [[0,0]] );
+  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'' } ] );
 
-  var xMinMax = minMax( data, 0 );
-  var yMinMax = minMax( data, 1 );
+  var all = [];
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) all = all.concat( data[i][j].points );
+
+  var xMinMax = minMax( all, 0 );
+  var yMinMax = minMax( all, 1 );
 
   // rounding currently to remove excessive decimals
   // needs improving for exponential notation
@@ -183,76 +187,77 @@ function svgPlot( id, data, config ) {
 
   function yPos( y ) { return roundTo( yOrigin - yScale*y, 2 ); }
 
-  // function paths in data arrays
-  for ( var k = 0 ; k < data.length ; k++ ) {
+  // function paths in arrays of arrays
+  for ( var i = 0 ; i < data.length ; i++ ) {
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
 
-    var d = data[k];
-    var x = d[0][0];
-    var y = d[0][1];
+      var d = data[i][j];
+      var x = d.points[0][0];
+      var y = d.points[0][1];
 
-    svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
-    var lastX = x;
-    var lastY = y;
-
-    for ( var i = 1 ; i < d.length ; i++ ) {
-
-      x = d[i][0];
-      y = d[i][1];
-
-      function intercept( u ) {
-        return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
-      }
-
-      // both points inside bounds
-      if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-
-      // both points outside bounds
-      if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      if ( lastY < yMin && y > yMax ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y < yMin ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-
-      // line between points crosses bounds
-      if ( lastY < yMin && y >= yMin && y < yMax ) {
-        svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY >= yMin && lastY < yMax && y < yMin ) {
-        svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY <= yMax && lastY > yMin && y > yMax ) {
-        svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y <= yMax && y > yMin ) {
-        svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-
+      svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
       var lastX = x;
       var lastY = y;
 
+      for ( var k = 1 ; k < d.points.length ; k++ ) {
+
+        x = d.points[k][0];
+        y = d.points[k][1];
+
+        function intercept( u ) {
+          return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
+        }
+
+        // both points inside bounds
+        if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+
+        // both points outside bounds
+        if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        if ( lastY < yMin && y > yMax ) {
+          if ( config.includeVerticals ) {
+            svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+            svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+          }
+          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY > yMax && y < yMin ) {
+          if ( config.includeVerticals ) {
+            svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+            svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+          }
+          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+
+        // line between points crosses bounds
+        if ( lastY < yMin && y >= yMin && y < yMax ) {
+          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY >= yMin && lastY < yMax && y < yMin ) {
+          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY <= yMax && lastY > yMin && y > yMax ) {
+          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY > yMax && y <= yMax && y > yMin ) {
+          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+        }
+
+        var lastX = x;
+        var lastY = y;
+
+      }
+
+      svg += `" stroke="${d.color}" stroke-width="1.5" fill="none"/>`;
+
     }
-
-    var color = config.colors && config.colors[k]  ? config.colors[k] : 'black';
-    svg += `" stroke="${color}" stroke-width="1.5" fill="none"/>`;
-
   }
 
   return svg + '</svg>';

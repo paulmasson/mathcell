@@ -1,5 +1,5 @@
 
-function arrow( begin, end ) {
+function arrow( begin, end, color='#07f' ) {
 
   // assume 2D for now
   var vector = [ end[0]-begin[0], end[1]-begin[1] ];
@@ -17,7 +17,7 @@ function arrow( begin, end ) {
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
 
-  return [ begin, end, p1, p2, end ]
+  return [ { points:[ begin, end, p1, p2, end ], color:color } ];
 
 }
 

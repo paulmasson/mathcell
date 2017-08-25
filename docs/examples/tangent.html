@@ -26,13 +26,11 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  var data = [];
+  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], 'rgb(0,255,0)' );
 
-  var plot = [];
-  linspace( -Math.PI, Math.PI, 200 ).forEach( x => plot.push( [ x, Math.tan( omega * x ) ] ) ); 
-  data.push( plot );
+  var data = [ p ];
 
-  var config = { type: 'svgplot', colors: [ 'green' ], yMin: -5, yMax: 5 };
+  var config = { type: 'svgplot', yMin: -5, yMax: 5 };
 
   evaluate( id, data, config );
 
@@ -61,13 +59,11 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  var data = [];
+  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], 'rgb(0,255,0)' );
 
-  var plot = [];
-  linspace( -Math.PI, Math.PI, 200 ).forEach( x => plot.push( [ x, Math.tan( omega * x ) ] ) ); 
-  data.push( plot );
+  var data = [ p ];
 
-  var config = { type: 'svgplot', colors: [ 'green' ], yMin: -5, yMax: 5 };
+  var config = { type: 'svgplot', yMin: -5, yMax: 5 };
 
   evaluate( id, data, config );
 

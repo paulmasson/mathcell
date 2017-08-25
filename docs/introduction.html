@@ -27,12 +27,14 @@ parent.update = function( id ) {
 
   var phase = +document.getElementById( id + 'phase' ).value;
 
-  var plot1 = plot( x => Math.sin(x), [0, 2*Math.PI], 'rgb(0,255,127)' );
-  var plot2 = plot( x => Math.cos(x-phase), [0, 2*Math.PI], 'purple' );
+  var p1 = plot( x => Math.sin(x), [0, 2*Math.PI], 'rgb(0,255,127)' );
+  var p2 = plot( x => Math.cos(x-phase), [0, 2*Math.PI], 'purple' );
+
+  var data = [ p1, p2 ];
 
   var config = { type: 'svgplot' };
 
-  evaluate( id, [ plot1, plot2 ], config );
+  evaluate( id, data, config );
 
 }
 

@@ -26,7 +26,7 @@
 <p>and the variable is assigned in code using</p>
 
 <pre>
-var name = +document.getElementById( id + 'name' ).value;
+var x = +document.getElementById( id + 'x' ).value;
 </pre>
 
 <p>A <code>buttons</code> input has two additional options, one an array and the other numeric, with default values</p>
@@ -40,13 +40,13 @@ var name = +document.getElementById( id + 'name' ).value;
 <p>and the variable is assigned in code using</p>
 
 <pre>
-var name = +document.querySelector( 'input[name=' + id + 'name]:checked' ).value;
+var x = +document.querySelector( 'input[name=' + id + 'x]:checked' ).value;
 </pre>
 
 <p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked. The variable is assigned in code using</p>
 
 <pre>
-var name = document.getElementById( id + 'name' ).checked;
+var x = document.getElementById( id + 'x' ).checked;
 </pre>
 
 <p>IMPORTANT: for inputs that are intended to provide numeric values, be sure to include the plus signs appearing here. This unary operator invokes the <code>Number</code> object and ensures that the value will truly be numeric.</p>

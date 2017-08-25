@@ -39,19 +39,15 @@ parent.update = function( id ) {
   var data = [];
 
   if ( combine === true ) {
-    var plot = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot.push( [ x, sine1(x) + sine2(x) ] ) ); 
-    data.push( plot );
+    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], 'purple' ); 
+    data = [ p ];
   } else {
-    var plot1 = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot1.push( [ x, sine1(x) ] ) ); 
-    data.push( plot1 );
-    var plot2 = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot2.push( [ x, sine2(x) ] ) ); 
-    data.push( plot2 );
+    var p1 = plot( x => sine1(x), [0, 2*Math.PI], 'rgb(0,127,255)' ); 
+    var p2 = plot( x => sine2(x), [0, 2*Math.PI], 'red' ); 
+    data = [ p1, p2 ];
   }
 
-  var config = { type: 'svgplot', colors: [ 'rgb(0,127,255)', 'red' ] };
+  var config = { type: 'svgplot' };
 
   evaluate( id, data, config );
 
@@ -93,19 +89,15 @@ parent.update = function( id ) {
   var data = [];
 
   if ( combine === true ) {
-    var plot = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot.push( [ x, sine1(x) + sine2(x) ] ) ); 
-    data.push( plot );
+    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], 'purple' ); 
+    data = [ p ];
   } else {
-    var plot1 = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot1.push( [ x, sine1(x) ] ) ); 
-    data.push( plot1 );
-    var plot2 = [];
-    linspace( 0, 2*Math.PI, 200 ).forEach( x => plot2.push( [ x, sine2(x) ] ) ); 
-    data.push( plot2 );
+    var p1 = plot( x => sine1(x), [0, 2*Math.PI], 'rgb(0,127,255)' ); 
+    var p2 = plot( x => sine2(x), [0, 2*Math.PI], 'red' ); 
+    data = [ p1, p2 ];
   }
 
-  var config = { type: 'svgplot', colors: [ 'rgb(0,127,255)', 'red' ] };
+  var config = { type: 'svgplot' };
 
   evaluate( id, data, config );
 

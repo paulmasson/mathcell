@@ -1,5 +1,5 @@
 
-function contour( f, xRange, yRange, level=0 ) {
+function contour( f, xRange, yRange, color='#07f', level=0 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
@@ -48,88 +48,93 @@ function contour( f, xRange, yRange, level=0 ) {
 
       // keep corners above level to left of segments
       //   for possible future use
-      // segments can be determined using lookup tables
-      //   as for marching cubes but code would be about same size
+      // segments can be determined using lookup tables as
+      //   for marching cubes but code would be about same size
+
+      var points = [];
 
       switch( index ) {
 
         case 0:
         case 15:
 
+          continue;
           break;
 
         case 1:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v3, v0 ) ];
           break;
 
         case 2:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v0, v1 ) ];
           break;
 
         case 3:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v3, v0 ) ];
           break;
 
         case 4:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v1, v2 ) ];
           break;
 
         case 5:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v3, v0 ) ] );
-          segments.push( [ lerp( v0, v1 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v3, v0 ) ];
+          points = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
           break;
 
         case 6:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v0, v1 ) ];
           break;
 
         case 7:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v3, v0 ) ];
           break;
 
         case 8:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v2, v3 ) ];
           break;
 
         case 9:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v2, v3 ) ];
           break;
 
         case 10:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v0, v1 ) ] );
-          segments.push( [ lerp( v1, v2 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v0, v1 ) ];
+          points = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
           break;
 
         case 11:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
           break;
 
         case 12:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v1, v2 ) ];
           break;
 
         case 13:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
           break;
 
         case 14:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v0, v1 ) ];
 
       }
+
+      segments.push( { points:points, color:color } );
 
     }
   }

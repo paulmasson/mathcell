@@ -151,11 +151,10 @@ function minMax( d, index ) {
   var min = Number.MAX_VALUE;
   var max = -Number.MAX_VALUE;
 
-  for ( var i = 0 ; i < d.length ; i++ )
-    for ( var j = 0 ; j < d[i].length ; j++ ) {
-      if ( d[i][j][index] < min ) min = d[i][j][index];
-      if ( d[i][j][index] > max ) max = d[i][j][index];
-    }
+  for ( var i = 0 ; i < d.length ; i++ ) {
+    if ( d[i][index] < min ) min = d[i][index];
+    if ( d[i][index] > max ) max = d[i][index];
+  }
 
   return { min: min, max: max };
 
@@ -174,7 +173,7 @@ function linspace( a, b, points ) {
 }
 
 
-function plot( f, xRange, color ) {
+function plot( f, xRange, color='#07f' ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
 
@@ -183,7 +182,7 @@ function plot( f, xRange, color ) {
     x => points.push( [ x, f(x) ] )
   );
 
-  return { points:points, color:color, opacity:opacity };
+  return [ { points:points, color:color } ];
 
 }
 
@@ -486,10 +485,14 @@ function svgPlot( id, data, config ) {
   var height = document.getElementById( id + 'output' ).offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [[0,0]] );
+  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'' } ] );
 
-  var xMinMax = minMax( data, 0 );
-  var yMinMax = minMax( data, 1 );
+  var all = [];
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) all = all.concat( data[i][j].points );
+
+  var xMinMax = minMax( all, 0 );
+  var yMinMax = minMax( all, 1 );
 
   // rounding currently to remove excessive decimals
   // needs improving for exponential notation
@@ -629,21 +632,22 @@ function svgPlot( id, data, config ) {
 
   function yPos( y ) { return roundTo( yOrigin - yScale*y, 2 ); }
 
-  // function paths in data arrays
-  for ( var k = 0 ; k < data.length ; k++ ) {
+  // function paths in arrays of arrays
+  for ( var i = 0 ; i < data.length ; i++ ) {
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
 
-    var d = data[k];
-    var x = d[0][0];
-    var y = d[0][1];
+    var d = data[i][j];
+    var x = d.points[0][0];
+    var y = d.points[0][1];
 
     svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
     var lastX = x;
     var lastY = y;
 
-    for ( var i = 1 ; i < d.length ; i++ ) {
+    for ( var k = 1 ; k < d.points.length ; k++ ) {
 
-      x = d[i][0];
-      y = d[i][1];
+      x = d.points[k][0];
+      y = d.points[k][1];
 
       function intercept( u ) {
         return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
@@ -696,9 +700,9 @@ function svgPlot( id, data, config ) {
 
     }
 
-    var color = config.colors && config.colors[k]  ? config.colors[k] : 'black';
-    svg += `" stroke="${color}" stroke-width="1.5" fill="none"/>`;
+    svg += `" stroke="${d.color}" stroke-width="1.5" fill="none"/>`;
 
+}
   }
 
   return svg + '</svg>';
@@ -728,10 +732,10 @@ function threejsPlot( data, config ) {
   var surfaces = data.surfaces ? data.surfaces : [];
 
   var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all.push( [texts[i].slice(1)] );
-  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) all.push( lines[i].points );
-  for ( var i = 0 ; i < surfaces.length ; i++ ) all.push( surfaces[i].vertices );
+  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );
+  for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
+  for ( var i = 0 ; i < surfaces.length ; i++ ) all = all.concat( surfaces[i].vertices );
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );
@@ -1435,7 +1439,7 @@ var triangleTable = [
 ];
 
 
-function contour( f, xRange, yRange, level=0 ) {
+function contour( f, xRange, yRange, color='#07f', level=0 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
@@ -1484,88 +1488,93 @@ function contour( f, xRange, yRange, level=0 ) {
 
       // keep corners above level to left of segments
       //   for possible future use
-      // segments can be determined using lookup tables
-      //   as for marching cubes but code would be about same size
+      // segments can be determined using lookup tables as
+      //   for marching cubes but code would be about same size
+
+      var points = [];
 
       switch( index ) {
 
         case 0:
         case 15:
 
+          continue;
           break;
 
         case 1:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v3, v0 ) ];
           break;
 
         case 2:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v0, v1 ) ];
           break;
 
         case 3:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v3, v0 ) ];
           break;
 
         case 4:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v1, v2 ) ];
           break;
 
         case 5:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v3, v0 ) ] );
-          segments.push( [ lerp( v0, v1 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v3, v0 ) ];
+          points = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
           break;
 
         case 6:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v0, v1 ) ];
           break;
 
         case 7:
 
-          segments.push( [ lerp( v2, v3 ), lerp( v3, v0 ) ] );
+          points = [ lerp( v2, v3 ), lerp( v3, v0 ) ];
           break;
 
         case 8:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v2, v3 ) ];
           break;
 
         case 9:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v2, v3 ) ];
           break;
 
         case 10:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v0, v1 ) ] );
-          segments.push( [ lerp( v1, v2 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v0, v1 ) ];
+          points = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
           break;
 
         case 11:
 
-          segments.push( [ lerp( v1, v2 ), lerp( v2, v3 ) ] );
+          points = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
           break;
 
         case 12:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v1, v2 ) ];
           break;
 
         case 13:
 
-          segments.push( [ lerp( v0, v1 ), lerp( v1, v2 ) ] );
+          points = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
           break;
 
         case 14:
 
-          segments.push( [ lerp( v3, v0 ), lerp( v0, v1 ) ] );
+          points = [ lerp( v3, v0 ), lerp( v0, v1 ) ];
 
       }
+
+      segments.push( { points:points, color:color } );
 
     }
   }

@@ -4,11 +4,10 @@ function minMax( d, index ) {
   var min = Number.MAX_VALUE;
   var max = -Number.MAX_VALUE;
 
-  for ( var i = 0 ; i < d.length ; i++ )
-    for ( var j = 0 ; j < d[i].length ; j++ ) {
-      if ( d[i][j][index] < min ) min = d[i][j][index];
-      if ( d[i][j][index] > max ) max = d[i][j][index];
-    }
+  for ( var i = 0 ; i < d.length ; i++ ) {
+    if ( d[i][index] < min ) min = d[i][index];
+    if ( d[i][index] > max ) max = d[i][index];
+  }
 
   return { min: min, max: max };
 
@@ -27,7 +26,7 @@ function linspace( a, b, points ) {
 }
 
 
-function plot( f, xRange, color ) {
+function plot( f, xRange, color='#07f' ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
 
@@ -36,7 +35,7 @@ function plot( f, xRange, color ) {
     x => points.push( [ x, f(x) ] )
   );
 
-  return { points:points, color:color, opacity:opacity };
+  return [ { points:points, color:color } ];
 
 }
 

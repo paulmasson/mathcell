@@ -21,10 +21,10 @@ function threejsPlot( data, config ) {
   var surfaces = data.surfaces ? data.surfaces : [];
 
   var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all.push( [texts[i].slice(1)] );
-  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) all.push( lines[i].points );
-  for ( var i = 0 ; i < surfaces.length ; i++ ) all.push( surfaces[i].vertices );
+  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );
+  for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
+  for ( var i = 0 ; i < surfaces.length ; i++ ) all = all.concat( surfaces[i].vertices );
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );

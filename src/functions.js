@@ -27,6 +27,20 @@ function linspace( a, b, points ) {
 }
 
 
+function plot( f, xRange, color ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 200;
+
+  var points = [];
+  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
+    x => points.push( [ x, f(x) ] )
+  );
+
+  return { points:points, color:color, opacity:opacity };
+
+}
+
+
 function parametric( z, xRange, yRange, color, opacity ) {
 
   var slices = xRange[2];
@@ -52,7 +66,7 @@ function parametric( z, xRange, yRange, color, opacity ) {
     }
   }
 
-  return { 'vertices': vertices, 'faces': faces, 'color': color, 'opacity': opacity }
+  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
 
 }
 

@@ -129,12 +129,17 @@ function evaluate( id, data, config ) {
   var output = document.getElementById( id + 'output' );
   output.innerHTML = graphic( id, data, config );
 
-  if ( config.type === 'threejs' && /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+  if ( config.type === 'threejs' ) {
 
     var iframe = output.children[0];
-    iframe.style.width = getComputedStyle( iframe ).width;
-    iframe.style.height = getComputedStyle( iframe ).height;
-    iframe.srcdoc = iframe.srcdoc;
+
+    if ( /Safari/g.test( navigator.userAgent ) ) iframe.srcdoc = iframe.srcdoc;
+
+    if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+      iframe.style.width = getComputedStyle( iframe ).width;
+      iframe.style.height = getComputedStyle( iframe ).height;
+      iframe.srcdoc = iframe.srcdoc;
+    }
 
   }
 
@@ -169,6 +174,20 @@ function linspace( a, b, points ) {
 }
 
 
+function plot( f, xRange, color ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 200;
+
+  var points = [];
+  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
+    x => points.push( [ x, f(x) ] )
+  );
+
+  return { points:points, color:color, opacity:opacity };
+
+}
+
+
 function parametric( z, xRange, yRange, color, opacity ) {
 
   var slices = xRange[2];
@@ -194,7 +213,7 @@ function parametric( z, xRange, yRange, color, opacity ) {
     }
   }
 
-  return { 'vertices': vertices, 'faces': faces, 'color': color, 'opacity': opacity }
+  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
 
 }
 

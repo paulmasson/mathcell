@@ -129,12 +129,17 @@ function evaluate( id, data, config ) {
   var output = document.getElementById( id + 'output' );
   output.innerHTML = graphic( id, data, config );
 
-  if ( config.type === 'threejs' && /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+  if ( config.type === 'threejs' ) {
 
     var iframe = output.children[0];
-    iframe.style.width = getComputedStyle( iframe ).width;
-    iframe.style.height = getComputedStyle( iframe ).height;
-    iframe.srcdoc = iframe.srcdoc;
+
+    if ( /Safari/g.test( navigator.userAgent ) ) iframe.srcdoc = iframe.srcdoc;
+
+    if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
+      iframe.style.width = getComputedStyle( iframe ).width;
+      iframe.style.height = getComputedStyle( iframe ).height;
+      iframe.srcdoc = iframe.srcdoc;
+    }
 
   }
 

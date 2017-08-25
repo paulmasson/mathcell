@@ -173,74 +173,6 @@ function linspace( a, b, points ) {
 }
 
 
-function plot( f, xRange, color='#07f' ) {
-
-  if ( xRange.length < 3 ) xRange[2] = 200;
-
-  var points = [];
-  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
-    x => points.push( [ x, f(x) ] )
-  );
-
-  return [ { points:points, color:color } ];
-
-}
-
-
-function parametric( z, xRange, yRange, color, opacity ) {
-
-  var slices = xRange[2];
-  var stacks = yRange[2];
-
-  var xStep = ( xRange[1] - xRange[0] ) / slices;
-  var yStep = ( yRange[1] - yRange[0] ) / stacks;
-
-  var vertices = [];
-  for ( var i = 0 ; i <= stacks ; i++ ) {
-    var y = yRange[0] + i * yStep;
-    for ( var j = 0 ; j <= slices ; j++ ) {
-      var x = xRange[0] + j * xStep;
-      vertices.push( [x, y, z(x,y)] );
-    }
-  }
-
-  var faces = [];
-  var count = slices + 1;
-  for ( var i = 0 ; i < stacks ; i++ ) {
-    for ( var j = 0 ; j < slices ; j++ ) {
-      faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
-    }
-  }
-
-  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
-
-}
-
-
-function arrow( begin, end ) {
-
-  // assume 2D for now
-  var vector = [ end[0]-begin[0], end[1]-begin[1] ];
-
-  function normalize( v ) {
-    var len = Math.sqrt( v[0]*v[0] + v[1]*v[1] );
-    return [ v[0]/len, v[1]/len ];
-  }
-
-  var t = normalize( vector );
-  var n = [ t[1], -t[0] ];
-  var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
-
-  size = .05;
-  var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
-  var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
-
-  return [ begin, end, p1, p2, end ]
-
-}
-
-
-
 var mathcellStyle = document.createElement( 'style' );
 mathcellStyle.type = 'text/css';
 mathcellStyle.innerHTML = `
@@ -444,6 +376,74 @@ input[type=range]::-moz-focus-outer {
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 
 
+function plot( f, xRange, color='#07f' ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 200;
+
+  var points = [];
+  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
+    x => points.push( [ x, f(x) ] )
+  );
+
+  return [ { points:points, color:color } ];
+
+}
+
+
+function parametric( z, xRange, yRange, color, opacity ) {
+
+  var slices = xRange[2];
+  var stacks = yRange[2];
+
+  var xStep = ( xRange[1] - xRange[0] ) / slices;
+  var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  var vertices = [];
+  for ( var i = 0 ; i <= stacks ; i++ ) {
+    var y = yRange[0] + i * yStep;
+    for ( var j = 0 ; j <= slices ; j++ ) {
+      var x = xRange[0] + j * xStep;
+      vertices.push( [x, y, z(x,y)] );
+    }
+  }
+
+  var faces = [];
+  var count = slices + 1;
+  for ( var i = 0 ; i < stacks ; i++ ) {
+    for ( var j = 0 ; j < slices ; j++ ) {
+      faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
+    }
+  }
+
+  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
+
+}
+
+
+function arrow( begin, end, color='#07f' ) {
+
+  // assume 2D for now
+  var vector = [ end[0]-begin[0], end[1]-begin[1] ];
+
+  function normalize( v ) {
+    var len = Math.sqrt( v[0]*v[0] + v[1]*v[1] );
+    return [ v[0]/len, v[1]/len ];
+  }
+
+  var t = normalize( vector );
+  var n = [ t[1], -t[0] ];
+  var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
+
+  size = .05;
+  var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
+  var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
+
+  return [ { points:[ begin, end, p1, p2, end ], color:color } ];
+
+}
+
+
+
 function svgPlot( id, data, config ) {
 
   function parsedLength( input ) {
@@ -636,73 +636,73 @@ function svgPlot( id, data, config ) {
   for ( var i = 0 ; i < data.length ; i++ ) {
     for ( var j = 0 ; j < data[i].length ; j++ ) {
 
-    var d = data[i][j];
-    var x = d.points[0][0];
-    var y = d.points[0][1];
+      var d = data[i][j];
+      var x = d.points[0][0];
+      var y = d.points[0][1];
 
-    svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
-    var lastX = x;
-    var lastY = y;
-
-    for ( var k = 1 ; k < d.points.length ; k++ ) {
-
-      x = d.points[k][0];
-      y = d.points[k][1];
-
-      function intercept( u ) {
-        return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
-      }
-
-      // both points inside bounds
-      if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-
-      // both points outside bounds
-      if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      if ( lastY < yMin && y > yMax ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y < yMin ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-
-      // line between points crosses bounds
-      if ( lastY < yMin && y >= yMin && y < yMax ) {
-        svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY >= yMin && lastY < yMax && y < yMin ) {
-        svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY <= yMax && lastY > yMin && y > yMax ) {
-        svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y <= yMax && y > yMin ) {
-        svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-
+      svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
       var lastX = x;
       var lastY = y;
 
+      for ( var k = 1 ; k < d.points.length ; k++ ) {
+
+        x = d.points[k][0];
+        y = d.points[k][1];
+
+        function intercept( u ) {
+          return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
+        }
+
+        // both points inside bounds
+        if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+
+        // both points outside bounds
+        if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        if ( lastY < yMin && y > yMax ) {
+          if ( config.includeVerticals ) {
+            svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+            svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+          }
+          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY > yMax && y < yMin ) {
+          if ( config.includeVerticals ) {
+            svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+            svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+          }
+          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+
+        // line between points crosses bounds
+        if ( lastY < yMin && y >= yMin && y < yMax ) {
+          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY >= yMin && lastY < yMax && y < yMin ) {
+          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY <= yMax && lastY > yMin && y > yMax ) {
+          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        if ( lastY > yMax && y <= yMax && y > yMin ) {
+          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+        }
+
+        var lastX = x;
+        var lastY = y;
+
+      }
+
+      svg += `" stroke="${d.color}" stroke-width="1.5" fill="none"/>`;
+
     }
-
-    svg += `" stroke="${d.color}" stroke-width="1.5" fill="none"/>`;
-
-}
   }
 
   return svg + '</svg>';

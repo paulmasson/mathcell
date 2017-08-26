@@ -376,6 +376,9 @@ input[type=range]::-moz-focus-outer {
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 
 
+// return arrays of objects for all plots
+
+
 function plot( f, xRange, color='#07f' ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
@@ -415,9 +418,13 @@ function parametric( z, xRange, yRange, color, opacity ) {
     }
   }
 
-  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
 
 }
+
+
+// return arrays of objects for all graphics
 
 
 function arrow( begin, end, color='#07f' ) {
@@ -726,10 +733,16 @@ function threejsPlot( data, config ) {
 
   // UNIFY DATA HANDLING IN TEMPLATE
 
-  var texts = data.texts ? data.texts : [];
-  var points = data.points ? data.points : [];
-  var lines = data.lines ? data.lines : [];
-  var surfaces = data.surfaces ? data.surfaces : [];
+  var texts = [], points = [], lines = [], surfaces = [];
+
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+      if ( d.type === 'surface' ) surfaces.push( d );
+    }
 
   var all = [];
   for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );
@@ -1135,7 +1148,8 @@ function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0
     }
   }
 
-  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
 
 }
 

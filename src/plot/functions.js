@@ -1,4 +1,7 @@
 
+// return arrays of objects for all plots
+
+
 function plot( f, xRange, color='#07f' ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
@@ -38,7 +41,8 @@ function parametric( z, xRange, yRange, color, opacity ) {
     }
   }
 
-  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
 
 }
 

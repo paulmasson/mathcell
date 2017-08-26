@@ -1,4 +1,7 @@
 
+// return arrays of objects for all graphics
+
+
 function arrow( begin, end, color='#07f' ) {
 
   // assume 2D for now

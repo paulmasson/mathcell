@@ -15,10 +15,16 @@ function threejsPlot( data, config ) {
 
   // UNIFY DATA HANDLING IN TEMPLATE
 
-  var texts = data.texts ? data.texts : [];
-  var points = data.points ? data.points : [];
-  var lines = data.lines ? data.lines : [];
-  var surfaces = data.surfaces ? data.surfaces : [];
+  var texts = [], points = [], lines = [], surfaces = [];
+
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+      if ( d.type === 'surface' ) surfaces.push( d );
+    }
 
   var all = [];
   for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );

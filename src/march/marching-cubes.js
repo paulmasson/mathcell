@@ -92,7 +92,8 @@ function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0
     }
   }
 
-  return { vertices:vertices, faces:faces, color:color, opacity:opacity };
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
 
 }
 

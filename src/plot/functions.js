@@ -16,7 +16,20 @@ function plot( f, xRange, color='#07f' ) {
 }
 
 
-function parametric( z, xRange, yRange, color, opacity ) {
+function listPlot( points, color='#07f' ) {
+
+  if ( points[0].length === 2 )
+
+    return [ { points:points, color:color } ];
+
+  if ( points[0].length === 3 )
+
+    return [ { points:points, color:color, type: line } ];
+
+}
+
+
+function parametric( z, xRange, yRange, color='#07f', opacity ) {
 
   var slices = xRange[2];
   var stacks = yRange[2];

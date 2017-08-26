@@ -32,9 +32,9 @@ parent.update = function( id ) {
 
   }
 
-  var plot = isosurface( f, [-1,1], [-1,1], [-1,1] );
+  var s = isosurface( f, [-1,1], [-1,1], [-1,1] );
 
-  var data = { 'surfaces': [ plot ] };
+  var data = [ s ];
 
   var config = { type: 'threejs', frame: false };
 
@@ -71,9 +71,9 @@ parent.update = function( id ) {
 
   }
 
-  var plot = isosurface( f, [-1,1], [-1,1], [-1,1] );
+  var s = isosurface( f, [-1,1], [-1,1], [-1,1] );
 
-  var data = { 'surfaces': [ plot ] };
+  var data = [ s ];
 
   var config = { type: 'threejs', frame: false };
 

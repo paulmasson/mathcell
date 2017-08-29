@@ -56,14 +56,14 @@ function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0
         var v = []; // temp list of vertices
         var index = 0;
 
-        if ( v0[3] > level ) index += 1;
-        if ( v1[3] > level ) index += 2;
-        if ( v2[3] > level ) index += 4;
-        if ( v3[3] > level ) index += 8;
-        if ( v4[3] > level ) index += 16;
-        if ( v5[3] > level ) index += 32;
-        if ( v6[3] > level ) index += 64;
-        if ( v7[3] > level ) index += 128;
+        if ( v0[3] < level ) index += 1;
+        if ( v1[3] < level ) index += 2;
+        if ( v2[3] < level ) index += 4;
+        if ( v3[3] < level ) index += 8;
+        if ( v4[3] < level ) index += 16;
+        if ( v5[3] < level ) index += 32;
+        if ( v6[3] < level ) index += 64;
+        if ( v7[3] < level ) index += 128;
 
         if ( edgeTable[index] === 0 ) continue;
 

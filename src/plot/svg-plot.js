@@ -255,7 +255,7 @@ function svgPlot( id, data, config ) {
 
       }
 
-      svg += `" stroke="${d.color}" stroke-width="1.5" fill="none"/>`;
+      svg += `" stroke="${d.color}" stroke-width="1.5" fill="${d.fill ? d.color : 'none'}"/>`;
 
     }
   }

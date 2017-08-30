@@ -7,7 +7,40 @@
 
 <body>
 
+<script src="../../math/build/math.js"></script>
+<script src="../build/mathcell.js"></script>
+
 <p>A JavaScript library of special functions and common mathematical operations has been initiated, entitled simply <a href="https://github.com/paulmasson/math" target="_blank">Math</a>. It provides higher-level mathematics not available by default in JavaScript.</p>
+
+<p>As an example, here are the first five Bessel functions of the first kind:</p>
+
+<div class="mathcell" style="height: 4in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = 'id' + document.scripts.length;
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var data = [];
+
+  for ( var i = 0 ; i < 5 ; i++ )
+    data.push( plot( x => besselJ(i,x), [0, 10], 'hsl(' + 72*i + ',100%,50%)' ) );
+
+  var config = { type: 'svgplot' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
 
 </body>
 </html>

@@ -400,7 +400,7 @@ function listPlot( points, color='#07f' ) {
 }
 
 
-function parametric( z, xRange, yRange, color='#07f', opacity ) {
+function parametric( z, xRange, yRange, color='#07f', opacity=1 ) {
 
   var slices = xRange[2];
   var stacks = yRange[2];
@@ -544,7 +544,7 @@ function svgPlot( id, data, config ) {
 
   var xScale = width / xRange;
   var yScale = height / yRange;
-if ( config.preserveAspectRatio ) yScale = xScale
+  if ( config.equalAspect ) yScale = xScale;
 
   var axes = 'axes' in config ? config.axes : true;
   var ticks = 'ticks' in config ? config.ticks : [ 'auto', 'auto' ];

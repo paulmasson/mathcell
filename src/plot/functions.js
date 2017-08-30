@@ -23,7 +23,7 @@ function listPlot( points, color='#07f' ) {
 }
 
 
-function parametric( z, xRange, yRange, color='#07f', opacity ) {
+function parametric( z, xRange, yRange, color='#07f', opacity=1 ) {
 
   var slices = xRange[2];
   var stacks = yRange[2];

@@ -388,20 +388,14 @@ function plot( f, xRange, color='#07f' ) {
     x => points.push( [ x, f(x) ] )
   );
 
-  return [ { points:points, color:color } ];
+  return [ { points:points, color:color, type: 'line' } ];
 
 }
 
 
 function listPlot( points, color='#07f' ) {
 
-  if ( points[0].length === 2 )
-
-    return [ { points:points, color:color } ];
-
-  if ( points[0].length === 3 )
-
-    return [ { points:points, color:color, type: line } ];
+    return [ { points:points, color:color, type: 'line' } ];
 
 }
 
@@ -458,10 +452,17 @@ function arrow( begin, end, color='#07f' ) {
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
 
-  return [ { points:[ begin, end, p1, p2, end ], color:color } ];
+  return [ { points:[ begin, end, p1, p2, end ], color:color, type: 'line' } ];
 
 }
 
+
+function text( content, location, color='black', fontSize=14 ) {
+
+    return [ { text:content, point:location, color:color,
+               fontSize:fontSize, type: 'text' } ]
+
+}
 
 
 function svgPlot( id, data, config ) {
@@ -507,9 +508,20 @@ function svgPlot( id, data, config ) {
 
   if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'' } ] );
 
-  var all = [];
+  var texts = [], points = [], lines = [];
+
   for ( var i = 0 ; i < data.length ; i++ )
-    for ( var j = 0 ; j < data[i].length ; j++ ) all = all.concat( data[i][j].points );
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+    }
+
+  var all = [];
+  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( texts[i].point );
+  for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );
@@ -605,7 +617,8 @@ function svgPlot( id, data, config ) {
   }
 
   var svg = `
-<svg width="${width}" height="${height}" preserveAspectRatio="none"
+<svg width="${width}" height="${height}"
+     preserveAspectRatio="${config.preserveAspectRatio ? 'xMidYMid' : 'none'}"
      viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
      xmlns="http://www.w3.org/2000/svg">
   `;
@@ -648,81 +661,97 @@ function svgPlot( id, data, config ) {
 
   }
 
+
   function xPos( x ) { return roundTo( xOrigin + xScale*x, 2 ); }
 
   function yPos( y ) { return roundTo( yOrigin - yScale*y, 2 ); }
 
-  // function paths in arrays of arrays
-  for ( var i = 0 ; i < data.length ; i++ ) {
-    for ( var j = 0 ; j < data[i].length ; j++ ) {
 
-      var d = data[i][j];
-      var x = d.points[0][0];
-      var y = d.points[0][1];
+  for ( var i = 0 ; i < lines.length ; i++ ) {
 
-      svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
-      var lastX = x;
-      var lastY = y;
+    var l = lines[i];
+    var x = l.points[0][0];
+    var y = l.points[0][1];
 
-      for ( var k = 1 ; k < d.points.length ; k++ ) {
+    svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
+    var lastX = x;
+    var lastY = y;
 
-        x = d.points[k][0];
-        y = d.points[k][1];
+    for ( var k = 1 ; k < l.points.length ; k++ ) {
 
-        function intercept( u ) {
-          return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
-        }
+      x = l.points[k][0];
+      y = l.points[k][1];
 
-        // both points inside bounds
-        if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+      function intercept( u ) {
+        return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
+      }
 
-        // both points outside bounds
-        if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        if ( lastY < yMin && y > yMax ) {
-          if ( config.includeVerticals ) {
-            svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-            svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-          }
-          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        if ( lastY > yMax && y < yMin ) {
-          if ( config.includeVerticals ) {
-            svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-            svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-            svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-          }
-          else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
+      // both points inside bounds
+      if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
 
-        // line between points crosses bounds
-        if ( lastY < yMin && y >= yMin && y < yMax ) {
+      // both points outside bounds
+      if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      if ( lastY < yMin && y > yMax ) {
+        if ( config.includeVerticals ) {
           svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-        }
-        if ( lastY >= yMin && lastY < yMax && y < yMin ) {
-          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        if ( lastY <= yMax && lastY > yMin && y > yMax ) {
           svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
           svg += ` M ${ xPos(x) } ${ yPos(y) }`;
         }
-        if ( lastY > yMax && y <= yMax && y > yMin ) {
+        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY > yMax && y < yMin ) {
+        if ( config.includeVerticals ) {
           svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
         }
-
-        var lastX = x;
-        var lastY = y;
-
+        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
       }
 
-      svg += `" stroke="${d.color}" stroke-width="1.5" fill="${d.fill ? d.color : 'none'}"/>`;
+      // line between points crosses bounds
+      if ( lastY < yMin && y >= yMin && y < yMax ) {
+        svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY >= yMin && lastY < yMax && y < yMin ) {
+        svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY <= yMax && lastY > yMin && y > yMax ) {
+        svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY > yMax && y <= yMax && y > yMin ) {
+        svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+      }
+
+      var lastX = x;
+      var lastY = y;
 
     }
+
+    svg += `" stroke="${l.color}" stroke-width="1.5" fill="${l.fill ? l.color : 'none'}"/>`;
+
+  }
+
+  for ( var i = 0 ; i < points.length ; i++ ) {
+
+    var c = points[i];
+    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.color}"/>`;
+
+  }
+
+  for ( var i = 0 ; i < texts.length ; i++ ) {
+
+    var t = texts[i];
+    svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
+                  fill="${t.color}" font-size="${t.fontSize}"
+                  text-anchor="middle" dominant-baseline="central">
+            ${t.text}</text>`;
+
   }
 
   return svg + '</svg>';
@@ -758,7 +787,7 @@ function threejsPlot( data, config ) {
     }
 
   var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );
+  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( texts[i].point );
   for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
   for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
   for ( var i = 0 ; i < surfaces.length ; i++ ) all = all.concat( surfaces[i].vertices );
@@ -888,15 +917,14 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         addLabel( ( b[1].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[1].z );
     }
 
-    function addLabel( text, x, y, z ) {
-        var fontsize = 14;
+    function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
         var canvas = document.createElement( 'canvas' );
         canvas.width = 128;
         canvas.height = 32; // powers of two
 
         var context = canvas.getContext( '2d' );
-        context.fillStyle = 'black';
+        context.fillStyle = color;
         context.font = fontsize + 'px monospace';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
@@ -954,7 +982,7 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
 
     var texts = ${texts};
     for ( var i=0 ; i < texts.length ; i++ )
-        addLabel( texts[i].text, texts[i].x, texts[i].y, texts[i].z );
+        addLabel( texts[i].text, texts[i].point[0], texts[i].point[1], texts[i].point[2], texts[i].color, texts[i].fontSize );
 
     var points = ${points};
     for ( var i=0 ; i < points.length ; i++ ) addPoint( points[i] );
@@ -1600,7 +1628,7 @@ function isoline( f, xRange, yRange, color='#07f', level=0 ) {
 
       }
 
-      segments.push( { points:points, color:color } );
+      segments.push( { points:points, color:color, type: 'line' } );
 
     }
   }
@@ -1746,7 +1774,7 @@ function isobar( f, xRange, yRange, color='#07f', level=0 ) {
 
       }
 
-      segments.push( { points:points, color:color, fill: true } );
+      segments.push( { points:points, color:color, fill: true, type: 'line' } );
 
     }
   }

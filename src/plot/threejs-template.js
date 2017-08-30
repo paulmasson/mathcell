@@ -95,15 +95,14 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         addLabel( ( b[1].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[1].z );
     }
 
-    function addLabel( text, x, y, z ) {
-        var fontsize = 14;
+    function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
         var canvas = document.createElement( 'canvas' );
         canvas.width = 128;
         canvas.height = 32; // powers of two
 
         var context = canvas.getContext( '2d' );
-        context.fillStyle = 'black';
+        context.fillStyle = color;
         context.font = fontsize + 'px monospace';
         context.textAlign = 'center';
         context.textBaseline = 'middle';
@@ -161,7 +160,7 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
 
     var texts = ${texts};
     for ( var i=0 ; i < texts.length ; i++ )
-        addLabel( texts[i].text, texts[i].x, texts[i].y, texts[i].z );
+        addLabel( texts[i].text, texts[i].point[0], texts[i].point[1], texts[i].point[2], texts[i].color, texts[i].fontSize );
 
     var points = ${points};
     for ( var i=0 ; i < points.length ; i++ ) addPoint( points[i] );

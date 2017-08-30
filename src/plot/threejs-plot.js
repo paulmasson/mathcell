@@ -27,7 +27,7 @@ function threejsPlot( data, config ) {
     }
 
   var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( [texts[i].slice(1)] );
+  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( texts[i].point );
   for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
   for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
   for ( var i = 0 ; i < surfaces.length ; i++ ) all = all.concat( surfaces[i].vertices );

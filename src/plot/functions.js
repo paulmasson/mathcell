@@ -11,20 +11,14 @@ function plot( f, xRange, color='#07f' ) {
     x => points.push( [ x, f(x) ] )
   );
 
-  return [ { points:points, color:color } ];
+  return [ { points:points, color:color, type: 'line' } ];
 
 }
 
 
 function listPlot( points, color='#07f' ) {
 
-  if ( points[0].length === 2 )
-
-    return [ { points:points, color:color } ];
-
-  if ( points[0].length === 3 )
-
-    return [ { points:points, color:color, type: line } ];
+    return [ { points:points, color:color, type: 'line' } ];
 
 }
 

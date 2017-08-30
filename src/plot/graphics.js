@@ -20,8 +20,15 @@ function arrow( begin, end, color='#07f' ) {
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
 
-  return [ { points:[ begin, end, p1, p2, end ], color:color } ];
+  return [ { points:[ begin, end, p1, p2, end ], color:color, type: 'line' } ];
 
 }
 
+
+function text( content, location, color='black', fontSize=14 ) {
+
+    return [ { text:content, point:location, color:color,
+               fontSize:fontSize, type: 'text' } ]
+
+}
 

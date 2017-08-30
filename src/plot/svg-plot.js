@@ -78,6 +78,7 @@ function svgPlot( id, data, config ) {
 
   var xScale = width / xRange;
   var yScale = height / yRange;
+  if ( config.equalAspect ) yScale = xScale;
 
   var axes = 'axes' in config ? config.axes : true;
   var ticks = 'ticks' in config ? config.ticks : [ 'auto', 'auto' ];
@@ -151,8 +152,7 @@ function svgPlot( id, data, config ) {
   }
 
   var svg = `
-<svg width="${width}" height="${height}"
-     preserveAspectRatio="${config.preserveAspectRatio ? 'xMidYMid' : 'none'}"
+<svg width="${width}" height="${height}" preserveAspectRatio="none"
      viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
      xmlns="http://www.w3.org/2000/svg">
   `;

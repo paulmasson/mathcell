@@ -54,30 +54,7 @@
 
 </div>
 
-<iframe id="content" name="content" src="introduction.html"
-                     onload="iPadNavigationFix()"></iframe>
-
-<script>
-
-var c = document.getElementById( 'content' );
-window.addEventListener( 'hashchange', c.contentWindow.onhashchange );
-
-function iPadNavigationFix() {
-
-  if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
-
-    c.contentWindow.onhashchange = function() {
-      window.scrollTo(0,0);
-      c.src = c.contentWindow.location.href;
-    }
-
-    c.contentWindow.onhashchange();
-
-  }
-
-}
-
-</script>
+<iframe id="content" name="content" src="introduction.html"></iframe>
 
 </body>
 </html>

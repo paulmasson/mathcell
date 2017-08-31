@@ -402,6 +402,9 @@ function listPlot( points, color='#07f' ) {
 
 function parametric( z, xRange, yRange, color='#07f', opacity=1 ) {
 
+  if ( xRange.length < 3 ) xRange[2] = 50;
+  if ( yRange.length < 3 ) yRange[2] = 50;
+
   var slices = xRange[2];
   var stacks = yRange[2];
 
@@ -1044,6 +1047,8 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         var geometry = new THREE.Geometry();
         for ( var i=0 ; i < json.vertices.length ; i++ ) {
             var v = json.vertices[i];
+            if ( v[2] < b[0].z ) v[2] = b[0].z; // allow cap on poles
+            if ( v[2] > b[1].z ) v[2] = b[1].z;
             geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
         }
         for ( var i=0 ; i < json.faces.length ; i++ ) {

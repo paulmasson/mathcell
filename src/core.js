@@ -55,13 +55,15 @@ function interact( id, input ) {
       var list = 'list' in input ? input.list : [1,2,3];
       var check = 'default' in input ? input.default : list[0];
 
+      var style = input.width ? 'style="width: ' + input.width + '"' : '';
+
       var s = ''
       for ( var i = 0 ; i < list.length ; i++ )
         s += `
 <input id=${id + name}_${i} name=${id + name} type=radio
        value=${list[i]} ${list[i]===check?'checked':''}
        onchange="${id}.update('${id}')">
-<label for=${id + name}_${i}> ${list[i]} </label> &nbsp; </input>
+<label for=${id + name}_${i} ${style}> ${list[i]} </label> &nbsp; </input>
         `;
       return s;
 

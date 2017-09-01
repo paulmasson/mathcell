@@ -1696,8 +1696,8 @@ function isoline( f, xRange, yRange, color='#07f', level=0 ) {
 
 function isobar( f, xRange, yRange, color='#07f', level=0 ) {
 
-  if ( xRange.length < 3 ) xRange[2] = 80;
-  if ( yRange.length < 3 ) yRange[2] = 80;
+  if ( xRange.length < 3 ) xRange[2] = 75;
+  if ( yRange.length < 3 ) yRange[2] = 75;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );

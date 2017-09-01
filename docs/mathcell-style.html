@@ -9,5 +9,7 @@
 
 <p>MathCell by default includes CSS styling to standardize the appearance of interactive elements across browsers. The one piece of this that is not set automatically is the height of the cell, since the number of inputs and the type of output is not known in advance. While this may be automated to some extent in the future, it is simpler to have the end user manually set the height in the <code>style</code> attribute on the first line of the cell as needed.</p>
 
+<p>By default SVG plots fill all available output space. For plots that need to enforce an equal aspect ratio to ensure correct appearance, as for example plotting circles, the output option <code>equalAspect</code> should be set to <code>true</code> and the height of the MathCell increased to display the entire plot.</p>
+
 </body>
 </html>

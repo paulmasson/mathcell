@@ -40,7 +40,7 @@ function svgPlot( id, data, config ) {
   var height = document.getElementById( id + 'output' ).offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'' } ] );
+  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'', type: 'line' } ] );
 
   var texts = [], points = [], lines = [];
 

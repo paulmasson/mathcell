@@ -114,7 +114,12 @@ function graphic( id, data, config ) {
 
     case 'text':
 
-      return `<div style="white-space: nowrap; overflow-x: auto">${JSON.stringify(data)}</div>`;
+      // need JSON stringify to render objects
+      // explicit double quotes removed by default
+      // escape in other ways if needed in output
+
+      return `<div style="white-space: nowrap; overflow-x: auto">
+              ${JSON.stringify(data).replace(/\"/g, '')} </div>`;
 
     case 'matrix':
 

@@ -119,7 +119,7 @@ function graphic( id, data, config ) {
       // escape in other ways if needed in output
 
       return `<div style="white-space: nowrap; overflow-x: auto">
-              ${JSON.stringify(data).replace(/\"/g, '')} </div>`;
+              ${JSON.stringify( data ).replace( /\"/g, '' )} </div>`;
 
     case 'matrix':
 

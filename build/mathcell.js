@@ -67,6 +67,20 @@ function interact( id, input ) {
         `;
       return s;
 
+    case 'number':
+
+      var name = 'name' in input ? input.name : '';
+      var min = 'min' in input ? input.min : 0;
+      var max = 'max' in input ? input.max : 1;
+      var value = 'default' in input ? input.default : min;
+
+      return `
+<input id=${id + name} type=number min=${min} max=${max} value=${value}
+       style="width: 1in" title="" onload=this.onchange
+       onchange="if (+this.value < +this.min) this.value=this.min;
+                 if (+this.value > +this.max) this.value=this.max;${id}.update('${id}')"/>
+      `;
+
     case 'checkbox':
 
       var name = 'name' in input ? input.name : '';

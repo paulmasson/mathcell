@@ -81,9 +81,10 @@ function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0
         if ( edgeTable[index] & 2048 ) v[11] = lerp( v3, v7 );
 
         for ( var m = 0 ; triangleTable[index][m] != -1 ; m += 3 ) {
-          vertices.push( v[ triangleTable[index][m]   ],
-                         v[ triangleTable[index][m+1] ],
-                         v[ triangleTable[index][m+2] ] );
+          // remove array references for convenience
+          vertices.push( v[ triangleTable[index][m]   ].slice(),
+                         v[ triangleTable[index][m+1] ].slice(),
+                         v[ triangleTable[index][m+2] ].slice() );
           var l = vertices.length;
           faces.push( [ l-3, l-2, l-1 ] );
         }

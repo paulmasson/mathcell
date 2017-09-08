@@ -23,7 +23,10 @@ function threejsPlot( data, config ) {
       if ( d.type === 'text' ) texts.push( d );
       if ( d.type === 'point' ) points.push( d );
       if ( d.type === 'line' ) lines.push( d );
-      if ( d.type === 'surface' ) surfaces.push( d );
+      if ( d.type === 'surface' ) {
+        d.vertices = roundTo( d.vertices, 5 ); // reduce raw data size
+        surfaces.push( d );
+      }
     }
 
   var all = [];

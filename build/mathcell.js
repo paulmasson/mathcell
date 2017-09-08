@@ -202,7 +202,7 @@ function roundTo( x, n ) {
   if ( x === 0 ) return x;
 
   if ( Array.isArray(x) ) {
-    var v = vector( x.length );
+    var v = [];
     for ( var i = 0 ; i < x.length ; i++ ) v[i] = roundTo( x[i], n );
     return v;
   }
@@ -218,7 +218,7 @@ function ceilTo( x, n ) {
   if ( x === 0 ) return x;
 
   if ( Array.isArray(x) ) {
-    var v = vector( x.length );
+    var v = [];
     for ( var i = 0 ; i < x.length ; i++ ) v[i] = ceilTo( x[i], n );
     return v;
   }
@@ -234,7 +234,7 @@ function floorTo( x, n ) {
   if ( x === 0 ) return x;
 
   if ( Array.isArray(x) ) {
-    var v = vector( x.length );
+    var v = [];
     for ( var i = 0 ; i < x.length ; i++ ) v[i] = floorTo( x[i], n );
     return v;
   }

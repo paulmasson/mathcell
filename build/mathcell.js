@@ -628,7 +628,7 @@ function line( points, options={} ) {
     var segments = [];
 
     if ( options.endcaps )
-      segments.push( sphere( options.radius, { center: points[0] } )[0] );
+      segments.push( sphere( options.radius, { center: points[0], color: color } )[0] );
 
     for ( var i = 1 ; i < points.length ; i++ ) {
 
@@ -643,7 +643,7 @@ function line( points, options={} ) {
       segments.push( cylinder( options.radius, height, options )[0] );
 
       if ( options.endcaps )
-        segments.push( sphere( options.radius, { center: b } )[0] );
+        segments.push( sphere( options.radius, { center: b, color: color } )[0] );
 
     }
 

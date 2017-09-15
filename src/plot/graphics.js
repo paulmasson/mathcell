@@ -35,7 +35,7 @@ function text( content, location, color='black', fontSize=14 ) {
 
 // simple 3D objects
 
-function cuboid( width, depth, height, options={} ) {
+function box( width, depth, height, options={} ) {
 
   var color = 'color' in options ? options.color : 'red';
   var opacity = 'opacity' in options ? options.opacity : 1;
@@ -55,14 +55,20 @@ function cuboid( width, depth, height, options={} ) {
 
 }
 
-function sphere() {
+function sphere( radius, options={} ) {
 
+  var color = 'color' in options ? options.color : 'red';
+  var opacity = 'opacity' in options ? options.opacity : 1;
+
+  
 
 }
 
-function cylinder( radius, height, color='red', opacity=1 ) {
+function cylinder( radius, height, options={} ) {
 
-  
+  var color = 'color' in options ? options.color : 'red';
+  var opacity = 'opacity' in options ? options.opacity : 1;
+
 
 
 

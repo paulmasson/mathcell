@@ -69,8 +69,31 @@ function cylinder( radius, height, options={} ) {
   var color = 'color' in options ? options.color : 'red';
   var opacity = 'opacity' in options ? options.opacity : 1;
 
+  var steps = 'steps' in options ? options.steps : 20;
+  var h = height / 2;
 
+  var vertices = [ [0,0,h], [0,0,-h] ];
+  var faces = [];
 
+  for ( var i = 1 ; i < steps ; i++ ) {
+
+    vertices.push( [ radius * Math.cos( 2*Math.PI*(i-1)/(steps-1) ),
+                     radius * Math.sin( 2*Math.PI*(i-1)/(steps-1) ), h ],
+                   [ radius * Math.cos( 2*Math.PI*i/(steps-1) ),
+                     radius * Math.sin( 2*Math.PI*i/(steps-1) ), h ],
+                   [ radius * Math.cos( 2*Math.PI*(i-1)/(steps-1) ),
+                     radius * Math.sin( 2*Math.PI*(i-1)/(steps-1) ), -h ],
+                   [ radius * Math.cos( 2*Math.PI*i/(steps-1) ),
+                     radius * Math.sin( 2*Math.PI*i/(steps-1) ), -h ] );
+
+    var l = vertices.length;
+
+    faces.push( [0,l-4,l-3], [1,l-2,l-1], [l-4,l-3,l-1,l-2] );
+
+  }
+
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
 
 }
 

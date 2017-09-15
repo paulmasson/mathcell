@@ -28,7 +28,52 @@ function arrow( begin, end, color='#07f' ) {
 function text( content, location, color='black', fontSize=14 ) {
 
     return [ { text:content, point:location, color:color,
-               fontSize:fontSize, type: 'text' } ]
+               fontSize:fontSize, type: 'text' } ];
+
+}
+
+
+function line( points, options={} ) {
+
+  var color = 'color' in options ? options.color : 'red';
+  var opacity = 'opacity' in options ? options.opacity : 1;
+
+  if ( 'radius' in options ) {
+
+    var segments = [];
+
+    if ( options.endcaps )
+      segments.push( sphere( options.radius, { center: points[0] } )[0] );
+
+    for ( var i = 1 ; i < points.length ; i++ ) {
+
+      var a = points[i-1];
+      var b = points[i];
+
+      var height = Math.sqrt( (b[0]-a[0])**2 + (b[1]-a[1])**2 + (b[2]-a[2])**2 );
+
+      options.axis = [ b[0]-a[0], b[1]-a[1], b[2]-a[2] ];
+      options.center = [ (a[0]+b[0])/2, (a[1]+b[1])/2, (a[2]+b[2])/2 ];
+
+      segments.push( cylinder( options.radius, height, options )[0] );
+
+      if ( options.endcaps )
+        segments.push( sphere( options.radius, { center: b } )[0] );
+
+    }
+
+    return segments;
+
+  }
+
+  else {
+
+    var linewidth = 'linewidth' in options ? options.linewidth : 1;
+
+    return [ { points:points, color:color, opacity:opacity,
+               linewidth:linewidth, type: 'line' } ];
+
+  }
 
 }
 
@@ -89,6 +134,8 @@ function sphere( radius, options={} ) {
 
   }
 
+  if ( 'center' in options ) translate( vertices, options.center );
+
   return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
              type: 'surface' } ];
 
@@ -121,6 +168,17 @@ function cylinder( radius, height, options={} ) {
     faces.push( [0,l-4,l-3], [1,l-2,l-1], [l-4,l-3,l-1,l-2] );
 
   }
+
+  if ( 'axis' in options ) {
+
+    var v = options.axis;
+    var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
+
+    rotate( vertices, angle, [ -v[1], v[0], 0 ] );
+
+  }
+
+  if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
              type: 'surface' } ];

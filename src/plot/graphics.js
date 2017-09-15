@@ -60,7 +60,22 @@ function sphere( radius, options={} ) {
   var color = 'color' in options ? options.color : 'red';
   var opacity = 'opacity' in options ? options.opacity : 1;
 
-  
+  var steps = 'steps' in options ? options.steps : 20;
+
+  var vertices = [], faces = [];
+
+  for ( var i = 1 ; i < steps ; i++ ) {
+
+
+    var l = vertices.length;
+
+    faces.push( [0,l-4,l-3], [1,l-2,l-1], [l-4,l-3,l-1,l-2] );
+
+  }
+
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
+
 
 }
 
@@ -77,14 +92,13 @@ function cylinder( radius, height, options={} ) {
 
   for ( var i = 1 ; i < steps ; i++ ) {
 
-    vertices.push( [ radius * Math.cos( 2*Math.PI*(i-1)/(steps-1) ),
-                     radius * Math.sin( 2*Math.PI*(i-1)/(steps-1) ), h ],
-                   [ radius * Math.cos( 2*Math.PI*i/(steps-1) ),
-                     radius * Math.sin( 2*Math.PI*i/(steps-1) ), h ],
-                   [ radius * Math.cos( 2*Math.PI*(i-1)/(steps-1) ),
-                     radius * Math.sin( 2*Math.PI*(i-1)/(steps-1) ), -h ],
-                   [ radius * Math.cos( 2*Math.PI*i/(steps-1) ),
-                     radius * Math.sin( 2*Math.PI*i/(steps-1) ), -h ] );
+    var a = 2*Math.PI*(i-1)/(steps-1);
+    var b = 2*Math.PI*i/(steps-1);
+
+    vertices.push( [ radius * Math.cos(a), radius * Math.sin(a), h ],
+                   [ radius * Math.cos(b), radius * Math.sin(b), h ],
+                   [ radius * Math.cos(a), radius * Math.sin(a), -h ],
+                   [ radius * Math.cos(b), radius * Math.sin(b), -h ] );
 
     var l = vertices.length;
 

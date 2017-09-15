@@ -645,21 +645,36 @@ function sphere( radius, options={} ) {
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
 
   var vertices = [], faces = [];
 
   for ( var i = 1 ; i < steps ; i++ ) {
 
+    var a = Math.PI * (i-1) / (steps-1);
+    var b = Math.PI * i / (steps-1);
 
-    var l = vertices.length;
+    for ( var j = 1 ; j < steps ; j++ ) {
 
-    faces.push( [0,l-4,l-3], [1,l-2,l-1], [l-4,l-3,l-1,l-2] );
+      var c = 2 * Math.PI * (j-1) / (steps-1);
+      var d = 2 * Math.PI * j / (steps-1);
+
+    vertices.push(
+      [ r * Math.sin(a) * Math.cos(c), r * Math.sin(a) * Math.sin(c), r * Math.cos(a) ],
+      [ r * Math.sin(a) * Math.cos(d), r * Math.sin(a) * Math.sin(d), r * Math.cos(a) ],
+      [ r * Math.sin(b) * Math.cos(c), r * Math.sin(b) * Math.sin(c), r * Math.cos(b) ],
+      [ r * Math.sin(b) * Math.cos(d), r * Math.sin(b) * Math.sin(d), r * Math.cos(b) ]  );
+
+      var l = vertices.length;
+
+      faces.push( [l-4,l-3,l-1,l-2] );
+
+    }
 
   }
 
   return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
              type: 'surface' } ];
-
 
 }
 
@@ -669,6 +684,7 @@ function cylinder( radius, height, options={} ) {
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
   var h = height / 2;
 
   var vertices = [ [0,0,h], [0,0,-h] ];
@@ -676,13 +692,13 @@ function cylinder( radius, height, options={} ) {
 
   for ( var i = 1 ; i < steps ; i++ ) {
 
-    var a = 2*Math.PI*(i-1)/(steps-1);
-    var b = 2*Math.PI*i/(steps-1);
+    var a = 2 * Math.PI * (i-1) / (steps-1);
+    var b = 2 * Math.PI * i / (steps-1);
 
-    vertices.push( [ radius * Math.cos(a), radius * Math.sin(a), h ],
-                   [ radius * Math.cos(b), radius * Math.sin(b), h ],
-                   [ radius * Math.cos(a), radius * Math.sin(a), -h ],
-                   [ radius * Math.cos(b), radius * Math.sin(b), -h ] );
+    vertices.push( [ r * Math.cos(a), r * Math.sin(a), h ],
+                   [ r * Math.cos(b), r * Math.sin(b), h ],
+                   [ r * Math.cos(a), r * Math.sin(a), -h ],
+                   [ r * Math.cos(b), r * Math.sin(b), -h ] );
 
     var l = vertices.length;
 

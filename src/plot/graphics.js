@@ -32,3 +32,39 @@ function text( content, location, color='black', fontSize=14 ) {
 
 }
 
+
+// simple 3D objects
+
+function cuboid( width, depth, height, options={} ) {
+
+  var color = 'color' in options ? options.color : 'red';
+  var opacity = 'opacity' in options ? options.opacity : 1;
+
+  var x = width / 2;
+  var y = depth / 2;
+  var z = height / 2;
+
+  var vertices = [ [x,y,z], [-x,y,z], [x,-y,z], [-x,-y,z],
+                   [x,y,-z], [-x,y,-z], [x,-y,-z], [-x,-y,-z] ];
+
+  var faces = [ [0,1,3,2], [4,5,7,6], [0,4,5,1], [2,6,7,3],
+                [0,4,6,2], [1,5,7,3] ];
+
+  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+             type: 'surface' } ];
+
+}
+
+function sphere() {
+
+
+}
+
+function cylinder( radius, height, color='red', opacity=1 ) {
+
+  
+
+
+
+}
+

@@ -46,7 +46,9 @@ function threejsPlot( data, config ) {
   var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
   var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
 
-  var bounds = JSON.stringify( [{ x:xMin, y:yMin, z:zMin },{ x:xMax, y:yMax, z:zMax }] );
+  var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
+
+  var camera = 'auto';
 
   var lights = '[{ "x":-5, "y":3, "z":0, "color":"#7f7f7f", "parent":"camera" }]';
   var ambient = '{ "color":"#7f7f7f" }';
@@ -56,7 +58,7 @@ function threejsPlot( data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( options, bounds, lights, ambient, texts, points, lines, surfaces );
+  var html = template( options, bounds, camera, lights, ambient, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

@@ -1,5 +1,5 @@
 
-function template( options, bounds, lights, ambient, texts, points, lines, surfaces ) {
+function template( options, bounds, camera, lights, ambient, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>
@@ -34,37 +34,39 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
 
     var animate = false; // options.animate;
 
-    var b = ${bounds}; // bounds
+    var bounds = ${bounds};
+    var b0 = bounds[0]; // lower
+    var b1 = bounds[1]; // upper
 
-    if ( b[0].x === b[1].x ) {
-        b[0].x -= 1;
-        b[1].x += 1;
+    if ( b0[0] === b1[0] ) {
+        b0[0] -= 1;
+        b1[0] += 1;
     }
-    if ( b[0].y === b[1].y ) {
-        b[0].y -= 1;
-        b[1].y += 1;
+    if ( b0[1] === b1[1] ) {
+        b0[1] -= 1;
+        b1[1] += 1;
     }
-    if ( b[0].z === b[1].z ) {
-        b[0].z -= 1;
-        b[1].z += 1;
+    if ( b0[2] === b1[2] ) {
+        b0[2] -= 1;
+        b1[2] += 1;
     }
 
-    var xRange = b[1].x - b[0].x;
-    var yRange = b[1].y - b[0].y;
-    var zRange = b[1].z - b[0].z;
+    var xRange = b1[0] - b0[0];
+    var yRange = b1[1] - b0[1];
+    var zRange = b1[2] - b0[2];
     var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
     var ar = options.aspectRatio;
     var a = [ ar[0], ar[1], ar[2] ]; // aspect multipliers
     if ( zRange > rRange && a[2] === 1 ) a[2] = rRange / zRange;
 
-    var xMid = ( b[0].x + b[1].x ) / 2;
-    var yMid = ( b[0].y + b[1].y ) / 2;
-    var zMid = ( b[0].z + b[1].z ) / 2;
+    var xMid = ( b0[0] + b1[0] ) / 2;
+    var yMid = ( b0[1] + b1[1] ) / 2;
+    var zMid = ( b0[2] + b1[2] ) / 2;
 
     var box = new THREE.Geometry();
-    box.vertices.push( new THREE.Vector3( a[0]*b[0].x, a[1]*b[0].y, a[2]*b[0].z ) );
-    box.vertices.push( new THREE.Vector3( a[0]*b[1].x, a[1]*b[1].y, a[2]*b[1].z ) );
+    box.vertices.push( new THREE.Vector3( a[0]*b0[0], a[1]*b0[1], a[2]*b0[2] ) );
+    box.vertices.push( new THREE.Vector3( a[0]*b1[0], a[1]*b1[1], a[2]*b1[2] ) );
     var boxMesh = new THREE.LineSegments( box );
     if ( options.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
 
@@ -73,26 +75,26 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         var offsetRatio = 0.1;
         var al = options.axesLabels;
 
-        var offset = offsetRatio * a[1]*( b[1].y - b[0].y );
+        var offset = offsetRatio * a[1]*( b1[1] - b0[1] );
         var xm = xMid.toFixed(d);
         if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
-        addLabel( al[0] + '=' + xm, a[0]*xMid, a[1]*b[1].y+offset, a[2]*b[0].z );
-        addLabel( ( b[0].x ).toFixed(d), a[0]*b[0].x, a[1]*b[1].y+offset, a[2]*b[0].z );
-        addLabel( ( b[1].x ).toFixed(d), a[0]*b[1].x, a[1]*b[1].y+offset, a[2]*b[0].z );
+        addLabel( al[0] + '=' + xm, a[0]*xMid, a[1]*b1[1]+offset, a[2]*b0[2] );
+        addLabel( ( b0[0] ).toFixed(d), a[0]*b0[0], a[1]*b1[1]+offset, a[2]*b0[2] );
+        addLabel( ( b1[0] ).toFixed(d), a[0]*b1[0], a[1]*b1[1]+offset, a[2]*b0[2] );
 
-        var offset = offsetRatio * a[0]*( b[1].x - b[0].x );
+        var offset = offsetRatio * a[0]*( b1[0] - b0[0] );
         var ym = yMid.toFixed(d);
         if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
-        addLabel( al[1] + '=' + ym, a[0]*b[1].x+offset, a[1]*yMid, a[2]*b[0].z );
-        addLabel( ( b[0].y ).toFixed(d), a[0]*b[1].x+offset, a[1]*b[0].y, a[2]*b[0].z );
-        addLabel( ( b[1].y ).toFixed(d), a[0]*b[1].x+offset, a[1]*b[1].y, a[2]*b[0].z );
+        addLabel( al[1] + '=' + ym, a[0]*b1[0]+offset, a[1]*yMid, a[2]*b0[2] );
+        addLabel( ( b0[1] ).toFixed(d), a[0]*b1[0]+offset, a[1]*b0[1], a[2]*b0[2] );
+        addLabel( ( b1[1] ).toFixed(d), a[0]*b1[0]+offset, a[1]*b1[1], a[2]*b0[2] );
 
-        var offset = offsetRatio * a[1]*( b[1].y - b[0].y );
+        var offset = offsetRatio * a[1]*( b1[1] - b0[1] );
         var zm = zMid.toFixed(d);
         if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
-        addLabel( al[2] + '=' + zm, a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*zMid );
-        addLabel( ( b[0].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[0].z );
-        addLabel( ( b[1].z ).toFixed(d), a[0]*b[1].x, a[1]*b[0].y-offset, a[2]*b[1].z );
+        addLabel( al[2] + '=' + zm, a[0]*b1[0], a[1]*b0[1]-offset, a[2]*zMid );
+        addLabel( ( b0[2] ).toFixed(d), a[0]*b1[0], a[1]*b0[1]-offset, a[2]*b0[2] );
+        addLabel( ( b1[2] ).toFixed(d), a[0]*b1[0], a[1]*b0[1]-offset, a[2]*b1[2] );
     }
 
     function addLabel( text, x, y, z, color='black', fontsize=14 ) {
@@ -124,11 +126,13 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         scene.add( sprite );
     }
 
-    if ( options.axes ) scene.add( new THREE.AxisHelper( Math.min( a[0]*b[1].x, a[1]*b[1].y, a[2]*b[1].z ) ) );
+    if ( options.axes ) scene.add( new THREE.AxisHelper( Math.min( a[0]*b1[0], a[1]*b1[1], a[2]*b1[2] ) ) );
 
     var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.up.set( 0, 0, 1 );
-    camera.position.set( a[0]*(xMid+xRange), a[1]*(yMid+yRange), a[2]*(zMid+zRange) );
+
+    if ( camera === 'auto' )
+      camera.position.set( a[0]*(xMid+xRange), a[1]*(yMid+yRange), a[2]*(zMid+zRange) );
 
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {
@@ -222,8 +226,8 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
         var geometry = new THREE.Geometry();
         for ( var i=0 ; i < json.vertices.length ; i++ ) {
             var v = json.vertices[i];
-            if ( v[2] < b[0].z ) v[2] = b[0].z; // allow cap on poles
-            if ( v[2] > b[1].z ) v[2] = b[1].z;
+            if ( v[2] < b0[2] ) v[2] = b0[2]; // allow cap on poles
+            if ( v[2] > b1[2] ) v[2] = b1[2];
             geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
         }
         for ( var i=0 ; i < json.faces.length ; i++ ) {

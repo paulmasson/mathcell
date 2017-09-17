@@ -2,7 +2,7 @@
 // return arrays of objects for all plots
 
 
-function plot( f, xRange, color='#07f' ) {
+function plot( f, xRange, color='blue' ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
 
@@ -16,14 +16,14 @@ function plot( f, xRange, color='#07f' ) {
 }
 
 
-function listPlot( points, color='#07f' ) {
+function listPlot( points, color='blue' ) {
 
     return [ { points: points, color: color, type: 'line' } ];
 
 }
 
 
-function parametric( z, xRange, yRange, color='#07f', opacity=1 ) {
+function parametric( z, xRange, yRange, color='blue', opacity=1 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;

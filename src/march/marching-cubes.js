@@ -1,5 +1,5 @@
 
-function isosurface( f, xRange, yRange, zRange, color='#07f', opacity=1, level=0 ) {
+function isosurface( f, xRange, yRange, zRange, color='blue', opacity=1, level=0 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;

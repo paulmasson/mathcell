@@ -1,6 +1,7 @@
 
 function threejsPlot( data, config ) {
 
+  var ambientLight = 'ambientLight' in config ? config.ambientLight : 'rgb(127,127,127)';
   var aspectRatio = 'aspectRatio' in config ? config.aspectRatio : [1,1,1];
   var axes = 'axes' in config ? config.axes : false;
   var axesLabels = 'axesLabels' in config ? config.axesLabels : ['x','y','z'];

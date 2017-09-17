@@ -25,9 +25,9 @@ function arrow( begin, end, color='blue' ) {
 }
 
 
-function text( content, location, color='black', fontSize=14 ) {
+function text( string, point, color='black', fontSize=14 ) {
 
-    return [ { text: content, point: location, color: color,
+    return [ { text: string, point: point, color: color,
                fontSize: fontSize, type: 'text' } ];
 
 }

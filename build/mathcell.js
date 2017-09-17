@@ -610,9 +610,9 @@ function arrow( begin, end, color='blue' ) {
 }
 
 
-function text( content, location, color='black', fontSize=14 ) {
+function text( string, point, color='black', fontSize=14 ) {
 
-    return [ { text: content, point: location, color: color,
+    return [ { text: string, point: point, color: color,
                fontSize: fontSize, type: 'text' } ];
 
 }
@@ -1081,8 +1081,6 @@ function threejsPlot( data, config ) {
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
       decimals: decimals, frame: frame, viewpoint: viewpoint } );
 
-  // UNIFY DATA HANDLING IN TEMPLATE
-
   var texts = [], points = [], lines = [], surfaces = [];
 
   for ( var i = 0 ; i < data.length ; i++ )
@@ -1298,8 +1296,10 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     } );
 
     var texts = ${texts};
-    for ( var i=0 ; i < texts.length ; i++ )
-        addLabel( texts[i].text, texts[i].point[0], texts[i].point[1], texts[i].point[2], texts[i].color, texts[i].fontSize );
+    for ( var i=0 ; i < texts.length ; i++ ) {
+      var t = texts[i];
+      addLabel( t.text, t.point[0], t.point[1], t.point[2], t.color, t.fontSize );
+    }
 
     var points = ${points};
     for ( var i=0 ; i < points.length ; i++ ) addPoint( points[i] );

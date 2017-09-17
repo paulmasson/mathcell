@@ -166,8 +166,10 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     } );
 
     var texts = ${texts};
-    for ( var i=0 ; i < texts.length ; i++ )
-        addLabel( texts[i].text, texts[i].point[0], texts[i].point[1], texts[i].point[2], texts[i].color, texts[i].fontSize );
+    for ( var i=0 ; i < texts.length ; i++ ) {
+      var t = texts[i];
+      addLabel( t.text, t.point[0], t.point[1], t.point[2], t.color, t.fontSize );
+    }
 
     var points = ${points};
     for ( var i=0 ; i < points.length ; i++ ) addPoint( points[i] );

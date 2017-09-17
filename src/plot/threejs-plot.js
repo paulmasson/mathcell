@@ -15,8 +15,6 @@ function threejsPlot( data, config ) {
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
       decimals: decimals, frame: frame, viewpoint: viewpoint } );
 
-  // UNIFY DATA HANDLING IN TEMPLATE
-
   var texts = [], points = [], lines = [], surfaces = [];
 
   for ( var i = 0 ; i < data.length ; i++ )

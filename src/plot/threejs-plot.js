@@ -50,7 +50,7 @@ function threejsPlot( data, config ) {
 
   var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
 
-  var lights = '[{ "x":-5, "y":3, "z":0, "color":"#7f7f7f", "parent":"camera" }]';
+  var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
 
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );

@@ -1116,7 +1116,7 @@ function threejsPlot( data, config ) {
 
   var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
 
-  var lights = '[{ "x":-5, "y":3, "z":0, "color":"#7f7f7f", "parent":"camera" }]';
+  var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
 
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
@@ -1272,7 +1272,8 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {
         var light = new THREE.DirectionalLight( lights[i].color, 1 );
-        light.position.set( a[0]*lights[i].x, a[1]*lights[i].y, a[2]*lights[i].z );
+        var v = lights[i].position;
+        light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
         if ( lights[i].parent === 'camera' ) {
             light.target.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
             scene.add( light.target );

@@ -140,7 +140,8 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {
         var light = new THREE.DirectionalLight( lights[i].color, 1 );
-        light.position.set( a[0]*lights[i].x, a[1]*lights[i].y, a[2]*lights[i].z );
+        var v = lights[i].position;
+        light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
         if ( lights[i].parent === 'camera' ) {
             light.target.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
             scene.add( light.target );

@@ -1,5 +1,5 @@
 
-function template( options, bounds, lights, ambient, texts, points, lines, surfaces ) {
+function template( options, bounds, lights, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>
@@ -150,8 +150,7 @@ function template( options, bounds, lights, ambient, texts, points, lines, surfa
     }
     scene.add( camera );
 
-    var ambient = ${ambient};
-    scene.add( new THREE.AmbientLight( ambient.color, 1 ) );
+    scene.add( new THREE.AmbientLight( options.ambientLight, 1 ) );
 
     var controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.target.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );

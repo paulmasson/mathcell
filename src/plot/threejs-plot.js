@@ -10,7 +10,7 @@ function threejsPlot( data, config ) {
 
   if ( !frame ) axesLabels = false;
 
-  var options = JSON.stringify( {
+  var options = JSON.stringify( { ambientLight: ambientLight,
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
       decimals: decimals, frame: frame, viewpoint: viewpoint } );
 
@@ -50,14 +50,13 @@ function threejsPlot( data, config ) {
   var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
 
   var lights = '[{ "x":-5, "y":3, "z":0, "color":"#7f7f7f", "parent":"camera" }]';
-  var ambient = '{ "color":"#7f7f7f" }';
 
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( options, bounds, lights, ambient, texts, points, lines, surfaces );
+  var html = template( options, bounds, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

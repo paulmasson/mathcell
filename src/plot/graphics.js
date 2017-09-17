@@ -20,15 +20,15 @@ function arrow( begin, end, color='#07f' ) {
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
 
-  return [ { points:[ begin, end, p1, p2, end ], color:color, type: 'line' } ];
+  return [ { points: [ begin, end, p1, p2, end ], color: color, type: 'line' } ];
 
 }
 
 
 function text( content, location, color='black', fontSize=14 ) {
 
-    return [ { text:content, point:location, color:color,
-               fontSize:fontSize, type: 'text' } ];
+    return [ { text: content, point: location, color: color,
+               fontSize: fontSize, type: 'text' } ];
 
 }
 
@@ -70,8 +70,8 @@ function line( points, options={} ) {
 
     var linewidth = 'linewidth' in options ? options.linewidth : 1;
 
-    return [ { points:points, color:color, opacity:opacity,
-               linewidth:linewidth, type: 'line' } ];
+    return [ { points: points, color: color, opacity: opacity,
+               linewidth: linewidth, type: 'line' } ];
 
   }
 
@@ -95,7 +95,7 @@ function box( width, depth, height, options={} ) {
   var faces = [ [0,1,3,2], [4,5,7,6], [0,4,5,1], [2,6,7,3],
                 [0,4,6,2], [1,5,7,3] ];
 
-  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
              type: 'surface' } ];
 
 }
@@ -136,7 +136,7 @@ function sphere( radius, options={} ) {
 
   if ( 'center' in options ) translate( vertices, options.center );
 
-  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
              type: 'surface' } ];
 
 }
@@ -180,7 +180,7 @@ function cylinder( radius, height, options={} ) {
 
   if ( 'center' in options ) translate( vertices, options.center );
 
-  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
              type: 'surface' } ];
 
 }

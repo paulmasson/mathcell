@@ -133,7 +133,7 @@ function isoline( f, xRange, yRange, color='#07f', level=0 ) {
 
       }
 
-      segments.push( { points:points, color:color, type: 'line' } );
+      segments.push( { points: points, color: color, type: 'line' } );
 
     }
   }
@@ -279,7 +279,7 @@ function isobar( f, xRange, yRange, color='#07f', level=0 ) {
 
       }
 
-      segments.push( { points:points, color:color, fill: true, type: 'line' } );
+      segments.push( { points: points, color: color, fill: true, type: 'line' } );
 
     }
   }

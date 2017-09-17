@@ -11,14 +11,14 @@ function plot( f, xRange, color='#07f' ) {
     x => points.push( [ x, f(x) ] )
   );
 
-  return [ { points:points, color:color, type: 'line' } ];
+  return [ { points: points, color: color, type: 'line' } ];
 
 }
 
 
 function listPlot( points, color='#07f' ) {
 
-    return [ { points:points, color:color, type: 'line' } ];
+    return [ { points: points, color: color, type: 'line' } ];
 
 }
 
@@ -51,7 +51,7 @@ function parametric( z, xRange, yRange, color='#07f', opacity=1 ) {
     }
   }
 
-  return [ { vertices:vertices, faces:faces, color:color, opacity:opacity,
+  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
              type: 'surface' } ];
 
 }

@@ -1188,8 +1188,7 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var zRange = b1[2] - b0[2];
     var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
-    var ar = options.aspectRatio;
-    var a = [ ar[0], ar[1], ar[2] ]; // aspect multipliers
+    var a = options.aspectRatio; // aspect multipliers
     if ( zRange > rRange && a[2] === 1 ) a[2] = rRange / zRange;
 
     var xMid = ( b0[0] + b1[0] ) / 2;

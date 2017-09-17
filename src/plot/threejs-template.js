@@ -1,5 +1,5 @@
 
-function template( options, bounds, camera, lights, ambient, texts, points, lines, surfaces ) {
+function template( options, bounds, lights, ambient, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>
@@ -131,8 +131,12 @@ function template( options, bounds, camera, lights, ambient, texts, points, line
     var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.up.set( 0, 0, 1 );
 
-    if ( camera === 'auto' )
+    if ( options.viewpoint === 'auto' )
       camera.position.set( a[0]*(xMid+xRange), a[1]*(yMid+yRange), a[2]*(zMid+zRange) );
+    else {
+      var v = options.viewpoint;
+      camera.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
+    }
 
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {

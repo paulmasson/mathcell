@@ -6,12 +6,13 @@ function threejsPlot( data, config ) {
   var axesLabels = 'axesLabels' in config ? config.axesLabels : ['x','y','z'];
   var decimals = 'decimals' in config ? config.decimals : 2;
   var frame = 'frame' in config ? config.frame : true;
+  var viewpoint = 'viewpoint' in config ? config.viewpoint : 'auto';
 
   if ( !frame ) axesLabels = false;
 
   var options = JSON.stringify( {
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
-      decimals: decimals, frame: frame } );
+      decimals: decimals, frame: frame, viewpoint: viewpoint } );
 
   // UNIFY DATA HANDLING IN TEMPLATE
 
@@ -48,8 +49,6 @@ function threejsPlot( data, config ) {
 
   var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
 
-  var camera = 'auto';
-
   var lights = '[{ "x":-5, "y":3, "z":0, "color":"#7f7f7f", "parent":"camera" }]';
   var ambient = '{ "color":"#7f7f7f" }';
 
@@ -58,7 +57,7 @@ function threejsPlot( data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( options, bounds, camera, lights, ambient, texts, points, lines, surfaces );
+  var html = template( options, bounds, lights, ambient, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

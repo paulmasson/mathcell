@@ -44,9 +44,9 @@ function interact( id, input ) {
       return `
 <input id=${id + name} type=range min=${min} max=${max} step=${step} value=${value}
        style="vertical-align: middle; width: calc(100% - 1.2in)"
-       onchange="${id + name}box.value=${id + name}.value;${id}.update('${id}')"/>
-<input id=${id + name}box type=number value=${value} title="" style="width: .5in"
-       onchange="${id + name}.value=${id + name}box.value;${id}.update('${id}')"/>
+       onchange="${id + name}Box.value=${id + name}.value;${id}.update('${id}')"/>
+<input id=${id + name}Box type=number value=${value} title="" style="width: .5in"
+       onchange="${id + name}.value=${id + name}Box.value;${id}.update('${id}')"/>
       `;
 
     case 'buttons':
@@ -143,6 +143,13 @@ function graphic( id, data, config ) {
       return 'Unsupported graphic type';
 
   }
+
+}
+
+
+function generateId() {
+
+  return 'id' + Math.floor( 10**10 * Math.random() );
 
 }
 

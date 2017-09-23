@@ -19,7 +19,7 @@
 
 var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 
-var id = 'id' + document.scripts.length;
+var id = generateId();
 parent.id = id;
 
 MathCell( id, [] );

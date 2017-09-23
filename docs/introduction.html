@@ -17,7 +17,7 @@ a simple straightforward way to include interactive mathematics in a web page</p
 
 var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 
-var id = 'id' + document.scripts.length;
+var id = generateId();
 parent.id = id;
 
 MathCell( id, [ { type: 'slider', min: 0, max: 2*Math.PI,

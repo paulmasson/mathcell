@@ -8,28 +8,10 @@ function svgPlot( id, data, config ) {
 
   }
 
-  function roundTo( x, n ) {
-
-    return Math.round( Math.pow(10,n) * x ) / Math.pow(10,n);
-
-  }
-
-  function ceilTo( x, n ) {
-
-    return Math.ceil( Math.pow(10,n) * x ) / Math.pow(10,n);
-
-  }
-
-  function floorTo( x, n ) {
-
-    return Math.floor( Math.pow(10,n) * x ) / Math.pow(10,n);
-
-  }
-
   function decimalsInNumber( x ) {
 
     for ( var i = 0 ; i < 100 ; i++ ) {
-      if ( roundTo(x,i) === x ) break;
+      if ( roundTo( x, i, false ) === x ) break;
     }
     return i;
 
@@ -61,15 +43,12 @@ function svgPlot( id, data, config ) {
   var yMinMax = minMax( all, 1 );
 
   // rounding currently to remove excessive decimals
-  // needs improving for exponential notation
-  var xMin = 'xMin' in config ? config.xMin
-             : floorTo( xMinMax.min, 4); //3 - Math.round( Math.log10(xMinMax.min) ) );
-  var xMax = 'xMax' in config ? config.xMax
-             : ceilTo( xMinMax.max, 4); //3 - Math.round( Math.log10(xMinMax.max) ) );
-  var yMin = 'yMin' in config ? config.yMin
-             : floorTo( yMinMax.min, 4); //3 - Math.round( Math.log10(yMinMax.min) ) );
-  var yMax = 'yMax' in config ? config.yMax
-             : ceilTo( yMinMax.max, 4); //3 - Math.round( Math.log10(yMinMax.max) ) );
+  // add option when needed for rounding to significant digits
+
+  var xMin = 'xMin' in config ? config.xMin : floorTo( xMinMax.min, 4, false );
+  var xMax = 'xMax' in config ? config.xMax : ceilTo( xMinMax.max, 4, false );
+  var yMin = 'yMin' in config ? config.yMin : floorTo( yMinMax.min, 4, false );
+  var yMax = 'yMax' in config ? config.yMax : ceilTo( yMinMax.max, 4, false );
 
   if ( yMin === yMax ) yMax += 1;
 
@@ -99,9 +78,9 @@ function svgPlot( id, data, config ) {
   var yTickDecimals = decimalsInNumber( ticks[1] );
 
   // size of largest y-axis tick label
-  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals ).toString().length,
-                                roundTo( yMax, yTickDecimals ).toString().length,
-                                roundTo( 3*ticks[1], yTickDecimals ).toString().length  );
+  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, false ).toString().length,
+                                roundTo( yMax, yTickDecimals, false ).toString().length,
+                                roundTo( 3*ticks[1], yTickDecimals, false ).toString().length  );
 
   // offsets of numbers from axes, inverted when on right/top
   var xOffset = 10;
@@ -196,9 +175,9 @@ function svgPlot( id, data, config ) {
   }
 
 
-  function xPos( x ) { return roundTo( xOrigin + xScale*x, 2 ); }
+  function xPos( x ) { return roundTo( xOrigin + xScale*x, 2, false ); }
 
-  function yPos( y ) { return roundTo( yOrigin - yScale*y, 2 ); }
+  function yPos( y ) { return roundTo( yOrigin - yScale*y, 2, false ); }
 
 
   for ( var i = 0 ; i < lines.length ; i++ ) {

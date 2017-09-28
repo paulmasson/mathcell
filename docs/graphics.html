@@ -7,7 +7,19 @@
 
 <body>
 
-<p></p>
+<p>Options for graphics objects are specified as dictionaries. Color and opacity can be omitted, with default values of blue and one, respectively.</p>
+
+<br/><p><b>arrow( begin, end, color )</b> &mdash; two-dimensional arrow from beginning to end</p>
+
+<p><b>box( width, depth, height, options )</b> &mdash; box of specified dimensions centered at the origin</p>
+
+<p><b>cylinder( radius, height, options )</b> &mdash; cylinder of specified dimensions centered at the origin; an option of <code>steps</code> determines the smoothness of the surface, an option of <code>axis</code> the arbitrary direction of the cylinder, and an option of <code>center</code> the position of the cylinder</p>
+
+<p><b>line( points, options )</b> &mdash; two- or three-dimensional line joining an array of points; an option of <code>radius</code> draws the line as an extended cylinder, and an option of <code>endcaps</code> equal to <code>true</code> includes spheres to smooth the joints</p>
+
+<p><b>sphere( radius, options )</b> &mdash; sphere of specified radius centered at the origin; an option of <code>steps</code> determines the smoothness of the surface</p>
+
+<p><b>text( string, point, color, fontsize )</b> &mdash; string of text at the two- or three-dimensional point, with default color of black and font size of 14</p>
 
 </body>
 </html>

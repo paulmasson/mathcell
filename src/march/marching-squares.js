@@ -143,7 +143,7 @@ function isoline( f, xRange, yRange, color='blue', level=0 ) {
 }
 
 
-function isobar( f, xRange, yRange, color='blue', level=0 ) {
+function isoband( f, xRange, yRange, color='blue', level=0 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 75;
   if ( yRange.length < 3 ) yRange[2] = 75;

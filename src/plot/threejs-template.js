@@ -66,7 +66,7 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var box = new THREE.Geometry();
     box.vertices.push( new THREE.Vector3( a[0]*b0[0], a[1]*b0[1], a[2]*b0[2] ) );
     box.vertices.push( new THREE.Vector3( a[0]*b1[0], a[1]*b1[1], a[2]*b1[2] ) );
-    var boxMesh = new THREE.LineSegments( box );
+    var boxMesh = new THREE.Line( box );
     if ( options.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
 
     if ( options.axesLabels ) {
@@ -207,10 +207,8 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
 
     function addLine( json ) {
         var geometry = new THREE.Geometry();
-        for ( var i=0 ; i < json.points.length - 1 ; i++ ) {
+        for ( var i=0 ; i < json.points.length ; i++ ) {
             var v = json.points[i];
-            geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
-            var v = json.points[i+1];
             geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
         }
 
@@ -219,7 +217,7 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
                                                       transparent: transparent, opacity: json.opacity } );
 
         var c = geometry.center().multiplyScalar( -1 );
-        var mesh = new THREE.LineSegments( geometry, material );
+        var mesh = new THREE.Line( geometry, material );
         mesh.position.set( c.x, c.y, c.z );
         scene.add( mesh );
     }

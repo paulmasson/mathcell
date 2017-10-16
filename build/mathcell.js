@@ -566,7 +566,7 @@ function listPlot( points, color='blue' ) {
 }
 
 
-function parametric( z, xRange, yRange, color='blue', opacity=1 ) {
+function parametric( vector, xRange, yRange, color='blue', opacity=1 ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;
@@ -582,7 +582,7 @@ function parametric( z, xRange, yRange, color='blue', opacity=1 ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
-      vertices.push( [x, y, z(x,y)] );
+      vertices.push( vector(x,y) );
     }
   }
 

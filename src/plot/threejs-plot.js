@@ -1,5 +1,5 @@
 
-function threejsPlot( data, config ) {
+function threejsPlot( id, data, config ) {
 
   var ambientLight = 'ambientLight' in config ? config.ambientLight : 'rgb(127,127,127)';
   var aspectRatio = 'aspectRatio' in config ? config.aspectRatio : [1,1,1];
@@ -8,6 +8,18 @@ function threejsPlot( data, config ) {
   var decimals = 'decimals' in config ? config.decimals : 2;
   var frame = 'frame' in config ? config.frame : true;
   var viewpoint = 'viewpoint' in config ? config.viewpoint : 'auto';
+
+  var output = document.getElementById( id + 'output' );
+
+  if ( output.children.length > 0 ) {
+
+    var cw = output.children[0].contentWindow;
+    var v = cw.camera.position;
+
+    // only direction of viewpoint meaningful, not normalization
+    viewpoint = [ v.x - cw.a[0] * cw.xMid, v.y - cw.a[1] * cw.yMid, v.z - cw.a[2] * cw.zMid ];
+
+  }
 
   if ( !frame ) axesLabels = false;
 

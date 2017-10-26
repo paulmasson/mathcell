@@ -110,7 +110,7 @@ function graphic( id, data, config ) {
 
     case 'threejs':
 
-      return threejsPlot( data, config );
+      return threejsPlot( id, data, config );
 
     case 'text':
 
@@ -1060,7 +1060,7 @@ function svgPlot( id, data, config ) {
 }
 
 
-function threejsPlot( data, config ) {
+function threejsPlot( id, data, config ) {
 
   var ambientLight = 'ambientLight' in config ? config.ambientLight : 'rgb(127,127,127)';
   var aspectRatio = 'aspectRatio' in config ? config.aspectRatio : [1,1,1];
@@ -1069,6 +1069,18 @@ function threejsPlot( data, config ) {
   var decimals = 'decimals' in config ? config.decimals : 2;
   var frame = 'frame' in config ? config.frame : true;
   var viewpoint = 'viewpoint' in config ? config.viewpoint : 'auto';
+
+  var output = document.getElementById( id + 'output' );
+
+  if ( output.children.length > 0 ) {
+
+    var cw = output.children[0].contentWindow;
+    var v = cw.camera.position;
+
+    // only direction of viewpoint meaningful, not normalization
+    viewpoint = [ v.x - cw.a[0] * cw.xMid, v.y - cw.a[1] * cw.yMid, v.z - cw.a[2] * cw.zMid ];
+
+  }
 
   if ( !frame ) axesLabels = false;
 
@@ -1255,12 +1267,19 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.up.set( 0, 0, 1 );
 
-    if ( options.viewpoint === 'auto' )
-      camera.position.set( a[0]*(xMid+xRange), a[1]*(yMid+yRange), a[2]*(zMid+zRange) );
-    else {
+    // default auto position, followed by rotation to viewpoint direction
+    camera.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+    var defaultOffset = new THREE.Vector3( a[0]*xRange, a[1]*yRange, a[2]*zRange );
+
+    if ( options.viewpoint !== 'auto' ) {
       var v = options.viewpoint;
-      camera.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
+      var t = new THREE.Vector3( v[0], v[1], v[2] );
+      var phi = defaultOffset.angleTo( t );
+      var n = t.cross( defaultOffset ).normalize();
+      defaultOffset.applyAxisAngle( n, -phi );
     }
+
+    camera.position.add( defaultOffset );
 
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {

@@ -130,12 +130,19 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
     var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
     camera.up.set( 0, 0, 1 );
 
-    if ( options.viewpoint === 'auto' )
-      camera.position.set( a[0]*(xMid+xRange), a[1]*(yMid+yRange), a[2]*(zMid+zRange) );
-    else {
+    // default auto position, followed by rotation to viewpoint direction
+    camera.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+    var defaultOffset = new THREE.Vector3( a[0]*xRange, a[1]*yRange, a[2]*zRange );
+
+    if ( options.viewpoint !== 'auto' ) {
       var v = options.viewpoint;
-      camera.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
+      var t = new THREE.Vector3( v[0], v[1], v[2] );
+      var phi = defaultOffset.angleTo( t );
+      var n = t.cross( defaultOffset ).normalize();
+      defaultOffset.applyAxisAngle( n, -phi );
     }
+
+    camera.position.add( defaultOffset );
 
     var lights = ${lights};
     for ( var i=0 ; i < lights.length ; i++ ) {

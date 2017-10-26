@@ -110,7 +110,7 @@ function graphic( id, data, config ) {
 
     case 'threejs':
 
-      return threejsPlot( data, config );
+      return threejsPlot( id, data, config );
 
     case 'text':
 

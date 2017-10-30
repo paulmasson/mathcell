@@ -1,9 +1,13 @@
 
-function isosurface( f, xRange, yRange, zRange, color='blue', opacity=1, level=0 ) {
+function isosurface( f, xRange, yRange, zRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;
   if ( zRange.length < 3 ) zRange[2] = 50;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var opacity = 'opacity' in options ? options.opacity : 1;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );

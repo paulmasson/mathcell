@@ -2,9 +2,11 @@
 // return arrays of objects for all plots
 
 
-function plot( f, xRange, color='blue' ) {
+function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
@@ -16,17 +18,22 @@ function plot( f, xRange, color='blue' ) {
 }
 
 
-function listPlot( points, color='blue' ) {
+function listPlot( points, options={} ) {
 
-    return [ { points: points, color: color, type: 'line' } ];
+  var color = 'color' in options ? options.color : defaultPlotColor;
+
+  return [ { points: points, color: color, type: 'line' } ];
 
 }
 
 
-function parametric( vector, xRange, yRange, color='blue', opacity=1 ) {
+function parametric( vector, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var opacity = 'opacity' in options ? options.opacity : 1;
 
   var slices = xRange[2];
   var stacks = yRange[2];

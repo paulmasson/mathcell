@@ -339,6 +339,8 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 }
 
 
+var defaultPlotColor = 'rgb(0,127,255)';
+
 var mathcellStyle = document.createElement( 'style' );
 mathcellStyle.type = 'text/css';
 mathcellStyle.innerHTML = `
@@ -545,9 +547,11 @@ document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 // return arrays of objects for all plots
 
 
-function plot( f, xRange, color='blue' ) {
+function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
@@ -559,17 +563,22 @@ function plot( f, xRange, color='blue' ) {
 }
 
 
-function listPlot( points, color='blue' ) {
+function listPlot( points, options={} ) {
 
-    return [ { points: points, color: color, type: 'line' } ];
+  var color = 'color' in options ? options.color : defaultPlotColor;
+
+  return [ { points: points, color: color, type: 'line' } ];
 
 }
 
 
-function parametric( vector, xRange, yRange, color='blue', opacity=1 ) {
+function parametric( vector, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var opacity = 'opacity' in options ? options.opacity : 1;
 
   var slices = xRange[2];
   var stacks = yRange[2];
@@ -603,7 +612,7 @@ function parametric( vector, xRange, yRange, color='blue', opacity=1 ) {
 // return arrays of objects for all graphics
 
 
-function arrow( begin, end, color='blue' ) {
+function arrow( begin, end, color=defaultPlotColor ) {
 
   // assume 2D for now
   var vector = [ end[0]-begin[0], end[1]-begin[1] ];
@@ -636,7 +645,7 @@ function text( string, point, color='black', fontSize=14 ) {
 
 function line( points, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   if ( 'radius' in options ) {
@@ -683,7 +692,7 @@ function line( points, options={} ) {
 
 function box( width, depth, height, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var x = width / 2;
@@ -703,7 +712,7 @@ function box( width, depth, height, options={} ) {
 
 function sphere( radius, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;
@@ -744,7 +753,7 @@ function sphere( radius, options={} ) {
 
 function cylinder( radius, height, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;
@@ -823,9 +832,9 @@ function svgPlot( id, data, config ) {
     }
 
   var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all = all.concat( texts[i].point );
-  for ( var i = 0 ; i < points.length ; i++ ) all = all.concat( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) all = all.concat( lines[i].points );
+  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
+  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );
@@ -1427,11 +1436,15 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
 }
 
 
-function isosurface( f, xRange, yRange, zRange, color='blue', opacity=1, level=0 ) {
+function isosurface( f, xRange, yRange, zRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 50;
   if ( yRange.length < 3 ) yRange[2] = 50;
   if ( zRange.length < 3 ) zRange[2] = 50;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var opacity = 'opacity' in options ? options.opacity : 1;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );
@@ -1826,10 +1839,13 @@ var triangleTable = [
 ];
 
 
-function isoline( f, xRange, yRange, color='blue', level=0 ) {
+function isoline( f, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );
@@ -1970,10 +1986,13 @@ function isoline( f, xRange, yRange, color='blue', level=0 ) {
 }
 
 
-function isoband( f, xRange, yRange, color='blue', level=0 ) {
+function isoband( f, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 75;
   if ( yRange.length < 3 ) yRange[2] = 75;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );

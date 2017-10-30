@@ -1,8 +1,11 @@
 
-function isoline( f, xRange, yRange, color='blue', level=0 ) {
+function isoline( f, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );
@@ -143,10 +146,13 @@ function isoline( f, xRange, yRange, color='blue', level=0 ) {
 }
 
 
-function isoband( f, xRange, yRange, color='blue', level=0 ) {
+function isoband( f, xRange, yRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 75;
   if ( yRange.length < 3 ) yRange[2] = 75;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
   var yStep = ( yRange[1] - yRange[0] ) / ( yRange[2] - 1 );

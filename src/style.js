@@ -1,4 +1,6 @@
 
+var defaultPlotColor = 'rgb(0,127,255)';
+
 var mathcellStyle = document.createElement( 'style' );
 mathcellStyle.type = 'text/css';
 mathcellStyle.innerHTML = `

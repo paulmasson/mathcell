@@ -2,7 +2,7 @@
 // return arrays of objects for all graphics
 
 
-function arrow( begin, end, color='blue' ) {
+function arrow( begin, end, color=defaultPlotColor ) {
 
   // assume 2D for now
   var vector = [ end[0]-begin[0], end[1]-begin[1] ];
@@ -35,7 +35,7 @@ function text( string, point, color='black', fontSize=14 ) {
 
 function line( points, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   if ( 'radius' in options ) {
@@ -82,7 +82,7 @@ function line( points, options={} ) {
 
 function box( width, depth, height, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var x = width / 2;
@@ -102,7 +102,7 @@ function box( width, depth, height, options={} ) {
 
 function sphere( radius, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;
@@ -143,7 +143,7 @@ function sphere( radius, options={} ) {
 
 function cylinder( radius, height, options={} ) {
 
-  var color = 'color' in options ? options.color : 'blue';
+  var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
   var steps = 'steps' in options ? options.steps : 20;

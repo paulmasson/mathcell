@@ -609,6 +609,47 @@ function parametric( vector, xRange, yRange, options={} ) {
 }
 
 
+function wireframe( vector, xRange, yRange, options={} ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 50;
+  if ( yRange.length < 3 ) yRange[2] = 50;
+
+  var color = 'color' in options ? options.color : defaultPlotColor;
+  var opacity = 'opacity' in options ? options.opacity : 1;
+
+  var slices = xRange[2];
+  var stacks = yRange[2];
+
+  var xStep = ( xRange[1] - xRange[0] ) / slices;
+  var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  var lines = [];
+
+  for ( var i = 0 ; i <= slices ; i++ ) {
+    var x = xRange[0] + i * xStep;
+    var points = [];
+    for ( var j = 0 ; j <= stacks ; j++ ) {
+      var y = yRange[0] + j * yStep;
+      points.push( vector(x,y) );
+    }
+    line( points, options ).forEach( l => lines.push( l ) );
+  }
+
+  for ( var i = 0 ; i <= stacks ; i++ ) {
+    var y = yRange[0] + i * yStep;
+    var points = [];
+    for ( var j = 0 ; j <= slices ; j++ ) {
+      var x = xRange[0] + j * xStep;
+      points.push( vector(x,y) );
+    }
+    line( points, options ).forEach( l => lines.push( l ) );
+  }
+
+  return lines;
+
+}
+
+
 // return arrays of objects for all graphics
 
 

@@ -255,6 +255,17 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
                                      transparent: transparent, opacity: json.opacity,
                                      shininess: 20 } );
 
+        if ( json.colors.length > 0 ) {
+          for ( var i = 0 ; i < geometry.vertices.length ; i++ )
+            geometry.colors.push( new THREE.Color().setHSL( json.colors[i], 1, .5 ) );
+          for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
+            var f = geometry.faces[i];
+            f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
+          }
+          material.vertexColors = THREE.VertexColors;
+          material.color.set( 'white' ); // crucial!
+        }
+
         var c = geometry.center().multiplyScalar( -1 );
         var mesh = new THREE.Mesh( geometry, material );
         mesh.position.set( c.x, c.y, c.z );

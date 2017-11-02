@@ -586,12 +586,13 @@ function parametric( vector, xRange, yRange, options={} ) {
   var xStep = ( xRange[1] - xRange[0] ) / slices;
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
-  var vertices = [];
+  var vertices = [], colors = [];
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
+      if ( 'colormap' in options ) colors.push( options.colormap(x,y) / 360 );
     }
   }
 
@@ -604,7 +605,7 @@ function parametric( vector, xRange, yRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', colors: colors } ];
 
 }
 
@@ -1441,6 +1442,17 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
                                      color: json.color, side: THREE.DoubleSide,
                                      transparent: transparent, opacity: json.opacity,
                                      shininess: 20 } );
+
+        if ( json.colors.length > 0 ) {
+          for ( var i = 0 ; i < geometry.vertices.length ; i++ )
+            geometry.colors.push( new THREE.Color().setHSL( json.colors[i], 1, .5 ) );
+          for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
+            var f = geometry.faces[i];
+            f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
+          }
+          material.vertexColors = THREE.VertexColors;
+          material.color.set( 'white' ); // crucial!
+        }
 
         var c = geometry.center().multiplyScalar( -1 );
         var mesh = new THREE.Mesh( geometry, material );

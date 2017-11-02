@@ -41,12 +41,13 @@ function parametric( vector, xRange, yRange, options={} ) {
   var xStep = ( xRange[1] - xRange[0] ) / slices;
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
-  var vertices = [];
+  var vertices = [], colors = [];
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
+      if ( 'colormap' in options ) colors.push( options.colormap(x,y) / 360 );
     }
   }
 
@@ -59,7 +60,7 @@ function parametric( vector, xRange, yRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', colors: colors } ];
 
 }
 

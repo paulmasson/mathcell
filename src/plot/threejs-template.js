@@ -240,8 +240,6 @@ function addSurface( json ) {
   var geometry = new THREE.Geometry();
   for ( var i = 0 ; i < json.vertices.length ; i++ ) {
     var v = json.vertices[i];
-    if ( v[2] < b0[2] ) v[2] = b0[2]; // allow cap on poles
-    if ( v[2] > b1[2] ) v[2] = b1[2];
     geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
   }
   for ( var i = 0 ; i < json.faces.length ; i++ ) {
@@ -251,6 +249,21 @@ function addSurface( json ) {
   }
   geometry.mergeVertices();
   geometry.computeVertexNormals();
+
+  // remove faces completely outside vertical range
+  for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
+    var f = geometry.faces[i];
+    if ( geometry.vertices[f.a].z < b0[2] && geometry.vertices[f.b].z < b0[2]
+           && geometry.vertices[f.c].z < b0[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z > b1[2] && geometry.vertices[f.b].z > b1[2] 
+           && geometry.vertices[f.c].z > b1[2] ) geometry.faces.splice( i, 1 );
+  }
+
+  // constrain vertices to vertical range
+  for ( var i = 0 ; i < geometry.vertices.length ; i++ ) {
+    if ( geometry.vertices[i].z < b0[2] ) geometry.vertices[i].z = b0[2];
+    if ( geometry.vertices[i].z > b1[2] ) geometry.vertices[i].z = b1[2];
+  }
 
   var transparent = json.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {

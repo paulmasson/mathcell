@@ -29,16 +29,25 @@ function listPlot( points, options={} ) {
 
 function parametric( vector, xRange, yRange, options={} ) {
 
-  if ( xRange.length < 3 ) xRange[2] = 50;
-  if ( yRange.length < 3 ) yRange[2] = 50;
-
   var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
-  var slices = xRange[2];
-  var stacks = yRange[2];
-
+  var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
+
+  if ( !Array.isArray( yRange ) ) {
+
+    var points = [];
+    for ( var i = 0 ; i <= slices ; i++ ) {
+      var x = xRange[0] + i * xStep;
+      points.push( vector(x) );
+    }
+
+    return line( points, yRange );
+
+  }
+
+  var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
   var vertices = [], colors = [];
@@ -67,16 +76,13 @@ function parametric( vector, xRange, yRange, options={} ) {
 
 function wireframe( vector, xRange, yRange, options={} ) {
 
-  if ( xRange.length < 3 ) xRange[2] = 50;
-  if ( yRange.length < 3 ) yRange[2] = 50;
-
   var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
-  var slices = xRange[2];
-  var stacks = yRange[2];
-
+  var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
+
+  var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
   var lines = [];

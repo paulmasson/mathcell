@@ -39,11 +39,11 @@ parent.update = function( id ) {
   var data = [];
 
   if ( combine === true ) {
-    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], 'purple' ); 
+    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], { color: 'purple' } ); 
     data = [ p ];
   } else {
-    var p1 = plot( x => sine1(x), [0, 2*Math.PI], 'rgb(0,127,255)' ); 
-    var p2 = plot( x => sine2(x), [0, 2*Math.PI], 'red' ); 
+    var p1 = plot( x => sine1(x), [0, 2*Math.PI] ); 
+    var p2 = plot( x => sine2(x), [0, 2*Math.PI], { color: 'red' } ); 
     data = [ p1, p2 ];
   }
 
@@ -89,11 +89,11 @@ parent.update = function( id ) {
   var data = [];
 
   if ( combine === true ) {
-    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], 'purple' ); 
+    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], { color: 'purple' } ); 
     data = [ p ];
   } else {
-    var p1 = plot( x => sine1(x), [0, 2*Math.PI], 'rgb(0,127,255)' ); 
-    var p2 = plot( x => sine2(x), [0, 2*Math.PI], 'red' ); 
+    var p1 = plot( x => sine1(x), [0, 2*Math.PI] ); 
+    var p2 = plot( x => sine2(x), [0, 2*Math.PI], { color: 'red' } ); 
     data = [ p1, p2 ];
   }
 

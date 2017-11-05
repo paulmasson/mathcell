@@ -26,7 +26,7 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], 'rgb(0,255,0)' );
+  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
 
   var data = [ p ];
 
@@ -59,7 +59,7 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], 'rgb(0,255,0)' );
+  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
 
   var data = [ p ];
 

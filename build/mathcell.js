@@ -1611,7 +1611,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', colors: [] } ];
 
 }
 

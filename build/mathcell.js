@@ -1447,16 +1447,16 @@ function addSurface( json ) {
   // remove faces completely outside vertical range
   for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = geometry.faces[i];
-    if ( geometry.vertices[f.a].z < b0[2] && geometry.vertices[f.b].z < b0[2]
-           && geometry.vertices[f.c].z < b0[2] ) geometry.faces.splice( i, 1 );
-    if ( geometry.vertices[f.a].z > b1[2] && geometry.vertices[f.b].z > b1[2] 
-           && geometry.vertices[f.c].z > b1[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z < a[2]*b0[2] && geometry.vertices[f.b].z < a[2]*b0[2]
+           && geometry.vertices[f.c].z < a[2]*b0[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z > a[2]*b1[2] && geometry.vertices[f.b].z > a[2]*b1[2] 
+           && geometry.vertices[f.c].z > a[2]*b1[2] ) geometry.faces.splice( i, 1 );
   }
 
   // constrain vertices to vertical range
   for ( var i = 0 ; i < geometry.vertices.length ; i++ ) {
-    if ( geometry.vertices[i].z < b0[2] ) geometry.vertices[i].z = b0[2];
-    if ( geometry.vertices[i].z > b1[2] ) geometry.vertices[i].z = b1[2];
+    if ( geometry.vertices[i].z < a[2]*b0[2] ) geometry.vertices[i].z = a[2]*b0[2];
+    if ( geometry.vertices[i].z > a[2]*b1[2] ) geometry.vertices[i].z = a[2]*b1[2];
   }
 
   var transparent = json.opacity < 1 ? true : false;

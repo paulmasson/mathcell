@@ -1226,6 +1226,7 @@ document.body.appendChild( renderer.domElement );
 
 var options = ${options};
 
+var a = options.aspectRatio; // aspect multipliers
 var animate = false; // options.animate;
 
 var bounds = ${bounds};
@@ -1236,21 +1237,31 @@ if ( b0[0] === b1[0] ) { b0[0] -= 1; b1[0] += 1; }
 if ( b0[1] === b1[1] ) { b0[1] -= 1; b1[1] += 1; }
 if ( b0[2] === b1[2] ) { b0[2] -= 1; b1[2] += 1; }
 
+// apply aspect multipliers for convenience
+for ( var i = 0 ; i < 3 ; i++ ) {
+  b0[i] *= a[i];
+  b1[i] *= a[i];
+}
+
 var xRange = b1[0] - b0[0];
 var yRange = b1[1] - b0[1];
 var zRange = b1[2] - b0[2];
 var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
-var a = options.aspectRatio; // aspect multipliers
-if ( zRange > rRange && a[2] === 1 ) a[2] = rRange / zRange;
+if ( zRange > rRange && a[2] === 1 ) {
+  a[2] = rRange / zRange;
+  b0[2] *= a[2];
+  b1[2] *= a[2];
+  zRange *= a[2];
+}
 
 var xMid = ( b0[0] + b1[0] ) / 2;
 var yMid = ( b0[1] + b1[1] ) / 2;
 var zMid = ( b0[2] + b1[2] ) / 2;
 
 var box = new THREE.Geometry();
-box.vertices.push( new THREE.Vector3( a[0]*b0[0], a[1]*b0[1], a[2]*b0[2] ) );
-box.vertices.push( new THREE.Vector3( a[0]*b1[0], a[1]*b1[1], a[2]*b1[2] ) );
+box.vertices.push( new THREE.Vector3( b0[0], b0[1], b0[2] ) );
+box.vertices.push( new THREE.Vector3( b1[0], b1[1], b1[2] ) );
 var boxMesh = new THREE.Line( box );
 if ( options.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
 
@@ -1260,26 +1271,26 @@ if ( options.axesLabels ) {
   var offsetRatio = 0.1;
   var al = options.axesLabels;
 
-  var offset = offsetRatio * a[1]*( b1[1] - b0[1] );
-  var xm = xMid.toFixed(d);
+  var offset = offsetRatio * ( b1[1] - b0[1] );
+  var xm = ( xMid/a[0] ).toFixed(d);
   if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
-  addLabel( al[0] + '=' + xm, a[0]*xMid, a[1]*b1[1]+offset, a[2]*b0[2] );
-  addLabel( ( b0[0] ).toFixed(d), a[0]*b0[0], a[1]*b1[1]+offset, a[2]*b0[2] );
-  addLabel( ( b1[0] ).toFixed(d), a[0]*b1[0], a[1]*b1[1]+offset, a[2]*b0[2] );
+  addLabel( al[0] + '=' + xm, xMid, b1[1]+offset, b0[2] );
+  addLabel( ( b0[0]/a[0] ).toFixed(d), b0[0], b1[1]+offset, b0[2] );
+  addLabel( ( b1[0]/a[0] ).toFixed(d), b1[0], b1[1]+offset, b0[2] );
 
-  var offset = offsetRatio * a[0]*( b1[0] - b0[0] );
-  var ym = yMid.toFixed(d);
+  var offset = offsetRatio * ( b1[0] - b0[0] );
+  var ym = ( yMid/a[1] ).toFixed(d);
   if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
-  addLabel( al[1] + '=' + ym, a[0]*b1[0]+offset, a[1]*yMid, a[2]*b0[2] );
-  addLabel( ( b0[1] ).toFixed(d), a[0]*b1[0]+offset, a[1]*b0[1], a[2]*b0[2] );
-  addLabel( ( b1[1] ).toFixed(d), a[0]*b1[0]+offset, a[1]*b1[1], a[2]*b0[2] );
+  addLabel( al[1] + '=' + ym, b1[0]+offset, yMid, b0[2] );
+  addLabel( ( b0[1]/a[1] ).toFixed(d), b1[0]+offset, b0[1], b0[2] );
+  addLabel( ( b1[1]/a[1] ).toFixed(d), b1[0]+offset, b1[1], b0[2] );
 
-  var offset = offsetRatio * a[1]*( b1[1] - b0[1] );
-  var zm = zMid.toFixed(d);
+  var offset = offsetRatio * ( b1[1] - b0[1] );
+  var zm = ( zMid/a[2] ).toFixed(d);
   if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
-  addLabel( al[2] + '=' + zm, a[0]*b1[0], a[1]*b0[1]-offset, a[2]*zMid );
-  addLabel( ( b0[2] ).toFixed(d), a[0]*b1[0], a[1]*b0[1]-offset, a[2]*b0[2] );
-  addLabel( ( b1[2] ).toFixed(d), a[0]*b1[0], a[1]*b0[1]-offset, a[2]*b1[2] );
+  addLabel( al[2] + '=' + zm, b1[0], b0[1]-offset, zMid );
+  addLabel( ( b0[2]/a[2] ).toFixed(d), b1[0], b0[1]-offset, b0[2] );
+  addLabel( ( b1[2]/a[2] ).toFixed(d), b1[0], b0[1]-offset, b1[2] );
 
 }
 
@@ -1313,14 +1324,14 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
 }
 
-if ( options.axes ) scene.add( new THREE.AxisHelper( Math.min( a[0]*b1[0], a[1]*b1[1], a[2]*b1[2] ) ) );
+if ( options.axes ) scene.add( new THREE.AxisHelper( Math.min( b1[0], b1[1], b1[2] ) ) );
 
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.up.set( 0, 0, 1 );
 
 // default auto position, followed by rotation to viewpoint direction
-camera.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
-var defaultOffset = new THREE.Vector3( a[0]*xRange, a[1]*yRange, a[2]*zRange );
+camera.position.set( xMid, yMid, zMid );
+var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
 
 if ( options.viewpoint !== 'auto' ) {
   var v = options.viewpoint;
@@ -1339,7 +1350,7 @@ for ( var i = 0 ; i < lights.length ; i++ ) {
   var v = lights[i].position;
   light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
   if ( lights[i].parent === 'camera' ) {
-    light.target.position.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+    light.target.position.set( xMid, yMid, zMid );
     scene.add( light.target );
     camera.add( light );
   } else scene.add( light );
@@ -1349,7 +1360,7 @@ scene.add( camera );
 scene.add( new THREE.AmbientLight( options.ambientLight, 1 ) );
 
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
-controls.target.set( a[0]*xMid, a[1]*yMid, a[2]*zMid );
+controls.target.set( xMid, yMid, zMid );
 controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
 
 window.addEventListener( 'resize', function() {
@@ -1447,16 +1458,16 @@ function addSurface( json ) {
   // remove faces completely outside vertical range
   for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = geometry.faces[i];
-    if ( geometry.vertices[f.a].z < a[2]*b0[2] && geometry.vertices[f.b].z < a[2]*b0[2]
-           && geometry.vertices[f.c].z < a[2]*b0[2] ) geometry.faces.splice( i, 1 );
-    if ( geometry.vertices[f.a].z > a[2]*b1[2] && geometry.vertices[f.b].z > a[2]*b1[2] 
-           && geometry.vertices[f.c].z > a[2]*b1[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z < b0[2] && geometry.vertices[f.b].z < b0[2]
+           && geometry.vertices[f.c].z < b0[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z > b1[2] && geometry.vertices[f.b].z > b1[2] 
+           && geometry.vertices[f.c].z > b1[2] ) geometry.faces.splice( i, 1 );
   }
 
   // constrain vertices to vertical range
   for ( var i = 0 ; i < geometry.vertices.length ; i++ ) {
-    if ( geometry.vertices[i].z < a[2]*b0[2] ) geometry.vertices[i].z = a[2]*b0[2];
-    if ( geometry.vertices[i].z > a[2]*b1[2] ) geometry.vertices[i].z = a[2]*b1[2];
+    if ( geometry.vertices[i].z < b0[2] ) geometry.vertices[i].z = b0[2];
+    if ( geometry.vertices[i].z > b1[2] ) geometry.vertices[i].z = b1[2];
   }
 
   var transparent = json.opacity < 1 ? true : false;

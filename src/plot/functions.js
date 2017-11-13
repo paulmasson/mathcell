@@ -56,7 +56,8 @@ function parametric( vector, xRange, yRange, options={} ) {
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
-      if ( 'colormap' in options ) colors.push( options.colormap(x,y) );
+      if ( 'colormap' in options )
+        colors.push( roundTo( options.colormap(x,y), 3 ) ); // reduce data
     }
   }
 

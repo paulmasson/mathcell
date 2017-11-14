@@ -16,7 +16,7 @@ function MathCell( id, inputArray ) {
         `;
     }
   s += `
-<div>&nbsp;</div>
+<div style="height: .25in"></div>
 <div id=${id}wrap style="width: 100%; flex: 1; position: relative">
 <div id=${id}output style="width: 100%; height: 100%;
                            position: absolute; top: 0; left: 0"></div>

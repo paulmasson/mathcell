@@ -18,7 +18,7 @@ function linspace( a, b, points ) {
 
   var result = [];
   var step = ( b - a ) / ( points - 1 );
-  for ( var x = a ; x < b ; x += step ) result.push( x );
+  for ( var i = 0 ; i < points - 1 ; i++ ) result.push( a + i * step );
   result.push( b );
 
   return result;

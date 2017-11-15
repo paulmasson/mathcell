@@ -29,7 +29,7 @@ parent.update = function( id ) {
   var data = [];
 
   for ( var i = 0 ; i < 5 ; i++ )
-    data.push( plot( x => besselJ(i,x), [0, 10], 'hsl(' + 72*i + ',100%,50%)' ) );
+    data.push( plot( x => besselJ(i,x), [0, 10], { color: 'hsl(' + 72*i + ',100%,50%)' } ) );
 
   var config = { type: 'svgplot' };
 

@@ -77,8 +77,7 @@ function parametric( vector, xRange, yRange, options={} ) {
 
 function wireframe( vector, xRange, yRange, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !options.openEnded ) options.openEnded = true;
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;

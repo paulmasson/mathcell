@@ -622,8 +622,7 @@ function parametric( vector, xRange, yRange, options={} ) {
 
 function wireframe( vector, xRange, yRange, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !options.openEnded ) options.openEnded = true;
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
@@ -805,26 +804,29 @@ function cylinder( radius, height, options={} ) {
   var color = 'color' in options ? options.color : defaultPlotColor;
   var opacity = 'opacity' in options ? options.opacity : 1;
 
+  if ( options.endcaps ) options.openEnded = true;
+
   var steps = 'steps' in options ? options.steps : 20;
   var r = radius;
   var h = height / 2;
 
-  var vertices = [ [0,0,h], [0,0,-h] ];
+  var vertices = [ [ 0, 0, h ], [ 0, 0, -h ] ];
   var faces = [];
 
-  for ( var i = 1 ; i < steps ; i++ ) {
+  for ( var i = 0 ; i < steps ; i++ ) {
 
-    var a = 2 * Math.PI * (i-1) / (steps-1);
-    var b = 2 * Math.PI * i / (steps-1);
+    var a = 2 * Math.PI * i / (steps-1);
 
     vertices.push( [ r * Math.cos(a), r * Math.sin(a), h ],
-                   [ r * Math.cos(b), r * Math.sin(b), h ],
-                   [ r * Math.cos(a), r * Math.sin(a), -h ],
-                   [ r * Math.cos(b), r * Math.sin(b), -h ] );
+                   [ r * Math.cos(a), r * Math.sin(a), -h ] );
 
-    var l = vertices.length;
+  }
 
-    faces.push( [0,l-4,l-3], [1,l-2,l-1], [l-4,l-3,l-1,l-2] );
+  for ( var i = 2 ; i < vertices.length - 3 ; i++ ) {
+
+    faces.push( [ i, i+1, i+3, i+2 ] );
+
+    if ( !options.openEnded ) faces.push( [ 0, i, i+2 ], [ 1, i+1, i+3 ] );
 
   }
 

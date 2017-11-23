@@ -7,17 +7,39 @@
 
 <body>
 
-<p>Options for graphics objects are specified as dictionaries. Color and opacity can be omitted, with default values of azure blue and one, respectively.</p>
+<p>Options for graphics objects are specified as dictionaries. Color and opacity can be omitted, with default values of azure blue and one, respectively, for most objects. Object-specific options are listed below each.</p>
 
 <br/><p><b>arrow( begin, end, color )</b> &mdash; two-dimensional arrow from beginning to end</p>
 
 <p><b>box( width, depth, height, options )</b> &mdash; box of specified dimensions centered at the origin</p>
 
-<p><b>cylinder( radius, height, options )</b> &mdash; cylinder of specified dimensions centered at the origin; an option of <code>steps</code> determines the smoothness of the surface, an option of <code>axis</code> the arbitrary direction of the cylinder, and an option of <code>center</code> the position of the cylinder</p>
+<p><b>cylinder( radius, height, options )</b> &mdash; cylinder of specified dimensions</p>
 
-<p><b>line( points, options )</b> &mdash; two- or three-dimensional line joining an array of points; an option of <code>radius</code> draws the line as an extended cylinder, and an option of <code>endcaps</code> equal to <code>true</code> includes spheres to smooth the joints</p>
+<table style="margin-left: 1in"><tr><td style="width: 1in">
+  <code>axis</code></td><td>arbitrary vector direction, default [0,0,1]
+</td></tr><tr><td>
+  <code>center</code></td><td>vector position, default [0,0,0]
+</td></tr><tr><td>
+  <code>openEnded</code></td><td>Boolean to draw cylinder ends, default <code>true</code>
+</td></tr><tr><td>
+  <code>steps</code></td><td>integer determining surface smoothness, default 20
+</td></tr></table>
 
-<p><b>sphere( radius, options )</b> &mdash; sphere of specified radius centered at the origin; an option of <code>steps</code> determines the smoothness of the surface</p>
+<p><b>line( points, options )</b> &mdash; two- or three-dimensional line joining an array of points</p>
+
+<table style="margin-left: 1in"><tr><td style="width: 1in">
+  <code>endcaps</code></td><td>Boolean to include spheres to smooth joints, default <code>false</code>
+</td></tr><tr><td>
+  <code>radius</code></td><td>float for drawing the line as an extended cylinder
+</td></tr></table>
+
+<p><b>sphere( radius, options )</b> &mdash; sphere of specified radius</p>
+
+<table style="margin-left: 1in"><tr><td style="width: 1in">
+  <code>center</code></td><td>vector position, default [0,0,0]
+</td></tr><tr><td>
+  <code>steps</code></td><td>integer determining surface smoothness, default 20
+</td></tr></table>
 
 <p><b>text( string, point, color, fontsize )</b> &mdash; string of text at the two- or three-dimensional point, with default color of black and font size of 14</p>
 

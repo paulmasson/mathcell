@@ -766,31 +766,39 @@ function sphere( radius, options={} ) {
   var steps = 'steps' in options ? options.steps : 20;
   var r = radius;
 
-  var vertices = [], faces = [];
+  var vertices = [ [ 0, 0, r ], [ 0, 0, -r ] ];
+  var faces = [];
 
   for ( var i = 1 ; i < steps ; i++ ) {
 
-    var a = Math.PI * (i-1) / (steps-1);
-    var b = Math.PI * i / (steps-1);
+    var a = Math.PI * i / steps;
 
-    for ( var j = 1 ; j < steps ; j++ ) {
+    for ( var j = 0 ; j <= steps ; j++ ) {
 
-      var c = 2 * Math.PI * (j-1) / (steps-1);
-      var d = 2 * Math.PI * j / (steps-1);
+      var b = 2 * Math.PI * j / steps;
 
-    vertices.push(
-      [ r * Math.sin(a) * Math.cos(c), r * Math.sin(a) * Math.sin(c), r * Math.cos(a) ],
-      [ r * Math.sin(a) * Math.cos(d), r * Math.sin(a) * Math.sin(d), r * Math.cos(a) ],
-      [ r * Math.sin(b) * Math.cos(c), r * Math.sin(b) * Math.sin(c), r * Math.cos(b) ],
-      [ r * Math.sin(b) * Math.cos(d), r * Math.sin(b) * Math.sin(d), r * Math.cos(b) ]  );
-
-      var l = vertices.length;
-
-      faces.push( [l-4,l-3,l-1,l-2] );
+      vertices.push( [ r * Math.sin(a) * Math.cos(b),
+                       r * Math.sin(a) * Math.sin(b),
+                       r * Math.cos(a) ] );
 
     }
 
   }
+
+  for ( var i = 1 ; i < steps - 1 ; i++ ) {
+
+    var k = ( i - 1 ) * ( steps + 1 ) + 2;
+
+    for ( var j = 0 ; j < steps ; j++ )
+
+      faces.push( [ k+j, k+j+1, k+j+1 + steps+1, k+j + steps+1 ] );
+
+  }
+
+  for ( var i = 2 ; i < steps + 2 ; i++ )
+    faces.push( [ 0, i+1, i ] ); // top, match direction around faces
+  for ( var i = vertices.length - steps - 1 ; i < vertices.length - 1 ; i++ )
+    faces.push( [ 1, i, i+1 ] ); // bottom
 
   if ( 'center' in options ) translate( vertices, options.center );
 

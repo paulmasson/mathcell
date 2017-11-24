@@ -813,9 +813,9 @@ function cylinder( radius, height, options={} ) {
   var vertices = [ [ 0, 0, h ], [ 0, 0, -h ] ];
   var faces = [];
 
-  for ( var i = 0 ; i < steps ; i++ ) {
+  for ( var i = 0 ; i <= steps ; i++ ) {
 
-    var a = 2 * Math.PI * i / (steps-1);
+    var a = 2 * Math.PI * i / steps;
 
     vertices.push( [ r * Math.cos(a), r * Math.sin(a), h ],
                    [ r * Math.cos(a), r * Math.sin(a), -h ] );

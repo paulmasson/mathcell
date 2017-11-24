@@ -164,7 +164,7 @@ function cylinder( radius, height, options={} ) {
 
   }
 
-  for ( var i = 2 ; i < vertices.length - 3 ; i++ ) {
+  for ( var i = 2 ; i < vertices.length - 3 ; i += 2 ) {
 
     faces.push( [ i, i+1, i+3, i+2 ] );
 

@@ -1,5 +1,6 @@
 
 // return arrays of objects for all graphics
+// face indices always counter-clockwise for consistency
 
 
 function arrow( begin, end, color=defaultPlotColor ) {
@@ -89,11 +90,11 @@ function box( width, depth, height, options={} ) {
   var y = depth / 2;
   var z = height / 2;
 
-  var vertices = [ [x,y,z], [-x,y,z], [x,-y,z], [-x,-y,z],
-                   [x,y,-z], [-x,y,-z], [x,-y,-z], [-x,-y,-z] ];
+  var vertices = [ [x,y,z], [-x,y,z], [-x,-y,z], [x,-y,z],
+                   [x,y,-z], [-x,y,-z], [-x,-y,-z], [x,-y,-z] ];
 
-  var faces = [ [0,1,3,2], [4,5,7,6], [0,4,5,1], [2,6,7,3],
-                [0,4,6,2], [1,5,7,3] ];
+  var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
+                [0,3,7,4], [1,5,6,2] ];
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
              type: 'surface' } ];
@@ -108,31 +109,39 @@ function sphere( radius, options={} ) {
   var steps = 'steps' in options ? options.steps : 20;
   var r = radius;
 
-  var vertices = [], faces = [];
+  var vertices = [ [ 0, 0, r ], [ 0, 0, -r ] ];
+  var faces = [];
 
   for ( var i = 1 ; i < steps ; i++ ) {
 
-    var a = Math.PI * (i-1) / (steps-1);
-    var b = Math.PI * i / (steps-1);
+    var a = Math.PI * i / steps;
 
-    for ( var j = 1 ; j < steps ; j++ ) {
+    for ( var j = 0 ; j <= steps ; j++ ) {
 
-      var c = 2 * Math.PI * (j-1) / (steps-1);
-      var d = 2 * Math.PI * j / (steps-1);
+      var b = 2 * Math.PI * j / steps;
 
-    vertices.push(
-      [ r * Math.sin(a) * Math.cos(c), r * Math.sin(a) * Math.sin(c), r * Math.cos(a) ],
-      [ r * Math.sin(a) * Math.cos(d), r * Math.sin(a) * Math.sin(d), r * Math.cos(a) ],
-      [ r * Math.sin(b) * Math.cos(c), r * Math.sin(b) * Math.sin(c), r * Math.cos(b) ],
-      [ r * Math.sin(b) * Math.cos(d), r * Math.sin(b) * Math.sin(d), r * Math.cos(b) ]  );
-
-      var l = vertices.length;
-
-      faces.push( [l-4,l-3,l-1,l-2] );
+      vertices.push( [ r * Math.sin(a) * Math.cos(b),
+                       r * Math.sin(a) * Math.sin(b),
+                       r * Math.cos(a) ] );
 
     }
 
   }
+
+  for ( var i = 1 ; i < steps - 1 ; i++ ) {
+
+    var k = ( i - 1 ) * ( steps + 1 ) + 2;
+
+    for ( var j = 0 ; j < steps ; j++ )
+
+      faces.push( [ k+j, k+j + steps+1, k+j+1 + steps+1, k+j+1 ] );
+
+  }
+
+  for ( var i = 2 ; i < steps + 2 ; i++ )
+    faces.push( [ 0, i, i+1 ] ); // top
+  for ( var i = vertices.length - steps - 1 ; i < vertices.length - 1 ; i++ )
+    faces.push( [ 1, i+1, i ] ); // bottom
 
   if ( 'center' in options ) translate( vertices, options.center );
 
@@ -168,7 +177,7 @@ function cylinder( radius, height, options={} ) {
 
     faces.push( [ i, i+1, i+3, i+2 ] );
 
-    if ( !options.openEnded ) faces.push( [ 0, i, i+2 ], [ 1, i+1, i+3 ] );
+    if ( !options.openEnded ) faces.push( [ 0, i, i+2 ], [ 1, i+3, i+1 ] );
 
   }
 

@@ -112,6 +112,10 @@ function graphic( id, data, config ) {
 
       return threejsPlot( id, data, config );
 
+    case 'x3d':
+
+      return x3dPlot( id, data, config );
+
     case 'text':
 
       // need JSON stringify to render objects

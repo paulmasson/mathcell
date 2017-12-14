@@ -31,7 +31,7 @@ parent.update = function( id ) {
   for ( var i = 0 ; i < 5 ; i++ )
     data.push( plot( x => besselJ(i,x), [0, 10], { color: 'hsl(' + 72*i + ',100%,50%)' } ) );
 
-  var config = { type: 'svgplot' };
+  var config = { type: 'svg' };
 
   evaluate( id, data, config );
 

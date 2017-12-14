@@ -104,7 +104,7 @@ function graphic( id, data, config ) {
 
   switch ( config.type ) {
 
-    case 'svgplot':
+    case 'svg':
 
       return svgPlot( id, data, config );
 

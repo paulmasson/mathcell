@@ -120,10 +120,10 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
     case 3:
 
       var n = vector;
-      var norm = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
+      var norm = Math.sqrt( n[0]*n[0] + n[1]*n[1] + n[2]*n[2] );
       if ( norm === 0 ) break;
       if ( norm !== 1 )
-        for ( var i = 0 ; i < 3 ; i++ ) n[i] /= Math.sqrt(norm);
+        for ( var i = 0 ; i < 3 ; i++ ) n[i] /= norm;
 
       var n1 = n[0];
       var n2 = n[1];

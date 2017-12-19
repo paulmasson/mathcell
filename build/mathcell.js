@@ -301,10 +301,10 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
     case 3:
 
       var n = vector;
-      var norm = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
+      var norm = Math.sqrt( n[0]*n[0] + n[1]*n[1] + n[2]*n[2] );
       if ( norm === 0 ) break;
       if ( norm !== 1 )
-        for ( var i = 0 ; i < 3 ; i++ ) n[i] /= Math.sqrt(norm);
+        for ( var i = 0 ; i < 3 ; i++ ) n[i] /= norm;
 
       var n1 = n[0];
       var n2 = n[1];
@@ -1541,6 +1541,29 @@ if ( !animate ) render();
 
 function x3dPlot( id, data, config ) {
 
+  function compositeRotation( first, second ) {
+
+    var a = first[0], na = first[1];
+    var b = second[0], nb = second[1];
+
+    var dot = na[0]*nb[0] + na[1]*nb[1] + na[2]*nb[2];
+    var cross = [ na[1]*nb[2] - na[2]*nb[1],
+                  na[2]*nb[0] - na[0]*nb[2],
+                  na[0]*nb[1] - na[1]*nb[0]  ];
+
+    var c = 2 * Math.acos( Math.cos(a/2) * Math.cos(b/2)
+                           - dot * Math.sin(a/2) * Math.sin(b/2) );
+
+    var nc = [];
+    for ( var i = 0 ; i < 3 ; i++ )
+      nc[i] = na[i] * Math.sin(a/2) * Math.cos(b/2) / Math.sin(c/2)
+              + nb[i] * Math.cos(a/2) * Math.sin(b/2) / Math.sin(c/2)
+              - cross[i] * Math.sin(a/2) * Math.sin(b/2) / Math.sin(c/2);
+
+    return [ c, nc ];
+
+  }
+
   var frame = 'frame' in config ? config.frame : true;
 
   var width = document.getElementById( id + 'output' ).offsetWidth;
@@ -1592,6 +1615,19 @@ function x3dPlot( id, data, config ) {
                     [ [xMax,yMin,zMax],[xMax,yMax,zMax] ],
                     [ [xMin,yMax,zMax],[xMax,yMax,zMax] ] ];
 
+  // default orientation is looking down z-axis, even after displacement
+  // need to rotate viewpoint back to origin with composite orientation
+
+  var zRotation = [ 3*Math.PI/4, [ 0, 0, 1 ] ];
+
+  var norm1 = Math.sqrt( (xMax-xMin)**2 + (yMax-yMin)**2 + (zMax-zMin)**2 );
+  var norm2 = Math.sqrt( (xMax-xMin)**2 + (yMax-yMin)**2 );
+
+  var xyRotation = [ Math.acos( (zMax-zMin)/norm1 ),
+                               [ (yMin-yMax)/norm2, (xMax-xMin)/norm2, 0 ] ];
+
+  var cr = compositeRotation( zRotation, xyRotation );
+
   var html = `
 <html>
 <head>
@@ -1606,9 +1642,8 @@ function x3dPlot( id, data, config ) {
 
 <X3D width="${width}" height="${height}">
 <Scene>
-<Viewpoint position="0 0 ${2*Math.sqrt(xMax*xMax+yMax*yMax+zMax*zMax)}"></Viewpoint>
-<Transform rotation="1 0 0 ${-.3*Math.PI}">
-<Transform rotation="0 0 1 ${-3*Math.PI/4}">
+<Viewpoint position="${xMax-xMin} ${yMax-yMin} ${zMax-zMin}"
+           orientation="${cr[1].join(' ')} ${cr[0]}"></Viewpoint>
   `;
 
   if ( frame ) boxHelper.forEach( a =>
@@ -1685,8 +1720,6 @@ function x3dPlot( id, data, config ) {
   }
 
   html += `
-</Transform>
-</Transform>
 </Scene>
 </X3D>
 

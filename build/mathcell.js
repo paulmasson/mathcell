@@ -605,8 +605,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
-      if ( 'colormap' in options )
-        colors.push( roundTo( options.colormap(x,y), 3 ) ); // reduce data
+      if ( 'colormap' in options ) colors.push( options.colormap(x,y) );
     }
   }
 
@@ -1171,6 +1170,7 @@ function threejsPlot( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
       if ( d.type === 'surface' ) {
         d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
+        if ( d.colors && d.colors.length > 0 ) d.colors = roundTo( d.colors, 3 );
         surfaces.push( d );
       }
     }
@@ -1705,6 +1705,7 @@ function x3dPlot( id, data, config ) {
         p.style.color = 'hsl(' + 360*s.colors[j] + ',100%,50%)';
         rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
         rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
+        rgb = roundTo( rgb, 3 );
         colors +=  rgb.join(' ') + ' ';
       }
       html += `

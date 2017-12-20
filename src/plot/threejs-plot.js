@@ -37,6 +37,7 @@ function threejsPlot( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
       if ( d.type === 'surface' ) {
         d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
+        if ( d.colors && d.colors.length > 0 ) d.colors = roundTo( d.colors, 3 );
         surfaces.push( d );
       }
     }

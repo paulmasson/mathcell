@@ -165,6 +165,7 @@ function x3dPlot( id, data, config ) {
         p.style.color = 'hsl(' + 360*s.colors[j] + ',100%,50%)';
         rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
         rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
+        rgb = roundTo( rgb, 3 );
         colors +=  rgb.join(' ') + ' ';
       }
       html += `

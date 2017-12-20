@@ -60,6 +60,14 @@ function x3dPlot( id, data, config ) {
   var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
   var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
 
+  var xRange = xMax - xMin;
+  var yRange = yMax - yMin;
+  var zRange = zMax - zMin;
+
+  var xMid = ( xMax + xMin ) / 2;
+  var yMid = ( yMax + yMin ) / 2;
+  var zMid = ( zMax + zMin ) / 2;
+
   var b0 = [ xMin, yMin, zMin ], b1 = [ xMax, yMax, zMax ];
 
   var boxHelper = [ [ [xMin,yMin,zMin],[xMax,yMin,zMin] ],
@@ -78,13 +86,13 @@ function x3dPlot( id, data, config ) {
   // default orientation is looking down z-axis, even after displacement
   // need to rotate viewpoint back to origin with composite orientation
 
-  var zRotation = [ 3*Math.PI/4, [ 0, 0, 1 ] ];
+  var zRotation = [ Math.PI/2 + Math.atan(yRange/xRange), [ 0, 0, 1 ] ];
 
-  var norm1 = Math.sqrt( (xMax-xMin)**2 + (yMax-yMin)**2 + (zMax-zMin)**2 );
-  var norm2 = Math.sqrt( (xMax-xMin)**2 + (yMax-yMin)**2 );
+  var norm1 = Math.sqrt( xRange**2 + yRange**2 + zRange**2 );
+  var norm2 = Math.sqrt( xRange**2 + yRange**2 );
 
-  var xyRotation = [ Math.acos( (zMax-zMin)/norm1 ),
-                               [ (yMin-yMax)/norm2, (xMax-xMin)/norm2, 0 ] ];
+  var xyRotation = [ Math.acos( zRange/norm1 ),
+                               [ -yRange/norm2, xRange/norm2, 0 ] ];
 
   var cr = compositeRotation( zRotation, xyRotation );
 
@@ -102,8 +110,9 @@ function x3dPlot( id, data, config ) {
 
 <X3D width="${width}" height="${height}">
 <Scene>
-<Viewpoint position="${xMax-xMin} ${yMax-yMin} ${zMax-zMin}"
-           orientation="${cr[1].join(' ')} ${cr[0]}"></Viewpoint>
+<Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
+           orientation="${cr[1].join(' ')} ${cr[0]}"
+           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>
   `;
 
   if ( frame ) boxHelper.forEach( a =>

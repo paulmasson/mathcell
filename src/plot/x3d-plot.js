@@ -129,23 +129,21 @@ function x3dPlot( id, data, config ) {
     var s = surfaces[i];
 
     // remove faces completely outside vertical range
-    for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
-      var f = s.faces[i];
+    for ( var j = s.faces.length - 1 ; j >= 0 ; j-- ) {
+      var f = s.faces[j];
       var check = true;
       f.forEach( index => check &= s.vertices[index][2] < b0[2] );
-      if ( check ) s.faces.splice( i, 1 );
+      if ( check ) s.faces.splice( j, 1 );
       var check = true;
       f.forEach( index => check &= s.vertices[index][2] > b1[2] );
-      if ( check ) s.faces.splice( i, 1 );
+      if ( check ) s.faces.splice( j, 1 );
     }
 
     // constrain vertices to vertical range
-    for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-      if ( s.vertices[i][2] < b0[2] ) s.vertices[i][2] = b0[2];
-      if ( s.vertices[i][2] > b1[2] ) s.vertices[i][2] = b1[2];
+    for ( var j = 0 ; j < s.vertices.length ; j++ ) {
+      if ( s.vertices[j][2] < b0[2] ) s.vertices[j][2] = b0[2];
+      if ( s.vertices[j][2] > b1[2] ) s.vertices[j][2] = b1[2];
     }
-
-
 
     var indices = '';
     for ( var j = 0 ; j < s.faces.length ; j++ )
@@ -163,7 +161,9 @@ function x3dPlot( id, data, config ) {
 
     html += `
 <Shape>
-<Appearance><TwoSidedMaterial diffuseColor="${color}"/></Appearance>
+<Appearance>
+<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.opacity}"/>
+</Appearance>
 <IndexedFaceSet coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>
     `;

@@ -1150,7 +1150,7 @@ function threejsPlot( id, data, config ) {
     var v = cw.camera.position;
 
     // only direction of viewpoint meaningful, not normalization
-    viewpoint = [ v.x - cw.a[0] * cw.xMid, v.y - cw.a[1] * cw.yMid, v.z - cw.a[2] * cw.zMid ];
+    viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
 
   }
 

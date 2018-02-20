@@ -1138,6 +1138,7 @@ function threejsPlot( id, data, config ) {
   var aspectRatio = 'aspectRatio' in config ? config.aspectRatio : [1,1,1];
   var axes = 'axes' in config ? config.axes : false;
   var axesLabels = 'axesLabels' in config ? config.axesLabels : ['x','y','z'];
+  var clearColor = 'clearColor' in config ? config.clearColor : 'white';
   var decimals = 'decimals' in config ? config.decimals : 2;
   var frame = 'frame' in config ? config.frame : true;
   var viewpoint = 'viewpoint' in config ? config.viewpoint : 'auto';
@@ -1158,7 +1159,8 @@ function threejsPlot( id, data, config ) {
 
   var options = JSON.stringify( { ambientLight: ambientLight,
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
-      decimals: decimals, frame: frame, viewpoint: viewpoint } );
+      clearColor: clearColor, decimals: decimals, frame: frame,
+      viewpoint: viewpoint } );
 
   var texts = [], points = [], lines = [], surfaces = [];
 
@@ -1232,15 +1234,14 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
 
 <script>
 
+var options = ${options};
 var scene = new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setClearColor( 0xffffff, 1 );
+renderer.setClearColor( options.clearColor, 1 );
 document.body.appendChild( renderer.domElement );
-
-var options = ${options};
 
 var a = options.aspectRatio; // aspect multipliers
 var animate = false; // options.animate;

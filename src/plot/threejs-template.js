@@ -22,15 +22,14 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
 
 <script>
 
+var options = ${options};
 var scene = new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setClearColor( 0xffffff, 1 );
+renderer.setClearColor( options.clearColor, 1 );
 document.body.appendChild( renderer.domElement );
-
-var options = ${options};
 
 var a = options.aspectRatio; // aspect multipliers
 var animate = false; // options.animate;

@@ -281,9 +281,9 @@ function addSurface( json ) {
                                transparent: transparent, opacity: json.opacity,
                                shininess: 20 } );
 
-  if ( json.colors && json.colors.length > 0 ) {
+  if ( 'colors' in json.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color().setHSL( json.colors[i], 1, .5 ) );
+      geometry.colors.push( new THREE.Color().setHSL( json.options.colors[i], 1, .5 ) );
     for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
       var f = geometry.faces[i];
       f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];

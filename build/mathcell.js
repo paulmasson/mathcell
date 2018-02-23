@@ -599,13 +599,15 @@ function parametric( vector, xRange, yRange, options={} ) {
   var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
-  var vertices = [], colors = [];
+  var vertices = [], newOptions = {};
+  if ( 'colormap' in options ) newOptions.colors = [];
+
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
-      if ( 'colormap' in options ) colors.push( options.colormap(x,y) );
+      if ( 'colormap' in options ) newOptions.colors.push( options.colormap(x,y) );
     }
   }
 
@@ -618,7 +620,7 @@ function parametric( vector, xRange, yRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', colors: colors } ];
+             type: 'surface', options: newOptions } ];
 
 }
 
@@ -761,7 +763,7 @@ function box( width, depth, height, options={} ) {
                 [0,3,7,4], [1,5,6,2] ];
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 
@@ -810,7 +812,7 @@ function sphere( radius, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 
@@ -857,7 +859,7 @@ function cylinder( radius, height, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 
@@ -1175,7 +1177,7 @@ function threejsPlot( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
       if ( d.type === 'surface' ) {
         d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
-        if ( d.colors && d.colors.length > 0 ) d.colors = roundTo( d.colors, 3 );
+        if ( 'colors' in d.options ) d.options.colors = roundTo( d.options.colors, 3 );
         surfaces.push( d );
       }
     }
@@ -1496,9 +1498,9 @@ function addSurface( json ) {
                                transparent: transparent, opacity: json.opacity,
                                shininess: 20 } );
 
-  if ( json.colors && json.colors.length > 0 ) {
+  if ( 'colors' in json.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color().setHSL( json.colors[i], 1, .5 ) );
+      geometry.colors.push( new THREE.Color().setHSL( json.options.colors[i], 1, .5 ) );
     for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
       var f = geometry.faces[i];
       f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
@@ -1712,10 +1714,10 @@ function x3dPlot( id, data, config ) {
 <Coordinate point="${points}"></Coordinate>
     `;
 
-    if ( s.colors && s.colors.length > 0 ) {
+    if ( 'colors' in s.options ) {
       var colors = '';
-      for ( var j = 0 ; j < s.colors.length ; j++ ) {
-        p.style.color = 'hsl(' + 360*s.colors[j] + ',100%,50%)';
+      for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
+        p.style.color = 'hsl(' + 360*s.options.colors[j] + ',100%,50%)';
         rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
         rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
         rgb = roundTo( rgb, 3 );
@@ -1846,7 +1848,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', colors: [] } ];
+             type: 'surface', options: {} } ];
 
 }
 

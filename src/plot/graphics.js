@@ -100,7 +100,7 @@ function box( width, depth, height, options={} ) {
                 [0,3,7,4], [1,5,6,2] ];
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 
@@ -149,7 +149,7 @@ function sphere( radius, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 
@@ -196,7 +196,7 @@ function cylinder( radius, height, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface' } ];
+             type: 'surface', options: {} } ];
 
 }
 

@@ -168,10 +168,10 @@ function x3dPlot( id, data, config ) {
 <Coordinate point="${points}"></Coordinate>
     `;
 
-    if ( s.colors && s.colors.length > 0 ) {
+    if ( 'colors' in s.options ) {
       var colors = '';
-      for ( var j = 0 ; j < s.colors.length ; j++ ) {
-        p.style.color = 'hsl(' + 360*s.colors[j] + ',100%,50%)';
+      for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
+        p.style.color = 'hsl(' + 360*s.options.colors[j] + ',100%,50%)';
         rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
         rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
         rgb = roundTo( rgb, 3 );

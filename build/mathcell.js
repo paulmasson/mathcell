@@ -1475,7 +1475,6 @@ function addSurface( json ) {
       geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
   }
   geometry.mergeVertices();
-  geometry.computeVertexNormals();
 
   // remove faces completely outside vertical range
   for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
@@ -1491,6 +1490,7 @@ function addSurface( json ) {
     if ( geometry.vertices[i].z < b0[2] ) geometry.vertices[i].z = b0[2];
     if ( geometry.vertices[i].z > b1[2] ) geometry.vertices[i].z = b1[2];
   }
+  geometry.computeVertexNormals();
 
   var transparent = json.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {

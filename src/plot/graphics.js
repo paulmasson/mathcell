@@ -26,10 +26,13 @@ function arrow( begin, end, color=defaultPlotColor ) {
 }
 
 
-function text( string, point, color='black', fontSize=14 ) {
+function text( string, point, options={} ) {
 
-    return [ { text: string, point: point, color: color,
-               fontSize: fontSize, type: 'text' } ];
+  var color = 'color' in options ? options.color : 'black';
+  var fontSize = 'fontSize' in options ? options.fontSize : 14;
+
+  return [ { text: string, point: point, color: color, fontSize: fontSize,
+             type: 'text' } ];
 
 }
 

@@ -599,15 +599,15 @@ function parametric( vector, xRange, yRange, options={} ) {
   var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
 
-  var vertices = [], newOptions = {};
-  if ( 'colormap' in options ) newOptions.colors = [];
+  var vertices = [];
+  if ( 'colormap' in options ) options.colors = [];
 
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
       vertices.push( vector(x,y) );
-      if ( 'colormap' in options ) newOptions.colors.push( options.colormap(x,y) );
+      if ( 'colormap' in options ) options.colors.push( options.colormap(x,y) );
     }
   }
 
@@ -620,7 +620,7 @@ function parametric( vector, xRange, yRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: newOptions } ];
+             type: 'surface', options: options } ];
 
 }
 
@@ -763,7 +763,7 @@ function box( width, depth, height, options={} ) {
                 [0,3,7,4], [1,5,6,2] ];
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: {} } ];
+             type: 'surface', options: options } ];
 
 }
 
@@ -812,7 +812,7 @@ function sphere( radius, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: {} } ];
+             type: 'surface', options: options } ];
 
 }
 
@@ -859,7 +859,7 @@ function cylinder( radius, height, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: {} } ];
+             type: 'surface', options: options } ];
 
 }
 
@@ -1848,7 +1848,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   }
 
   return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: {} } ];
+             type: 'surface', options: options } ];
 
 }
 

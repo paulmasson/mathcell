@@ -1509,6 +1509,8 @@ function addSurface( json ) {
     material.color.set( 'white' ); // crucial!
   }
 
+  if ( json.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
+
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );

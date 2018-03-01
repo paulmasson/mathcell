@@ -840,13 +840,16 @@ function cylinder( radius, height, options={} ) {
 
   }
 
-  for ( var i = 2 ; i < vertices.length - 3 ; i += 2 ) {
+  if ( !options.openEnded )
+   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
+     faces.push( [ 0, i, i+2 ] );
 
+  for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
     faces.push( [ i, i+1, i+3, i+2 ] );
 
-    if ( !options.openEnded ) faces.push( [ 0, i, i+2 ], [ 1, i+3, i+1 ] );
-
-  }
+  if ( !options.openEnded )
+   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
+     faces.push( [ 1, i+3, i+1 ] );
 
   if ( 'axis' in options ) {
 

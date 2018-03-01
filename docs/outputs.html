@@ -7,7 +7,7 @@
 
 <body>
 
-<p>There are currently four kinds of outputs: <code>svg</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these values.</p>
+<p>There are currently four kinds of outputs: <code>svg</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. An experimental <code>x3d</code> output is also available. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these values.</p>
 
 <br/><p>An <code>svg</code> output displays a two-dimensional plot of the data. The input data should be an array of arrays of data points, <i>i.e.</i> a three-dimensional array. The output has the options and default values</p>
 
@@ -76,6 +76,26 @@
 <table style="width: 3.5in; margin-left: 1.4in"><tr><td>
 <code>center</code></td><td><code>false</code>
 </td></tr></table>
+
+<br/><p>An <code>x3d</code> output displays a three-dimensional plot of the input data with the options and default values</p>
+
+<table style="width: 3in; margin-left: 1.75in"><tr><td>
+<code>xMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>xMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>yMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>zMin</code></td><td>calculated
+</td></tr><tr><td>
+  <code>zMax</code></td><td>calculated
+</td></tr><tr><td>
+  <code>frame</code></td><td><code>true</code>
+</td></tr></table>
+
+<p>This output uses <a href="https://github.com/x3dom/x3dom">x3dom</a> code, which is not under active development, so <code>threejs</code> is a superior choice at this time. This option looks forward to future three-dimensional rendering standards.</p>
 
 </body>
 </html>

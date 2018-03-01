@@ -794,6 +794,9 @@ function sphere( radius, options={} ) {
 
   }
 
+  for ( var i = 2 ; i < steps + 2 ; i++ )
+    faces.push( [ 0, i, i+1 ] ); // top
+
   for ( var i = 1 ; i < steps - 1 ; i++ ) {
 
     var k = ( i - 1 ) * ( steps + 1 ) + 2;
@@ -804,8 +807,6 @@ function sphere( radius, options={} ) {
 
   }
 
-  for ( var i = 2 ; i < steps + 2 ; i++ )
-    faces.push( [ 0, i, i+1 ] ); // top
   for ( var i = vertices.length - steps - 1 ; i < vertices.length - 1 ; i++ )
     faces.push( [ 1, i+1, i ] ); // bottom
 

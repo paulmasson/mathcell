@@ -1518,6 +1518,7 @@ function addSurface( json ) {
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
+  if ( json.options.renderOrder ) mesh.renderOrder = json.options.renderOrder;
   scene.add( mesh );
 
 }

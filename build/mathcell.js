@@ -1143,16 +1143,18 @@ function svgPlot( id, data, config ) {
 
 function threejsPlot( id, data, config ) {
 
-  var ambientLight = 'ambientLight' in config ? config.ambientLight : 'rgb(127,127,127)';
-  var aspectRatio = 'aspectRatio' in config ? config.aspectRatio : [1,1,1];
-  var axes = 'axes' in config ? config.axes : false;
-  var axesLabels = 'axesLabels' in config ? config.axesLabels : ['x','y','z'];
-  var clearColor = 'clearColor' in config ? config.clearColor : 'white';
-  var decimals = 'decimals' in config ? config.decimals : 2;
-  var frame = 'frame' in config ? config.frame : true;
-  var viewpoint = 'viewpoint' in config ? config.viewpoint : 'auto';
+  if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
+  if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
+  if ( !( 'axes' in config ) ) config.axes = false;
+  if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];
+  if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
+  if ( !( 'decimals' in config ) ) config.decimals = 2;
+  if ( !( 'frame' in config ) ) config.frame = true;
+  if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
 
   var output = document.getElementById( id + 'output' );
+
+  if ( !config.frame ) config.axesLabels = false;
 
   if ( output.children.length > 0 ) {
 
@@ -1160,16 +1162,11 @@ function threejsPlot( id, data, config ) {
     var v = cw.camera.position;
 
     // only direction of viewpoint meaningful, not normalization
-    viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
+    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
 
   }
 
-  if ( !frame ) axesLabels = false;
-
-  var options = JSON.stringify( { ambientLight: ambientLight,
-      aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
-      clearColor: clearColor, decimals: decimals, frame: frame,
-      viewpoint: viewpoint, clippingPlane: config.clippingPlane } );
+  var options = JSON.stringify( config );
 
   var texts = [], points = [], lines = [], surfaces = [];
 

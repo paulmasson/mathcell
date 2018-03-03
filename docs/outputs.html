@@ -56,6 +56,8 @@
 </td></tr><tr><td>
   <code>axesLabels</code></td><td>['x','y','z']
 </td></tr><tr><td>
+  <code>clippingPlane</code></td><td>none
+</td></tr><tr><td>
   <code>decimals</code></td><td>2
 </td></tr><tr><td>
   <code>frame</code></td><td><code>true</code>
@@ -67,7 +69,7 @@
   <code>clearColor</code></td><td>'white'
 </td></tr></table>
 
-<p><code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates. It is automatically preserved between renderings upon manipulation of inputs.</p>
+<p><code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates. It is automatically preserved between renderings upon manipulation of inputs. <code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin.</p>
 
 <br/><p>A <code>matrix</code> output displays the contents of a two-dimensional array in matrix form. You may need to adjust the width and height of the MathCell to show the entire array properly.</p>
 

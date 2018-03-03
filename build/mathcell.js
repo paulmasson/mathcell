@@ -1169,7 +1169,7 @@ function threejsPlot( id, data, config ) {
   var options = JSON.stringify( { ambientLight: ambientLight,
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
       clearColor: clearColor, decimals: decimals, frame: frame,
-      viewpoint: viewpoint } );
+      viewpoint: viewpoint, clippingPlane: config.clippingPlane } );
 
   var texts = [], points = [], lines = [], surfaces = [];
 
@@ -1520,6 +1520,15 @@ function addSurface( json ) {
   mesh.position.set( c.x, c.y, c.z );
   if ( json.options.renderOrder ) mesh.renderOrder = json.options.renderOrder;
   scene.add( mesh );
+
+}
+
+if ( options.clippingPlane ) {
+
+  var v = options.clippingPlane[0];
+  var d = options.clippingPlane[1];
+  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
+  renderer.clippingPlanes = [ plane ];
 
 }
 

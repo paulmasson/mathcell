@@ -27,7 +27,7 @@ function threejsPlot( id, data, config ) {
   var options = JSON.stringify( { ambientLight: ambientLight,
       aspectRatio: aspectRatio, axes: axes, axesLabels: axesLabels,
       clearColor: clearColor, decimals: decimals, frame: frame,
-      viewpoint: viewpoint } );
+      viewpoint: viewpoint, clippingPlane: config.clippingPlane } );
 
   var texts = [], points = [], lines = [], surfaces = [];
 

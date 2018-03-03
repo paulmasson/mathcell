@@ -302,6 +302,15 @@ function addSurface( json ) {
 
 }
 
+if ( options.clippingPlane ) {
+
+  var v = options.clippingPlane[0];
+  var d = options.clippingPlane[1];
+  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
+  renderer.clippingPlanes = [ plane ];
+
+}
+
 var scratch = new THREE.Vector3();
 
 function render() {

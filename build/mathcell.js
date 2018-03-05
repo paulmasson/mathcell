@@ -1166,8 +1166,6 @@ function threejsPlot( id, data, config ) {
 
   }
 
-  var options = JSON.stringify( config );
-
   var texts = [], points = [], lines = [], surfaces = [];
 
   for ( var i = 0 ; i < data.length ; i++ )
@@ -1193,14 +1191,15 @@ function threejsPlot( id, data, config ) {
   var yMinMax = minMax( all, 1 );
   var zMinMax = minMax( all, 2 );
 
-  var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
-  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
-  var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
-  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
-  var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
-  var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
+  if ( !( 'xMin' in config ) ) config.xMin = xMinMax.min;
+  if ( !( 'yMin' in config ) ) config.yMin = yMinMax.min;
+  if ( !( 'zMin' in config ) ) config.zMin = zMinMax.min;
 
-  var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
+  if ( !( 'xMax' in config ) ) config.xMax = xMinMax.max;
+  if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
+  if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
+
+  config = JSON.stringify( config );
 
   var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
 
@@ -1209,7 +1208,7 @@ function threejsPlot( id, data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( options, bounds, lights, texts, points, lines, surfaces );
+  var html = template( config, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
@@ -1217,7 +1216,7 @@ function threejsPlot( id, data, config ) {
 }
 
 
-function template( options, bounds, lights, texts, points, lines, surfaces ) {
+function template( config, lights, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>
@@ -1240,80 +1239,77 @@ function template( options, bounds, lights, texts, points, lines, surfaces ) {
 
 <script>
 
-var options = ${options};
+var config = ${config};
 var scene = new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer( { antialias: true } );
 renderer.setPixelRatio( window.devicePixelRatio );
 renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setClearColor( options.clearColor, 1 );
+renderer.setClearColor( config.clearColor, 1 );
 document.body.appendChild( renderer.domElement );
 
-var a = options.aspectRatio; // aspect multipliers
-var animate = false; // options.animate;
+var a = config.aspectRatio; // aspect multipliers
+var animate = false; // config.animate;
 
-var bounds = ${bounds};
-var b0 = bounds[0]; // lower
-var b1 = bounds[1]; // upper
+var xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
+var xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
 
-if ( b0[0] === b1[0] ) { b0[0] -= 1; b1[0] += 1; }
-if ( b0[1] === b1[1] ) { b0[1] -= 1; b1[1] += 1; }
-if ( b0[2] === b1[2] ) { b0[2] -= 1; b1[2] += 1; }
+if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
+if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
+if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
 
 // apply aspect multipliers for convenience
-for ( var i = 0 ; i < 3 ; i++ ) {
-  b0[i] *= a[i];
-  b1[i] *= a[i];
-}
+xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
+xMax *= a[0]; yMax *= a[1]; zMax *= a[2];
 
-var xRange = b1[0] - b0[0];
-var yRange = b1[1] - b0[1];
-var zRange = b1[2] - b0[2];
+var xRange = xMax - xMin;
+var yRange = yMax - yMin;
+var zRange = zMax - zMin;
 var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
 if ( zRange > rRange && a[2] === 1 ) {
   a[2] = rRange / zRange;
-  b0[2] *= a[2];
-  b1[2] *= a[2];
+  zMin *= a[2];
+  zMax *= a[2];
   zRange *= a[2];
 }
 
-var xMid = ( b0[0] + b1[0] ) / 2;
-var yMid = ( b0[1] + b1[1] ) / 2;
-var zMid = ( b0[2] + b1[2] ) / 2;
+var xMid = ( xMin + xMax ) / 2;
+var yMid = ( yMin + yMax ) / 2;
+var zMid = ( zMin + zMax ) / 2;
 
 var box = new THREE.Geometry();
-box.vertices.push( new THREE.Vector3( b0[0], b0[1], b0[2] ) );
-box.vertices.push( new THREE.Vector3( b1[0], b1[1], b1[2] ) );
+box.vertices.push( new THREE.Vector3( xMin, yMin, zMin ) );
+box.vertices.push( new THREE.Vector3( xMax, yMax, zMax ) );
 var boxMesh = new THREE.Line( box );
-if ( options.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
+if ( config.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
 
-if ( options.axesLabels ) {
+if ( config.axesLabels ) {
 
-  var d = options.decimals; // decimals
+  var d = config.decimals; // decimals
   var offsetRatio = 0.1;
-  var al = options.axesLabels;
+  var al = config.axesLabels;
 
-  var offset = offsetRatio * ( b1[1] - b0[1] );
+  var offset = offsetRatio * ( yMax - yMin );
   var xm = ( xMid/a[0] ).toFixed(d);
   if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
-  addLabel( al[0] + '=' + xm, xMid, b1[1]+offset, b0[2] );
-  addLabel( ( b0[0]/a[0] ).toFixed(d), b0[0], b1[1]+offset, b0[2] );
-  addLabel( ( b1[0]/a[0] ).toFixed(d), b1[0], b1[1]+offset, b0[2] );
+  addLabel( al[0] + '=' + xm, xMid, yMax+offset, zMin );
+  addLabel( ( xMin/a[0] ).toFixed(d), xMin, yMax+offset, zMin );
+  addLabel( ( xMax/a[0] ).toFixed(d), xMax, yMax+offset, zMin );
 
-  var offset = offsetRatio * ( b1[0] - b0[0] );
+  var offset = offsetRatio * ( xMax - xMin );
   var ym = ( yMid/a[1] ).toFixed(d);
   if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
-  addLabel( al[1] + '=' + ym, b1[0]+offset, yMid, b0[2] );
-  addLabel( ( b0[1]/a[1] ).toFixed(d), b1[0]+offset, b0[1], b0[2] );
-  addLabel( ( b1[1]/a[1] ).toFixed(d), b1[0]+offset, b1[1], b0[2] );
+  addLabel( al[1] + '=' + ym, xMax+offset, yMid, zMin );
+  addLabel( ( yMin/a[1] ).toFixed(d), xMax+offset, yMin, zMin );
+  addLabel( ( yMax/a[1] ).toFixed(d), xMax+offset, yMax, zMin );
 
-  var offset = offsetRatio * ( b1[1] - b0[1] );
+  var offset = offsetRatio * ( yMax - yMin );
   var zm = ( zMid/a[2] ).toFixed(d);
   if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
-  addLabel( al[2] + '=' + zm, b1[0], b0[1]-offset, zMid );
-  addLabel( ( b0[2]/a[2] ).toFixed(d), b1[0], b0[1]-offset, b0[2] );
-  addLabel( ( b1[2]/a[2] ).toFixed(d), b1[0], b0[1]-offset, b1[2] );
+  addLabel( al[2] + '=' + zm, xMax, yMin-offset, zMid );
+  addLabel( ( zMin/a[2] ).toFixed(d), xMax, yMin-offset, zMin );
+  addLabel( ( zMax/a[2] ).toFixed(d), xMax, yMin-offset, zMax );
 
 }
 
@@ -1347,7 +1343,7 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
 }
 
-if ( options.axes ) scene.add( new THREE.AxisHelper( Math.min( b1[0], b1[1], b1[2] ) ) );
+if ( config.axes ) scene.add( new THREE.AxisHelper( Math.min( xMax, yMax, zMax ) ) );
 
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.up.set( 0, 0, 1 );
@@ -1356,8 +1352,8 @@ camera.up.set( 0, 0, 1 );
 camera.position.set( xMid, yMid, zMid );
 var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
 
-if ( options.viewpoint !== 'auto' ) {
-  var v = options.viewpoint;
+if ( config.viewpoint !== 'auto' ) {
+  var v = config.viewpoint;
   var t = new THREE.Vector3( v[0], v[1], v[2] );
   var phi = defaultOffset.angleTo( t );
   var n = t.cross( defaultOffset ).normalize();
@@ -1380,7 +1376,7 @@ for ( var i = 0 ; i < lights.length ; i++ ) {
 }
 scene.add( camera );
 
-scene.add( new THREE.AmbientLight( options.ambientLight, 1 ) );
+scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
 
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.target.set( xMid, yMid, zMid );
@@ -1480,16 +1476,16 @@ function addSurface( json ) {
   // remove faces completely outside vertical range
   for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = geometry.faces[i];
-    if ( geometry.vertices[f.a].z < b0[2] && geometry.vertices[f.b].z < b0[2]
-           && geometry.vertices[f.c].z < b0[2] ) geometry.faces.splice( i, 1 );
-    if ( geometry.vertices[f.a].z > b1[2] && geometry.vertices[f.b].z > b1[2] 
-           && geometry.vertices[f.c].z > b1[2] ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z < zMin && geometry.vertices[f.b].z < zMin
+           && geometry.vertices[f.c].z < zMin ) geometry.faces.splice( i, 1 );
+    if ( geometry.vertices[f.a].z > zMax && geometry.vertices[f.b].z > zMax 
+           && geometry.vertices[f.c].z > zMax ) geometry.faces.splice( i, 1 );
   }
 
   // constrain vertices to vertical range
   for ( var i = 0 ; i < geometry.vertices.length ; i++ ) {
-    if ( geometry.vertices[i].z < b0[2] ) geometry.vertices[i].z = b0[2];
-    if ( geometry.vertices[i].z > b1[2] ) geometry.vertices[i].z = b1[2];
+    if ( geometry.vertices[i].z < zMin ) geometry.vertices[i].z = zMin;
+    if ( geometry.vertices[i].z > zMax ) geometry.vertices[i].z = zMax;
   }
   geometry.computeVertexNormals();
 
@@ -1520,10 +1516,10 @@ function addSurface( json ) {
 
 }
 
-if ( options.clippingPlane ) {
+if ( config.clippingPlane ) {
 
-  var v = options.clippingPlane[0];
-  var d = options.clippingPlane[1];
+  var v = config.clippingPlane[0];
+  var d = config.clippingPlane[1];
   var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
   renderer.clippingPlanes = [ plane ];
 

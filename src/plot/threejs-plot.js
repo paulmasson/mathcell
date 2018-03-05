@@ -24,8 +24,6 @@ function threejsPlot( id, data, config ) {
 
   }
 
-  var options = JSON.stringify( config );
-
   var texts = [], points = [], lines = [], surfaces = [];
 
   for ( var i = 0 ; i < data.length ; i++ )
@@ -51,14 +49,15 @@ function threejsPlot( id, data, config ) {
   var yMinMax = minMax( all, 1 );
   var zMinMax = minMax( all, 2 );
 
-  var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
-  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
-  var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
-  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
-  var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
-  var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
+  if ( !( 'xMin' in config ) ) config.xMin = xMinMax.min;
+  if ( !( 'yMin' in config ) ) config.yMin = yMinMax.min;
+  if ( !( 'zMin' in config ) ) config.zMin = zMinMax.min;
 
-  var bounds = JSON.stringify( [ [xMin,yMin,zMin], [xMax,yMax,zMax] ] );
+  if ( !( 'xMax' in config ) ) config.xMax = xMinMax.max;
+  if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
+  if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
+
+  config = JSON.stringify( config );
 
   var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
 
@@ -67,7 +66,7 @@ function threejsPlot( id, data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( options, bounds, lights, texts, points, lines, surfaces );
+  var html = template( config, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

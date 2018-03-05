@@ -1610,10 +1610,11 @@ function x3dPlot( id, data, config ) {
   var zMinMax = minMax( all, 2 );
 
   var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
-  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
   var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
-  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
   var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
+
+  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
+  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
   var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
 
   var xRange = xMax - xMin;
@@ -1623,8 +1624,6 @@ function x3dPlot( id, data, config ) {
   var xMid = ( xMax + xMin ) / 2;
   var yMid = ( yMax + yMin ) / 2;
   var zMid = ( zMax + zMin ) / 2;
-
-  var b0 = [ xMin, yMin, zMin ], b1 = [ xMax, yMax, zMax ];
 
   var boxHelper = [ [ [xMin,yMin,zMin],[xMax,yMin,zMin] ],
                     [ [xMin,yMin,zMin],[xMin,yMax,zMin] ],
@@ -1688,17 +1687,17 @@ function x3dPlot( id, data, config ) {
     for ( var j = s.faces.length - 1 ; j >= 0 ; j-- ) {
       var f = s.faces[j];
       var check = true;
-      f.forEach( index => check &= s.vertices[index][2] < b0[2] );
+      f.forEach( index => check &= s.vertices[index][2] < zMin );
       if ( check ) s.faces.splice( j, 1 );
       var check = true;
-      f.forEach( index => check &= s.vertices[index][2] > b1[2] );
+      f.forEach( index => check &= s.vertices[index][2] > zMax );
       if ( check ) s.faces.splice( j, 1 );
     }
 
     // constrain vertices to vertical range
     for ( var j = 0 ; j < s.vertices.length ; j++ ) {
-      if ( s.vertices[j][2] < b0[2] ) s.vertices[j][2] = b0[2];
-      if ( s.vertices[j][2] > b1[2] ) s.vertices[j][2] = b1[2];
+      if ( s.vertices[j][2] < zMin ) s.vertices[j][2] = zMin;
+      if ( s.vertices[j][2] > zMax ) s.vertices[j][2] = zMax;
     }
 
     var indices = '';

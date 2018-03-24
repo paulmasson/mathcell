@@ -34,10 +34,7 @@ xhr.onload = function() {
   var index = Math.floor( fileList.length * Math.random() );
   example.href = 'docs/examples/' + fileList[index];
 
-  var url = 'https://raw.githubusercontent.com/paulmasson/mathcell/master/docs/examples/'
-            + fileList[index];
-
-  xhr.open( 'GET', url, true );
+  xhr.open( 'GET', example.href, true );
 
   xhr.onload = function() {
 

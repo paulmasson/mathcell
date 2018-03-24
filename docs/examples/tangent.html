@@ -43,37 +43,9 @@ parent.update( id );
 
 <p>Complete code for this example:</p>
 
-<pre>
-&lt;div class="mathcell" style="height: 4.5in">
-&lt;script>
+<pre id="codeDisplay"></pre>
 
-var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
-
-var id = generateId();
-parent.id = id;
-
-MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
-                                  name: 'omega', label: '&amp;omega;' } ] );
-
-parent.update = function( id ) {
-
-  var omega = +document.getElementById( id + 'omega' ).value;
-
-  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
-
-  var data = [ p ];
-
-  var config = { type: 'svg', yMin: -5, yMax: 5 };
-
-  evaluate( id, data, config );
-
-}
-
-parent.update( id );
-
-&lt;/script>
-&lt;/div>
-</pre>
+<script> getCompleteCode(); </script>
 
 </body>
 </html>

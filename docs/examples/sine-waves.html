@@ -60,54 +60,9 @@ parent.update( id );
 
 <p>Complete code for this example:</p>
 
-<pre>
-&lt;div class="mathcell" style="height: 4.5in">
-&lt;script>
+<pre id="codeDisplay"></pre>
 
-var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
-
-var id = generateId();
-parent.id = id;
-
-MathCell( id, [ { type: 'buttons', list: [1,2,3,4,5], name: 'omega1',
-                                    label: '&amp;omega;&lt;sub>1&lt;/sub>' },
-                { type: 'slider', min:1, max: 5, default: 2.5, name: 'omega2',
-                                    label: '&amp;omega;&lt;sub>2&lt;/sub>' },
-                { type: 'checkbox', name: 'combine',
-                                    label: 'Combine the two plots?' } ] );
-
-parent.update = function( id ) {
-
-  var omega1 = +document.querySelector( 'input[name=' + id + 'omega1]:checked' ).value;
-  var omega2 = +document.getElementById( id + 'omega2' ).value;
-  var combine = document.getElementById( id + 'combine' ).checked;
-
-  function sine1( x ) { return Math.sin( omega1 * x ); }
-
-  function sine2( x ) { return Math.sin( omega2 * x ); }
-
-  var data = [];
-
-  if ( combine === true ) {
-    var p = plot( x => sine1(x) + sine2(x), [0, 2*Math.PI], { color: 'purple' } ); 
-    data = [ p ];
-  } else {
-    var p1 = plot( x => sine1(x), [0, 2*Math.PI] ); 
-    var p2 = plot( x => sine2(x), [0, 2*Math.PI], { color: 'red' } ); 
-    data = [ p1, p2 ];
-  }
-
-  var config = { type: 'svg' };
-
-  evaluate( id, data, config );
-
-}
-
-parent.update( id );
-
-&lt;/script>
-&lt;/div>
-</pre>
+<script> getCompleteCode(); </script>
 
 </body>
 </html>

@@ -342,6 +342,21 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
 }
 
+// presentation functions
+
+function getCompleteCode() {
+
+  var cell = document.getElementsByClassName( 'mathcell' )[0]
+
+  var copy = cell.cloneNode( false );
+  copy.removeAttribute( 'id' );
+  copy.appendChild( cell.children[0] );
+
+  var s = copy.outerHTML.replace( /></g, '>\n<' );
+  document.getElementById( 'codeDisplay' ).innerText = s;
+
+}
+
 
 var defaultPlotColor = 'rgb(0,127,255)';
 

@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Mystery Curve</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>Mike Croucher&rsquo;s <a href="http://www.walkingrandomly.com/?p=5677">mystery curve</a> in pure JavaScript. On a device with a keyboard, try selecting one of the sliders and holding down a cursor key to see the patterns evolve continuously.</p>
+
+<div class="mathcell" style="height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: -20, max: 20, default: 1,
+                                  name: 'a', label: 'a' },
+                { type: 'slider', min: -20, max: 20, default: 6,
+                                  name: 'b', label: 'b' },
+                { type: 'slider', min: -20, max: 20, default: -14,
+                                  name: 'c', label: 'c' },
+                { type: 'slider', min: -20, max: 20, default: 0,
+                                  name: 'd', label: 'd' } ] );
+
+parent.update = function( id ) {
+
+  var a = +document.getElementById( id + 'a' ).value;
+  var b = +document.getElementById( id + 'b' ).value;
+  var c = +document.getElementById( id + 'c' ).value;
+  var d = +document.getElementById( id + 'd' ).value;
+
+  function x( t ) {
+    return Math.cos(a*t) - Math.cos(b*t)/2 - Math.sin(c*t)/3 + Math.cos(d*t)/4;
+  }
+
+  function y( t ) {
+    return Math.sin(a*t) - Math.sin(b*t)/2 + Math.cos(c*t)/3 + Math.sin(d*t)/4;
+  }
+
+  var p = parametric( t => [ x(t), y(t) ], [0, 2*Math.PI, 1000] );
+
+  var data = [ p ];
+
+  var config = { type: 'svg', axes: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+</body>
+</html>

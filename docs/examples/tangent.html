@@ -19,7 +19,7 @@ var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [ { type: 'slider', min:1, max: 5, default: 2.5,
+MathCell( id, [ { type: 'slider', min: 1, max: 5, default: 2.5,
                                   name: 'omega', label: '&omega;' } ] );
 
 parent.update = function( id ) {

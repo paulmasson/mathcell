@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>Slinky Thing</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>Mike Croucher&rsquo;s <a href="http://www.walkingrandomly.com/?p=3715">slinky thing</a> in pure JavaScript. On a device with a keyboard, try selecting one of the sliders and holding down a cursor key to see the patterns evolve continuously.</p>
+
+<div class="mathcell" style="height: 7in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 1, max: 80, default: 1,
+                                  name: 'e', label: 'e' },
+                { type: 'slider', min: 1, max: 80, default: 80,
+                                  name: 'f', label: 'f' },
+                { type: 'slider', min: 1, max: 80, default: 1,
+                                  name: 'g', label: 'g' },
+                { type: 'slider', min: 1, max: 80, default: 1,
+                                  name: 'h', label: 'h' },
+                { type: 'slider', min: 1, max: 80, default: 80,
+                                  name: 'i', label: 'i' } ] );
+
+parent.update = function( id ) {
+
+  var e = +document.getElementById( id + 'e' ).value;
+  var f = +document.getElementById( id + 'f' ).value;
+  var g = +document.getElementById( id + 'g' ).value;
+  var h = +document.getElementById( id + 'h' ).value;
+  var i = +document.getElementById( id + 'i' ).value;
+
+  function x( t ) {
+    return Math.cos(e*t) - Math.cos(f*t) * Math.sin(g*t);
+  }
+
+  function y( t ) {
+    return 2 * Math.sin(h*t) - Math.sin(i*t);
+  }
+
+  var p = parametric( t => [ x(t), y(t) ], [0, 2*Math.PI, 2000] );
+
+  var data = [ p ];
+
+  var config = { type: 'svg', axes: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+</body>
+</html>

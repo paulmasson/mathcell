@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>MathCell - Examples</title>
+<meta name="viewport" content="shrink-to-fit=no">
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
         a { width: 2in; height: 2in; display: inline-block;
@@ -48,6 +49,7 @@ xhr.onload = function() {
       iframe.srcdoc = '<html><body style="overflow: hidden">'
                       + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
                       + cell.outerHTML + '</body></html>';
+      iframe.scrolling = 'no';
       a.appendChild( iframe);
 
       document.body.appendChild( a );

@@ -9,7 +9,7 @@
 
 <script src="../../build/mathcell.js"></script>
 
-<p>A single tangent with frequency controlled by a slider. Minimum and maximum vertical values are set manually to improve the appearance of the plot.</p>
+<p>A tangent and its cotangent with frequency controlled by a slider. Minimum and maximum vertical values are set manually to improve the appearance of the plot.</p>
 
 <div class="mathcell" style="height: 4.5in">
 <script>
@@ -26,9 +26,10 @@ parent.update = function( id ) {
 
   var omega = +document.getElementById( id + 'omega' ).value;
 
-  var p = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
+  var p1 = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
+  var p2 = plot( x => 1/Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(255,0,255)' } );
 
-  var data = [ p ];
+  var data = [ p1, p2 ];
 
   var config = { type: 'svg', yMin: -5, yMax: 5 };
 

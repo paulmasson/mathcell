@@ -2,22 +2,67 @@
 <head>
 <title>MathCell - Examples</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-<style></style>
+<style>
+        a { width: 2in; height: 2in; display: inline-block;
+            padding: .1in; color: black !important }
+        a div { width: 2in; height: 2in; position: absolute; z-index: 1 }
+        a iframe { width: 6.5in; height: 6.5in;
+                   transform: scale( calc(2/6.5) );
+                   transform-origin: top left; z-index: -1 }
+</style>
 </head>
 
 <body>
 
-<p>A single <a href="examples/tangent.html">tangent</a> with a slider and vertical cropping</p>
+<script>
 
-<p>A pair of <a href="examples/sine-waves.html">sine waves</a> with three different inputs</p>
+var xhr = new XMLHttpRequest();
 
-<p>A three-dimensional <a href="examples/sine-wave-3d.html">sine wave</a> with a slider</p>
+xhr.open( 'GET', 'https://api.github.com/repos/paulmasson/mathcell/contents/docs/examples', true );
 
-<p>A three-dimensional <a href="examples/superellipsoid.html">superellipsoid</a> with a slider</p>
+xhr.onload = function() {
 
-<p>A <a href="examples/mystery-curve.html">mystery curve</a> and a <a href="examples/slinky-thing.html">slinky thing</a>.</p>
+  var files = JSON.parse( xhr.response );
+  var xhrs = [];
 
-<p>Taubin&rsquo;s <a href="examples/taubins-heart.html">heart</a>.</p>
+  for ( var i = 0 ; i < files.length ; i++ ) { 
+
+    xhrs[i] = new XMLHttpRequest();
+    xhrs[i].fileName = 'examples/' + files[i].name;
+
+    xhrs[i].open( 'GET', xhrs[i].fileName, true );
+
+    xhrs[i].onload = function() {
+
+      var parser = new DOMParser();
+      var dom = parser.parseFromString( this.response, 'text/html' );
+      var cell = dom.getElementsByClassName( 'mathcell' )[0];
+
+      var a = document.createElement( 'a' );
+      a.href = this.fileName;
+
+      var div = document.createElement( 'div' );
+      a.appendChild( div );
+
+      var iframe = document.createElement( 'iframe' );
+      iframe.srcdoc = '<html><body style="overflow: hidden">'
+                      + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
+                      + cell.outerHTML + '</body></html>';
+      a.appendChild( iframe);
+
+      document.body.appendChild( a );
+
+    }
+
+    xhrs[i].send();
+
+  }
+
+}
+
+xhr.send();
+
+</script>
 
 </body>
 </html>

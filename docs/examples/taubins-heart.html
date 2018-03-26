@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>Taubin&rsquo;s Heart</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Taubin&rsquo;s heart:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ ] );
+
+parent.update = function( id ) {
+
+  var p = isosurface( (x,y,z) => ( x**2 + 9/4*y**2 + z**2 - 1 )**3 - x**2*z**3 - 9/80*y**2*z**3,
+                      [-1.5,1.5,100], [-1.5,1.5,100], [-1.5,1.5,100], { color: 'red' } );
+
+  var data = [ p ];
+
+  var config = { type: 'threejs', frame: false, viewpoint: [0,1,0] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The surface is defined implicitly by</p>
+
+\[ \left( x^2 + \frac{9}{4} y^2 + z^2 - 1 \right)^3 - x^2 z^3 - \frac{9}{80} y^2 z^3 = 0 \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+</body>
+</html>

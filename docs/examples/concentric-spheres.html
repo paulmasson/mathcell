@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Concentric Spheres</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A set of nested concentric transparent spheres. The Three.js-specific option <code>renderOrder</code> is critical for making all spheres visible. Objects are drawn from numerically lowest render order to highest.</p>
+
+<div class="mathcell" style="width: 6in; height: 5.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ ] );
+
+parent.update = function( id ) {
+
+  var data = [];
+
+  data.push( sphere( 1,  { opacity: .1, steps: 50 } ) );
+  data.push( sphere( .8, { opacity: .2, steps: 50, renderOrder: -1 } ) );
+  data.push( sphere( .6, { opacity: .3, steps: 50, renderOrder: -2 } ) );
+  data.push( sphere( .4, { opacity: .4, steps: 50, renderOrder: -3 } ) );
+
+  var config = { type: 'threejs', axesLabels: false, viewpoint: [2,1,1] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+</body>
+</html>

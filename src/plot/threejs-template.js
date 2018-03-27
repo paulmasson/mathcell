@@ -272,9 +272,10 @@ function addSurface( json ) {
   }
   geometry.computeVertexNormals();
 
+  var side = json.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
   var transparent = json.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {
-                               color: json.color, side: THREE.DoubleSide,
+                               color: json.color, side: side,
                                transparent: transparent, opacity: json.opacity,
                                shininess: 20 } );
 

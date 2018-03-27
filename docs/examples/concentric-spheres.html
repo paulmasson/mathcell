@@ -10,7 +10,7 @@
 <script src="../../build/mathcell.js"></script>
 <script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
 
-<p>A set of nested concentric transparent spheres. The Three.js-specific option <code>renderOrder</code> is critical for making all spheres visible. Objects are drawn from numerically lowest render order to highest.</p>
+<p>A set of nested concentric transparent spheres. The Three.js-specific option <code>renderOrder</code> is critical for making all spheres visible. Objects are drawn from numerically lowest render order to highest, with a default value of zero.</p>
 
 <div class="mathcell" style="width: 6in; height: 5.5in">
 <script>
@@ -26,10 +26,10 @@ parent.update = function( id ) {
 
   var data = [];
 
-  data.push( sphere( 1,  { opacity: .1, steps: 50 } ) );
-  data.push( sphere( .8, { opacity: .2, steps: 50, renderOrder: -1 } ) );
-  data.push( sphere( .6, { opacity: .3, steps: 50, renderOrder: -2 } ) );
-  data.push( sphere( .4, { opacity: .4, steps: 50, renderOrder: -3 } ) );
+  data.push( sphere( 1,  { opacity: .1, steps: 50, singleSide: true } ) );
+  data.push( sphere( .8, { opacity: .2, steps: 50, singleSide: true, renderOrder: -1 } ) );
+  data.push( sphere( .6, { opacity: .3, steps: 50, singleSide: true, renderOrder: -2 } ) );
+  data.push( sphere( .4, { opacity: .4, steps: 50, singleSide: true, renderOrder: -3 } ) );
 
   var config = { type: 'threejs', axesLabels: false, viewpoint: [2,1,1] };
 

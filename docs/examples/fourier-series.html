@@ -1,0 +1,75 @@
+<html>
+<head>
+<title>Fourier Series</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>Five sine waves combined into a single Fourier superposition. The relative amplitudes of the components are controlled by the sliders.</p>
+
+<div class="mathcell" style="height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 1, default: 1,
+                                  name: 'c1', label: '<i>c</i><sub>1</sub>' },
+                { type: 'slider', max:1, default: .8,
+                                  name: 'c2', label: '<i>c</i><sub>2</sub>' },
+                { type: 'slider', max:1, default: .6,
+                                  name: 'c3', label: '<i>c</i><sub>3</sub>' },
+                { type: 'slider', max:1, default: .4,
+                                  name: 'c4', label: '<i>c</i><sub>4</sub>' },
+                { type: 'slider', max:1, default: .2,
+                                  name: 'c5', label: '<i>c</i><sub>5</sub>' } ] );
+
+parent.update = function( id ) {
+
+  var c1 = +document.getElementById( id + 'c1' ).value;
+  var c2 = +document.getElementById( id + 'c2' ).value;
+  var c3 = +document.getElementById( id + 'c3' ).value;
+  var c4 = +document.getElementById( id + 'c4' ).value;
+  var c5 = +document.getElementById( id + 'c5' ).value;
+
+  function sine( n, x ) { return Math.sin( 2 * Math.PI * n * x ); }
+
+  var data = [];
+
+  data.push( plot( x => c1 * sine(1,x), [0,1], { color: 'rgb(255,150,180)' } ) );
+  data.push( plot( x => c2 * sine(2,x), [0,1], { color: 'rgb(150,255,150)' } ) );
+  data.push( plot( x => c3 * sine(3,x), [0,1], { color: 'rgb(150,255,255)' } ) );
+  data.push( plot( x => c4 * sine(4,x), [0,1], { color: 'rgb(255,150,255)' } ) );
+  data.push( plot( x => c5 * sine(5,x), [0,1], { color: 'rgb(150,150,255)' } ) );
+
+  data.push(  plot( x => c1*sine(1,x) + c2*sine(2,x) + c3*sine(3,x)
+                                      + c4*sine(4,x) + c5*sine(5,x),
+              [0,1], { color: 'black' } ) );
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

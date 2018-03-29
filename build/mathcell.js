@@ -352,7 +352,7 @@ function getCompleteCode() {
   copy.removeAttribute( 'id' );
   copy.appendChild( cell.children[0] );
 
-  var s = copy.outerHTML.replace( /></g, '>\n<' );
+  var s = copy.outerHTML.replace( '<script>', '\n<script>' ).replace( '</div>', '\n</div>' );
   document.getElementById( 'codeDisplay' ).innerText = s;
 
 }

@@ -1,0 +1,103 @@
+<html>
+<head>
+<title>Real and Imaginary Parts</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The real and imaginary parts of an inverse function on the complex plane. For fractional values of the exponent only the principle sheet is displayed. Limits are set on the <i>z</i>-axis to trim the infinite peaks at poles.</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 5, default: 2.5,
+                                  name: 'n', label: 'n' },
+                { type: 'buttons', list: [ 'real', 'imaginary' ], width: '1in',
+                                   name: 'part', label: 'Part' } ] );
+
+parent.update = function( id ) {
+
+  var n = +document.getElementById( id + 'n' ).value;
+
+  // omit the plus sign here to use string values
+  var part = document.querySelector( 'input[name=' + id + 'part]:checked' ).value;
+
+  function real( x, y ) {
+
+    var r = Math.sqrt( x**2 + y**2 );
+    var phi = Math.atan2( y, x );
+
+    return ( 1 - r * Math.cos(n*phi) ) / ( ( 1 - r*Math.cos(n*phi) )**2 + r**2 * Math.sin(n*phi)**2 );
+
+  }
+
+  function imaginary( x, y ) {
+
+    var r = Math.sqrt( x**2 + y**2 );
+    var phi = Math.atan2( y, x );
+
+    return -r * Math.sin(n*phi) / ( ( 1 - r*Math.cos(n*phi) )**2 + r**2 * Math.sin(n*phi)**2 );
+
+  }
+
+  var data = [];
+
+  switch ( part ) {
+
+    case 'real':
+
+      data.push( parametric( (x,y) => [x,y,real(x,y)], [-3,3,100], [-3,3,100] ) );
+      break;
+
+    case 'imaginary':
+
+      data.push( parametric( (x,y) => [x,y,imaginary(x,y)], [-3,3,100], [-3,3,100] ) );
+      break;
+
+  }
+
+  var config = { type: 'threejs', axesLabels: false, zMin: -3, zMax: 3 };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The inverse function is</p>
+
+\[ f(z) = \frac{ 1 }{ 1 - z^n } \]
+
+<p>With the parametrization \( z = r e^{ i \phi } \) the function can be written</p>
+
+\[ \begin{align}
+   f(z) &= \frac{ 1 }{ 1 - r \cos n\phi + i r \sin n\phi } \\
+        &= \frac{ 1 - r \cos n\phi }{ ( 1 - r \cos n\phi )^2 + r^2 \sin^2 n\phi }
+           - i \frac{ r \sin n\phi }{ ( 1 - r \cos n\phi )^2 + r^2 \sin^2 n\phi }
+   \end{align} \]
+
+<p>so that evaluations can be done with standard JavaScript functions. More complicated functions would requres a library that can handle the arithmetic of complex numbers, such as <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -4,7 +4,9 @@ function isoline( f, xRange, yRange, options={} ) {
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -136,7 +138,7 @@ function isoline( f, xRange, yRange, options={} ) {
 
       }
 
-      segments.push( { points: points, color: color, type: 'line' } );
+      segments.push( { points: points, options: options, type: 'line' } );
 
     }
   }
@@ -151,7 +153,9 @@ function isoband( f, xRange, yRange, options={} ) {
   if ( xRange.length < 3 ) xRange[2] = 75;
   if ( yRange.length < 3 ) yRange[2] = 75;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -285,7 +289,9 @@ function isoband( f, xRange, yRange, options={} ) {
 
       }
 
-      segments.push( { points: points, color: color, fill: true, type: 'line' } );
+      options.fill = true;
+
+      segments.push( { points: points, options: options, type: 'line' } );
 
     }
   }

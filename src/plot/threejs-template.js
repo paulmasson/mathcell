@@ -178,7 +178,7 @@ var texts = ${texts};
 
 for ( var i = 0 ; i < texts.length ; i++ ) {
   var t = texts[i];
-  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.color, t.fontSize );
+  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
 }
 
 var points = ${points};
@@ -197,15 +197,15 @@ function addPoint( json ) {
 
   var context = canvas.getContext( '2d' );
   context.arc( 64, 64, 64, 0, 2 * Math.PI );
-  context.fillStyle = json.color;
+  context.fillStyle = json.options.color;
   context.fill();
 
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var transparent = json.opacity < 1 ? true : false;
+  var transparent = json.options.opacity < 1 ? true : false;
   var material = new THREE.PointsMaterial( { size: json.size/100, map: texture,
-                                             transparent: transparent, opacity: json.opacity,
+                                             transparent: transparent, opacity: json.options.opacity,
                                              alphaTest: .1 } );
 
   var c = geometry.center().multiplyScalar( -1 );
@@ -227,9 +227,9 @@ function addLine( json ) {
     geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
   }
 
-  var transparent = json.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: json.color, linewidth: json.linewidth,
-                                                transparent: transparent, opacity: json.opacity } );
+  var transparent = json.options.opacity < 1 ? true : false;
+  var material = new THREE.LineBasicMaterial( { color: json.options.color, linewidth: json.linewidth,
+                                                transparent: transparent, opacity: json.options.opacity } );
 
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Line( geometry, material );
@@ -273,10 +273,10 @@ function addSurface( json ) {
   geometry.computeVertexNormals();
 
   var side = json.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = json.opacity < 1 ? true : false;
+  var transparent = json.options.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {
-                               color: json.color, side: side,
-                               transparent: transparent, opacity: json.opacity,
+                               color: json.options.color, side: side,
+                               transparent: transparent, opacity: json.options.opacity,
                                shininess: 20 } );
 
   if ( 'colors' in json.options ) {

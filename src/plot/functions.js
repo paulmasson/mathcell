@@ -6,31 +6,33 @@ function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
     x => points.push( [ x, f(x) ] )
   );
 
-  return [ { points: points, color: color, type: 'line' } ];
+  return [ { points: points, options: options, type: 'line' } ];
 
 }
 
 
 function listPlot( points, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
-  return [ { points: points, color: color, type: 'line' } ];
+  return [ { points: points, options: options, type: 'line' } ];
 
 }
 
 
 function parametric( vector, xRange, yRange, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
@@ -70,8 +72,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     }
   }
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 

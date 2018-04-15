@@ -22,7 +22,7 @@ function svgPlot( id, data, config ) {
   var height = document.getElementById( id + 'output' ).offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'', type: 'line' } ] );
+  if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );
 
   var texts = [], points = [], lines = [];
 
@@ -246,14 +246,14 @@ function svgPlot( id, data, config ) {
 
     }
 
-    svg += `" stroke="${l.color}" stroke-width="1.5" fill="${l.fill ? l.color : 'none'}"/>`;
+    svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
 
   }
 
   for ( var i = 0 ; i < points.length ; i++ ) {
 
     var c = points[i];
-    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.color}"/>`;
+    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.options.color}"/>`;
 
   }
 
@@ -261,7 +261,7 @@ function svgPlot( id, data, config ) {
 
     var t = texts[i];
     svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
-                  fill="${t.color}" font-size="${t.fontSize}"
+                  fill="${t.options.color}" font-size="${t.options.fontSize}"
                   text-anchor="middle" dominant-baseline="central">
             ${t.text}</text>`;
 

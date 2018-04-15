@@ -153,7 +153,7 @@ function x3dPlot( id, data, config ) {
       points += s.vertices[j].join(' ') + ' ';
 
     var p = document.createElement( 'p' );
-    p.style.color = s.color;
+    p.style.color = s.options.color;
     var rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
     rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
     var color = rgb.join(' '); 
@@ -161,7 +161,7 @@ function x3dPlot( id, data, config ) {
     html += `
 <Shape>
 <Appearance>
-<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.opacity}"/>
+<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"/>
 </Appearance>
 <IndexedFaceSet coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>

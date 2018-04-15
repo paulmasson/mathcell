@@ -570,31 +570,33 @@ function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
     x => points.push( [ x, f(x) ] )
   );
 
-  return [ { points: points, color: color, type: 'line' } ];
+  return [ { points: points, options: options, type: 'line' } ];
 
 }
 
 
 function listPlot( points, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
-  return [ { points: points, color: color, type: 'line' } ];
+  return [ { points: points, options: options, type: 'line' } ];
 
 }
 
 
 function parametric( vector, xRange, yRange, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
@@ -634,8 +636,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     }
   }
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 
@@ -681,7 +682,9 @@ function wireframe( vector, xRange, yRange, options={} ) {
 // face indices always counter-clockwise for consistency
 
 
-function arrow( begin, end, color=defaultPlotColor ) {
+function arrow( begin, end, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
 
   // assume 2D for now
   var vector = [ end[0]-begin[0], end[1]-begin[1] ];
@@ -699,33 +702,34 @@ function arrow( begin, end, color=defaultPlotColor ) {
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
 
-  return [ { points: [ begin, end, p1, p2, end ], color: color, type: 'line' } ];
+  return [ { points: [ begin, end, p1, p2, end ], options: options, type: 'line' } ];
 
 }
 
 
 function text( string, point, options={} ) {
 
-  var color = 'color' in options ? options.color : 'black';
-  var fontSize = 'fontSize' in options ? options.fontSize : 14;
+  if ( !( 'color' in options ) ) options.color = 'black';
+  if ( !( 'fontSize' in options ) ) options.fontSize = 14;
 
-  return [ { text: string, point: point, color: color, fontSize: fontSize,
-             type: 'text' } ];
+  return [ { text: string, point: point, options: options, type: 'text' } ];
 
 }
 
 
 function line( points, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   if ( 'radius' in options ) {
 
     var segments = [];
 
-    if ( options.endcaps )
-      segments.push( sphere( options.radius, { center: points[0], color: color } )[0] );
+    if ( options.endcaps ) {
+      options.center = points[0];
+      segments.push( sphere( options.radius, options )[0] );
+    }
 
     for ( var i = 1 ; i < points.length ; i++ ) {
 
@@ -739,8 +743,10 @@ function line( points, options={} ) {
 
       segments.push( cylinder( options.radius, height, options )[0] );
 
-      if ( options.endcaps )
-        segments.push( sphere( options.radius, { center: b, color: color } )[0] );
+      if ( options.endcaps ) {
+        options.center = b;
+        segments.push( sphere( options.radius, options )[0] );
+      }
 
     }
 
@@ -750,10 +756,9 @@ function line( points, options={} ) {
 
   else {
 
-    var linewidth = 'linewidth' in options ? options.linewidth : 1;
+    if ( !( 'linewidth' in options ) ) options.linewidth = 1;
 
-    return [ { points: points, color: color, opacity: opacity,
-               linewidth: linewidth, type: 'line' } ];
+    return [ { points: points, options: options, type: 'line' } ];
 
   }
 
@@ -764,8 +769,8 @@ function line( points, options={} ) {
 
 function box( width, depth, height, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var x = width / 2;
   var y = depth / 2;
@@ -777,15 +782,14 @@ function box( width, depth, height, options={} ) {
   var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
                 [0,3,7,4], [1,5,6,2] ];
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 
 function sphere( radius, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   var steps = 'steps' in options ? options.steps : 20;
   var r = radius;
@@ -827,15 +831,14 @@ function sphere( radius, options={} ) {
 
   if ( 'center' in options ) translate( vertices, options.center );
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 
 function cylinder( radius, height, options={} ) {
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   if ( options.endcaps ) options.openEnded = true;
 
@@ -877,8 +880,7 @@ function cylinder( radius, height, options={} ) {
 
   if ( 'center' in options ) translate( vertices, options.center );
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 
@@ -906,7 +908,7 @@ function svgPlot( id, data, config ) {
   var height = document.getElementById( id + 'output' ).offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [ { points:[[0,0]], color:'', type: 'line' } ] );
+  if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );
 
   var texts = [], points = [], lines = [];
 
@@ -1130,14 +1132,14 @@ function svgPlot( id, data, config ) {
 
     }
 
-    svg += `" stroke="${l.color}" stroke-width="1.5" fill="${l.fill ? l.color : 'none'}"/>`;
+    svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
 
   }
 
   for ( var i = 0 ; i < points.length ; i++ ) {
 
     var c = points[i];
-    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.color}"/>`;
+    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.options.color}"/>`;
 
   }
 
@@ -1145,7 +1147,7 @@ function svgPlot( id, data, config ) {
 
     var t = texts[i];
     svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
-                  fill="${t.color}" font-size="${t.fontSize}"
+                  fill="${t.options.color}" font-size="${t.options.fontSize}"
                   text-anchor="middle" dominant-baseline="central">
             ${t.text}</text>`;
 
@@ -1410,7 +1412,7 @@ var texts = ${texts};
 
 for ( var i = 0 ; i < texts.length ; i++ ) {
   var t = texts[i];
-  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.color, t.fontSize );
+  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
 }
 
 var points = ${points};
@@ -1429,15 +1431,15 @@ function addPoint( json ) {
 
   var context = canvas.getContext( '2d' );
   context.arc( 64, 64, 64, 0, 2 * Math.PI );
-  context.fillStyle = json.color;
+  context.fillStyle = json.options.color;
   context.fill();
 
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var transparent = json.opacity < 1 ? true : false;
+  var transparent = json.options.opacity < 1 ? true : false;
   var material = new THREE.PointsMaterial( { size: json.size/100, map: texture,
-                                             transparent: transparent, opacity: json.opacity,
+                                             transparent: transparent, opacity: json.options.opacity,
                                              alphaTest: .1 } );
 
   var c = geometry.center().multiplyScalar( -1 );
@@ -1459,9 +1461,9 @@ function addLine( json ) {
     geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
   }
 
-  var transparent = json.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: json.color, linewidth: json.linewidth,
-                                                transparent: transparent, opacity: json.opacity } );
+  var transparent = json.options.opacity < 1 ? true : false;
+  var material = new THREE.LineBasicMaterial( { color: json.options.color, linewidth: json.linewidth,
+                                                transparent: transparent, opacity: json.options.opacity } );
 
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Line( geometry, material );
@@ -1505,10 +1507,10 @@ function addSurface( json ) {
   geometry.computeVertexNormals();
 
   var side = json.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = json.opacity < 1 ? true : false;
+  var transparent = json.options.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {
-                               color: json.color, side: side,
-                               transparent: transparent, opacity: json.opacity,
+                               color: json.options.color, side: side,
+                               transparent: transparent, opacity: json.options.opacity,
                                shininess: 20 } );
 
   if ( 'colors' in json.options ) {
@@ -1725,7 +1727,7 @@ function x3dPlot( id, data, config ) {
       points += s.vertices[j].join(' ') + ' ';
 
     var p = document.createElement( 'p' );
-    p.style.color = s.color;
+    p.style.color = s.options.color;
     var rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
     rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
     var color = rgb.join(' '); 
@@ -1733,7 +1735,7 @@ function x3dPlot( id, data, config ) {
     html += `
 <Shape>
 <Appearance>
-<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.opacity}"/>
+<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"/>
 </Appearance>
 <IndexedFaceSet coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>
@@ -1780,8 +1782,9 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   if ( yRange.length < 3 ) yRange[2] = 50;
   if ( zRange.length < 3 ) zRange[2] = 50;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -1872,8 +1875,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
     }
   }
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 
@@ -2182,7 +2184,9 @@ function isoline( f, xRange, yRange, options={} ) {
   if ( xRange.length < 3 ) xRange[2] = 100;
   if ( yRange.length < 3 ) yRange[2] = 100;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -2314,7 +2318,7 @@ function isoline( f, xRange, yRange, options={} ) {
 
       }
 
-      segments.push( { points: points, color: color, type: 'line' } );
+      segments.push( { points: points, options: options, type: 'line' } );
 
     }
   }
@@ -2329,7 +2333,9 @@ function isoband( f, xRange, yRange, options={} ) {
   if ( xRange.length < 3 ) xRange[2] = 75;
   if ( yRange.length < 3 ) yRange[2] = 75;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -2463,7 +2469,9 @@ function isoband( f, xRange, yRange, options={} ) {
 
       }
 
-      segments.push( { points: points, color: color, fill: true, type: 'line' } );
+      options.fill = true;
+
+      segments.push( { points: points, options: options, type: 'line' } );
 
     }
   }

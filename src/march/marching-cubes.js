@@ -5,8 +5,9 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   if ( yRange.length < 3 ) yRange[2] = 50;
   if ( zRange.length < 3 ) zRange[2] = 50;
 
-  var color = 'color' in options ? options.color : defaultPlotColor;
-  var opacity = 'opacity' in options ? options.opacity : 1;
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var level = 'level' in options ? options.level : 0;
 
   var xStep = ( xRange[1] - xRange[0] ) / ( xRange[2] - 1 );
@@ -97,8 +98,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
     }
   }
 
-  return [ { vertices: vertices, faces: faces, color: color, opacity: opacity,
-             type: 'surface', options: options } ];
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }
 

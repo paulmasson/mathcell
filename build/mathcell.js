@@ -1462,7 +1462,7 @@ function addLine( json ) {
   }
 
   var transparent = json.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: json.options.color, linewidth: json.linewidth,
+  var material = new THREE.LineBasicMaterial( { color: json.options.color, linewidth: json.options.linewidth,
                                                 transparent: transparent, opacity: json.options.opacity } );
 
   var c = geometry.center().multiplyScalar( -1 );

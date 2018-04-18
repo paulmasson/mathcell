@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Arcsin of Sin</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The inverse sine of a sine function scaled by an arbitrary factor:
+\( \arcsin( n \sin \theta ) \)</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 0.01, max: 2, default: .5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = +document.getElementById( id + 'n' ).value;
+
+  var data = [];
+
+  if ( n <= 1 )
+    data.push( plot( theta => Math.asin( n * Math.sin(theta) ), [ 0, Math.PI/2 ] ) );
+  else
+    data.push( plot( theta => Math.asin( n * Math.sin(theta) ), [ 0, Math.asin(1/n) ] ) );
+
+  var config = { type: 'svg', axesLabels:[ '&theta;', '' ] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>A relation of this sort occurs in Snell's Law for the refraction of light at the interface between two media:</p>
+
+\[ n_1 \sin \theta_1 = n_2 \sin \theta_2 \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

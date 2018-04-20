@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Butterfly Curve</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The butterfly curve of Temple Fay. The color is changed consecutively just to add some interest.</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+var i = 0;
+
+parent.update = function( id ) {
+
+  function r( phi ) {
+    return Math.exp( Math.sin(phi) ) - 2 * Math.cos(4*phi) + Math.sin( (2*phi-Math.PI)/24 )**5;
+  }
+
+  var color = 'hsl(' + 360*i + ',100%,50%)';
+
+  i = ( i + .1 ) % 1;
+
+  var data = [ parametric( phi => [ r(phi)*Math.cos(phi), r(phi)*Math.sin(phi) ],
+                           [ 0, 12*Math.PI, 1500 ], { color: color } ) ];
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+setInterval( parent.update, 1000, id );
+
+</script>
+</div>
+
+<p>The transcendental curve is defined by the polar equation</p>
+
+\[ r = e^{\sin \phi} - 2 \cos( 4\phi ) + \sin^5 \left( \frac{ 2\phi - \pi }{ 24 } \right) \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

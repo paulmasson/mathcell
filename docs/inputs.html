@@ -29,16 +29,16 @@
 var x = +document.getElementById( id + 'x' ).value;
 </pre>
 
-<br/><p>A <code>buttons</code> input has three additional options: an array of numbers or strings, a numeric value in that array, and a CSS string with default values</p>
+<br/><p>A <code>buttons</code> input has four additional options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
-  <code>list</code></td><td>[1,2,3]
+  <code>values</code></td><td>[1,2,3]
 </td></tr><tr><td>
-  <code>default</code></td><td><code>list[0]</code>
+  <code>labels</code></td><td><code>values</code>
+</td></tr><tr><td>
+  <code>default</code></td><td><code>values[0]</code>
 </td></tr><tr><td>
   <code>width</code></td><td>empty
-</td></tr><tr><td>
-  <code>labels</code></td><td><code>list</code> values
 </td></tr></table>
 
 <p>and the variable is assigned in code using</p>

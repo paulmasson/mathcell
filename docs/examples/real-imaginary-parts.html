@@ -22,7 +22,7 @@ parent.id = id;
 
 MathCell( id, [ { type: 'slider', max: 5, default: 2.5,
                                   name: 'n', label: 'n' },
-                { type: 'buttons', list: [ 'real', 'imaginary' ], width: '1in',
+                { type: 'buttons', values: [ 'real', 'imaginary' ], width: '1in',
                                    name: 'part', label: 'Part' } ] );
 
 parent.update = function( id ) {

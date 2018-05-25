@@ -12,6 +12,13 @@ button {
 
 }
 
+textarea {
+
+	position: absolute;
+	top: -100%;
+
+}
+
 </style>
 </head>
 
@@ -25,8 +32,6 @@ function copyTemplate() {
 
   var textArea = document.createElement( 'textarea' );
   textArea.textContent = document.getElementById( 'template' ).textContent;
-  textArea.style.display = 'none';
-
   document.body.append( textArea );
   textArea.select();
   document.execCommand( 'copy' );

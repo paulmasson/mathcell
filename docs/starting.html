@@ -2,14 +2,40 @@
 <head>
 <title>MathCell - Starting</title>
 <link rel="stylesheet" type="text/css" href="style.css">
-<style></style>
+<style>
+
+button {
+
+	border: 1px solid black;
+	border-radius: 5px;
+	background-color: #eee;
+
+}
+
+</style>
 </head>
 
 <body>
 
-<p>First copy this template into the body of the page:</p>
+<p>First <button onclick="copyTemplate()">copy</button> this template into the body of the page:</p>
 
-<pre>
+<script>
+
+function copyTemplate() {
+
+  var textArea = document.createElement( 'textarea' );
+  textArea.textContent = document.getElementById( 'template' ).textContent;
+  textArea.style.display = 'none';
+
+  document.body.append( textArea );
+  textArea.select();
+  document.execCommand( 'copy' );
+
+}
+
+</script>
+
+<pre id="template">
 &lt;div class="mathcell" style="height: 4in">
 &lt;script>
 

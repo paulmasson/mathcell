@@ -194,7 +194,7 @@ function svgPlot( id, data, config ) {
 
     var c = points[i];
     svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
-                    r="${ 3 * c.options.size }" stroke="${ c.options.color }"/>`;
+                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
 
   }
 

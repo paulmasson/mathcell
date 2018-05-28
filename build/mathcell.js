@@ -993,19 +993,19 @@ function svgPlot( id, data, config ) {
   // mathematical origin vs. location of axis
   var xOrigin = Math.round( -xMin * xScale );
   var xAxis = xOrigin;
-  var gutter = Math.max(ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin);
+  var gutter = Math.max( ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin );
   var xTotal = width + gutter + ext + xLabel;
   var xShift = gutter;
 
   if ( xOrigin < 0 ) {
     xAxis = -1.5*ext;
-    gutter = Math.max(yNumSize + xOffset, yLabelSize);
+    gutter = Math.max( yNumSize + xOffset, yLabelSize );
     xTotal = width + gutter + 2.5*ext + xLabel;
     xShift = gutter + 1.5*ext;
   }
   if ( xOrigin > width ) {
     xAxis = width + 1.5*ext;
-    gutter = Math.max(yNumSize, yLabelSize, xLabel);
+    gutter = Math.max( yNumSize, yLabelSize, xLabel );
     xTotal = width + gutter + 2.5*ext;
     xOffset = -yNumSize;
   }

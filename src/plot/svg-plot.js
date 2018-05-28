@@ -193,7 +193,8 @@ function svgPlot( id, data, config ) {
   for ( var i = 0 ; i < points.length ; i++ ) {
 
     var c = points[i];
-    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.options.color}"/>`;
+    svg += `<circle cx="${xPos(c.point[0])}" cy="${yPos(c.point[1])}"
+                    r="${c.options.size}" stroke="${c.options.color}"/>`;
 
   }
 

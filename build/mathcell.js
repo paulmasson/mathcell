@@ -718,6 +718,17 @@ function text( string, point, options={} ) {
 }
 
 
+function point( point, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'size' in options ) ) options.size = 5;
+
+  return [ { point: point, options: options, type: 'point' } ];
+
+}
+
+
 function line( points, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
@@ -1080,7 +1091,8 @@ function svgPlot( id, data, config ) {
   for ( var i = 0 ; i < points.length ; i++ ) {
 
     var c = points[i];
-    svg += `<circle cx="${c.point[0]}" cy="${c.point[1]}" r="5" stroke="${c.options.color}"/>`;
+    svg += `<circle cx="${xPos(c.point[0])}" cy="${yPos(c.point[1])}"
+                    r="${c.options.size}" stroke="${c.options.color}"/>`;
 
   }
 
@@ -1439,7 +1451,7 @@ function addPoint( json ) {
   texture.needsUpdate = true;
 
   var transparent = json.options.opacity < 1 ? true : false;
-  var material = new THREE.PointsMaterial( { size: json.size/100, map: texture,
+  var material = new THREE.PointsMaterial( { size: json.options.size/100, map: texture,
                                              transparent: transparent, opacity: json.options.opacity,
                                              alphaTest: .1 } );
 

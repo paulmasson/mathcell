@@ -204,7 +204,7 @@ function addPoint( json ) {
   texture.needsUpdate = true;
 
   var transparent = json.options.opacity < 1 ? true : false;
-  var material = new THREE.PointsMaterial( { size: json.size/100, map: texture,
+  var material = new THREE.PointsMaterial( { size: json.options.size/100, map: texture,
                                              transparent: transparent, opacity: json.options.opacity,
                                              alphaTest: .1 } );
 

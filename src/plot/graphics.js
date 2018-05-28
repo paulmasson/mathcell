@@ -38,6 +38,17 @@ function text( string, point, options={} ) {
 }
 
 
+function point( point, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'size' in options ) ) options.size = 5;
+
+  return [ { point: point, options: options, type: 'point' } ];
+
+}
+
+
 function line( points, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;

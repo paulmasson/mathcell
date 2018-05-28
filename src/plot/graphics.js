@@ -42,7 +42,7 @@ function point( point, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
-  if ( !( 'size' in options ) ) options.size = 5;
+  if ( !( 'size' in options ) ) options.size = 1;
 
   return [ { point: point, options: options, type: 'point' } ];
 

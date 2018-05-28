@@ -184,7 +184,7 @@ function svgPlot( id, data, config ) {
 
     var t = texts[i];
     svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
-                  fill="${t.options.color}" font-size="${t.options.fontSize}"
+                  fill="${ t.options.color }" font-size="${ t.options.fontSize }"
                   text-anchor="middle" dominant-baseline="central">
             ${t.text}</text>`;
 
@@ -193,8 +193,8 @@ function svgPlot( id, data, config ) {
   for ( var i = 0 ; i < points.length ; i++ ) {
 
     var c = points[i];
-    svg += `<circle cx="${xPos(c.point[0])}" cy="${yPos(c.point[1])}"
-                    r="${c.options.size}" stroke="${c.options.color}"/>`;
+    svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
+                    r="${ 3 * c.options.size }" stroke="${ c.options.color }"/>`;
 
   }
 

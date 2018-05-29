@@ -1078,24 +1078,6 @@ function svgPlot( id, data, config ) {
   function yPos( y ) { return roundTo( yOrigin - yScale*y, 2, false ); }
 
 
-  for ( var i = 0 ; i < texts.length ; i++ ) {
-
-    var t = texts[i];
-    svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
-                  fill="${ t.options.color }" font-size="${ t.options.fontSize }"
-                  text-anchor="middle" dominant-baseline="central">
-            ${t.text}</text>`;
-
-  }
-
-  for ( var i = 0 ; i < points.length ; i++ ) {
-
-    var c = points[i];
-    svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
-                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
-
-  }
-
   for ( var i = 0 ; i < lines.length ; i++ ) {
 
     var l = lines[i];
@@ -1163,6 +1145,26 @@ function svgPlot( id, data, config ) {
     }
 
     svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
+
+  }
+
+  // draw points on top of lines for now
+
+  for ( var i = 0 ; i < points.length ; i++ ) {
+
+    var c = points[i];
+    svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
+                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
+
+  }
+
+  for ( var i = 0 ; i < texts.length ; i++ ) {
+
+    var t = texts[i];
+    svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
+                  fill="${ t.options.color }" font-size="${ t.options.fontSize }"
+                  text-anchor="middle" dominant-baseline="central">
+            ${t.text}</text>`;
 
   }
 

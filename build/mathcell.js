@@ -1041,7 +1041,7 @@ function svgPlot( id, data, config ) {
 
     var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
     for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
-      if ( i != 0 || ( yOrigin != yAxis && yLabel === 0 ) ) {
+      if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
         var x = Math.round( xOrigin + xScale*i );
         svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
                       stroke="black" />`;
@@ -1053,7 +1053,7 @@ function svgPlot( id, data, config ) {
 
     var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
     for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
-      if ( i != 0 || ( xOrigin != xAxis && xLabel === 0 ) ) {
+      if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
         var y = Math.round( yOrigin - yScale*i );
         svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
                       stroke="black" />`;

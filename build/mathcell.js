@@ -915,6 +915,13 @@ function svgPlot( id, data, config ) {
 
   }
 
+  function chop( x, tolerance=1e-10 ) {
+
+    if ( Math.abs(x) < tolerance ) x = 0;
+    return x;
+
+  }
+
 
   var width = document.getElementById( id + 'output' ).offsetWidth;
   var height = document.getElementById( id + 'output' ).offsetHeight;

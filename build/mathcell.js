@@ -1275,8 +1275,8 @@ function template( config, lights, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.rawgit.com/mrdoob/three.js/r80/build/three.js"></script>
-<script src="https://cdn.rawgit.com/mrdoob/three.js/r80/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r90/build/three.js"></script>
+<script src="https://cdn.rawgit.com/mrdoob/three.js/r90/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 

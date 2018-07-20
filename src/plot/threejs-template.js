@@ -126,7 +126,7 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
 }
 
-if ( config.axes ) scene.add( new THREE.AxisHelper( Math.min( xMax, yMax, zMax ) ) );
+if ( config.axes ) scene.add( new THREE.AxesHelper( Math.min( xMax, yMax, zMax ) ) );
 
 var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
 camera.up.set( 0, 0, 1 );

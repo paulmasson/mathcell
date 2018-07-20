@@ -1502,6 +1502,23 @@ for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
 
 function addSurface( s ) {
 
+  // remove faces completely outside vertical range
+  for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
+    var f = s.faces[i];
+    var check = true;
+    f.forEach( index => check &= s.vertices[index][2] < zMin );
+    if ( check ) s.faces.splice( i, 1 );
+    var check = true;
+    f.forEach( index => check &= s.vertices[index][2] > zMax );
+    if ( check ) s.faces.splice( i, 1 );
+  }
+
+  // constrain vertices to vertical range
+  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+    if ( s.vertices[i][2] < zMin ) s.vertices[i][2] = zMin;
+    if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
+  }
+
   var geometry = new THREE.Geometry();
   for ( var i = 0 ; i < s.vertices.length ; i++ ) {
     var v = s.vertices[i];
@@ -1514,20 +1531,6 @@ function addSurface( s ) {
   }
   geometry.mergeVertices();
 
-  // remove faces completely outside vertical range
-  for ( var i = geometry.faces.length - 1 ; i >= 0 ; i-- ) {
-    var f = geometry.faces[i];
-    if ( geometry.vertices[f.a].z < zMin && geometry.vertices[f.b].z < zMin
-           && geometry.vertices[f.c].z < zMin ) geometry.faces.splice( i, 1 );
-    if ( geometry.vertices[f.a].z > zMax && geometry.vertices[f.b].z > zMax 
-           && geometry.vertices[f.c].z > zMax ) geometry.faces.splice( i, 1 );
-  }
-
-  // constrain vertices to vertical range
-  for ( var i = 0 ; i < geometry.vertices.length ; i++ ) {
-    if ( geometry.vertices[i].z < zMin ) geometry.vertices[i].z = zMin;
-    if ( geometry.vertices[i].z > zMax ) geometry.vertices[i].z = zMax;
-  }
   geometry.computeVertexNormals();
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;

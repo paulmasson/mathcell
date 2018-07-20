@@ -1443,10 +1443,10 @@ var points = ${points};
 
 for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
 
-function addPoint( json ) {
+function addPoint( p ) {
 
   var geometry = new THREE.Geometry();
-  var v = json.point;
+  var v = p.point;
   geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
 
   var canvas = document.createElement( 'canvas' );
@@ -1455,15 +1455,15 @@ function addPoint( json ) {
 
   var context = canvas.getContext( '2d' );
   context.arc( 64, 64, 64, 0, 2 * Math.PI );
-  context.fillStyle = json.options.color;
+  context.fillStyle = p.options.color;
   context.fill();
 
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var transparent = json.options.opacity < 1 ? true : false;
-  var material = new THREE.PointsMaterial( { size: json.options.size/20, map: texture,
-                                             transparent: transparent, opacity: json.options.opacity,
+  var transparent = p.options.opacity < 1 ? true : false;
+  var material = new THREE.PointsMaterial( { size: p.options.size/20, map: texture,
+                                             transparent: transparent, opacity: p.options.opacity,
                                              alphaTest: .1 } );
 
   var c = geometry.center().multiplyScalar( -1 );
@@ -1477,17 +1477,17 @@ var lines = ${lines};
 
 for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
 
-function addLine( json ) {
+function addLine( l ) {
 
   var geometry = new THREE.Geometry();
-  for ( var i = 0 ; i < json.points.length ; i++ ) {
-    var v = json.points[i];
+  for ( var i = 0 ; i < l.points.length ; i++ ) {
+    var v = l.points[i];
     geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
   }
 
-  var transparent = json.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: json.options.color, linewidth: json.options.linewidth,
-                                                transparent: transparent, opacity: json.options.opacity } );
+  var transparent = l.options.opacity < 1 ? true : false;
+  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
+                                                transparent: transparent, opacity: l.options.opacity } );
 
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Line( geometry, material );
@@ -1500,15 +1500,15 @@ var surfaces = ${surfaces};
 
 for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
 
-function addSurface( json ) {
+function addSurface( s ) {
 
   var geometry = new THREE.Geometry();
-  for ( var i = 0 ; i < json.vertices.length ; i++ ) {
-    var v = json.vertices[i];
+  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+    var v = s.vertices[i];
     geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
   }
-  for ( var i = 0 ; i < json.faces.length ; i++ ) {
-    var f = json.faces[i];
+  for ( var i = 0 ; i < s.faces.length ; i++ ) {
+    var f = s.faces[i];
     for ( var j = 0 ; j < f.length - 2 ; j++ )
       geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
   }
@@ -1530,16 +1530,16 @@ function addSurface( json ) {
   }
   geometry.computeVertexNormals();
 
-  var side = json.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = json.options.opacity < 1 ? true : false;
+  var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
+  var transparent = s.options.opacity < 1 ? true : false;
   var material = new THREE.MeshPhongMaterial( {
-                               color: json.options.color, side: side,
-                               transparent: transparent, opacity: json.options.opacity,
+                               color: s.options.color, side: side,
+                               transparent: transparent, opacity: s.options.opacity,
                                shininess: 20 } );
 
-  if ( 'colors' in json.options ) {
+  if ( 'colors' in s.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color().setHSL( json.options.colors[i], 1, .5 ) );
+      geometry.colors.push( new THREE.Color().setHSL( s.options.colors[i], 1, .5 ) );
     for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
       var f = geometry.faces[i];
       f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
@@ -1548,12 +1548,12 @@ function addSurface( json ) {
     material.color.set( 'white' ); // crucial!
   }
 
-  if ( json.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
+  if ( s.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
 
   var c = geometry.center().multiplyScalar( -1 );
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
-  if ( json.options.renderOrder ) mesh.renderOrder = json.options.renderOrder;
+  if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
   scene.add( mesh );
 
 }

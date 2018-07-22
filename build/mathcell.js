@@ -1466,7 +1466,7 @@ function addPoint( p ) {
                                              transparent: transparent, opacity: p.options.opacity,
                                              alphaTest: .1 } );
 
-  var c = geometry.center().multiplyScalar( -1 );
+  var c = geometry.center().negate();
   var mesh = new THREE.Points( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   scene.add( mesh );
@@ -1489,7 +1489,7 @@ function addLine( l ) {
   var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
                                                 transparent: transparent, opacity: l.options.opacity } );
 
-  var c = geometry.center().multiplyScalar( -1 );
+  var c = geometry.center().negate();
   var mesh = new THREE.Line( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   scene.add( mesh );
@@ -1519,6 +1519,7 @@ function addSurface( s ) {
     if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
   }
 
+  // no appreciable speedup with BufferGeometry
   var geometry = new THREE.Geometry();
   for ( var i = 0 ; i < s.vertices.length ; i++ ) {
     var v = s.vertices[i];
@@ -1529,8 +1530,8 @@ function addSurface( s ) {
     for ( var j = 0 ; j < f.length - 2 ; j++ )
       geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
   }
-  geometry.mergeVertices();
 
+  geometry.mergeVertices(); // only need for lazy constructions
   geometry.computeVertexNormals();
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
@@ -1553,7 +1554,7 @@ function addSurface( s ) {
 
   if ( s.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
 
-  var c = geometry.center().multiplyScalar( -1 );
+  var c = geometry.center().negate();
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;

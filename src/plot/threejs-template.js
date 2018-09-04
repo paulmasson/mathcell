@@ -244,6 +244,9 @@ for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
 
 function addSurface( s ) {
 
+  // apply aspect multipliers for convenience
+  s.vertices.forEach( v => { v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2]; } );
+
   // remove faces completely outside vertical range
   for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = s.faces[i];
@@ -265,7 +268,7 @@ function addSurface( s ) {
   var geometry = new THREE.Geometry();
   for ( var i = 0 ; i < s.vertices.length ; i++ ) {
     var v = s.vertices[i];
-    geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
   }
   for ( var i = 0 ; i < s.faces.length ; i++ ) {
     var f = s.faces[i];

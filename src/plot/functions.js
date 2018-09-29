@@ -21,6 +21,26 @@ function plot( f, xRange, options={} ) {
 
 function listPlot( points, options={} ) {
 
+  if ( Array.isArray( arguments[1] ) ) {
+
+    // working copy of points
+    points = JSON.parse( JSON.stringify( points ) );
+
+    // assume arrays of same lengths and depths
+    var dim = arguments[0][0].length - 1;
+
+    for ( var i = 1 ; i < arguments.length ; i++ )
+      if ( Array.isArray( arguments[i] ) )
+        for ( var j = 0 ; j < arguments[0].length ; j++ )
+          // only add last coordinates together
+          points[j][dim] += arguments[i][j][dim];
+
+    if ( !Array.isArray( arguments[ arguments.length - 1 ] ) )
+      options = arguments[ arguments.length - 1 ];
+    else options = {};
+
+  }
+
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
 

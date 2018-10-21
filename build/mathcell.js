@@ -1391,13 +1391,6 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
   context.textBaseline = 'middle';
   context.fillText( text, canvas.width/4, canvas.height/4 );
 
-  var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="32">'
-            + '<text x="64" y="16" font-size="16" font-family="monospace">'
-            + text + '</text></svg>';
-
-  var img = new Image();
-  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent( svg );
-
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 

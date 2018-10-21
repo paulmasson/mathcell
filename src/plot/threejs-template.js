@@ -99,15 +99,19 @@ if ( config.axesLabels ) {
 function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
   var canvas = document.createElement( 'canvas' );
-  canvas.width = 128;
-  canvas.height = 32; // powers of two
+  var pixelRatio = window.devicePixelRatio ? Math.round(window.devicePixelRatio) : 1;
+  canvas.width = 128 * pixelRatio;
+  canvas.height = 32 * pixelRatio; // powers of two
+  canvas.style.width = '128px';
+  canvas.style.height = '32px';
 
   var context = canvas.getContext( '2d' );
+  context.scale( pixelRatio, pixelRatio );
   context.fillStyle = color;
   context.font = fontsize + 'px monospace';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText( text, .5*canvas.width, .5*canvas.height );
+  context.fillText( text, canvas.width/4, canvas.height/4 );
 
   var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="128" height="32">'
             + '<text x="64" y="16" font-size="16" font-family="monospace">'

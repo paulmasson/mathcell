@@ -99,7 +99,7 @@ if ( config.axesLabels ) {
 function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
   var canvas = document.createElement( 'canvas' );
-  var pixelRatio = window.devicePixelRatio ? Math.round(window.devicePixelRatio) : 1;
+  var pixelRatio = Math.round( window.devicePixelRatio );
   canvas.width = 128 * pixelRatio;
   canvas.height = 32 * pixelRatio; // powers of two
   canvas.style.width = '128px';

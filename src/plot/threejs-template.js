@@ -111,7 +111,7 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
   context.font = fontsize + 'px monospace';
   context.textAlign = 'center';
   context.textBaseline = 'middle';
-  context.fillText( text, canvas.width/4, canvas.height/4 );
+  context.fillText( text, canvas.width/2/pixelRatio, canvas.height/2/pixelRatio );
 
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;

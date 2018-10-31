@@ -646,8 +646,31 @@ function parametric( vector, xRange, yRange, options={} ) {
     var y = yRange[0] + i * yStep;
     for ( var j = 0 ; j <= slices ; j++ ) {
       var x = xRange[0] + j * xStep;
-      vertices.push( vector(x,y) );
-      if ( 'colormap' in options ) options.colors.push( options.colormap(x,y) );
+      var v = vector(x,y);
+
+      if ( 'complexFunction' in options )
+        switch( options.complexFunction ) {
+          case 're':
+            vertices.push( [ v[0], v[1], v[2].re ] );
+            break;
+          case 'im':
+            vertices.push( [ v[0], v[1], v[2].im ] );
+            break;
+          case 'abs':
+            vertices.push( [ v[0], v[1], Math.sqrt( v[2].re**2 + v[2].im**2 ) ] );
+            break;
+          default:
+            throw 'Unsupported complex function case';
+        }
+      else vertices.push( v );
+
+      if ( 'colormap' in options )
+        if ( options.colormap === 'complexArgument' ) {
+          var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
+          if ( p < 0 ) p += 1;
+          options.colors.push( p );
+        }
+      else options.colors.push( options.colormap(x,y) );
     }
   }
 

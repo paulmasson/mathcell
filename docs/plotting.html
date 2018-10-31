@@ -15,23 +15,27 @@
   <code>opacity</code></td><td>1
 </td></tr></table>
 
-<br/><p><b>plot( <i>f</i>, range, options )</b> &mdash; plot of a function over a range given as an array [begin,end] or [begin,end,points]</p>
+<br/><p><b>plot( <i>f</i>, range, options )</b> &mdash; plot of a function over a range given as an array <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 
 <p><b>listPlot( points, options )</b> &mdash; plot of an array of points</p>
 
 <p><b>listPlot( points1, points2, &hellip;, options )</b> &mdash; plot of an arbitrary number of equally sized arrays of points combined additively in the last coordinate</p>
 
-<p><b>parametric( vector, xRange, options )</b> &mdash; line plot of a vector function of one variable over a range given as an array [begin,end] or [begin,end,points]</p>
+<p><b>parametric( vector, xRange, options )</b> &mdash; line plot of a vector function of one variable over a range given as an array <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 
-<p><b>parametric( vector, xRange, yRange, options )</b> &mdash; surface plot of a vector function of two variables over ranges given as arrays [begin,end] or [begin,end,points]; an option of <code>colormap</code> specifies the variable hue in the range 0 to 1</p>
+<p><b>parametric( vector, xRange, yRange, options )</b> &mdash; surface plot of a vector function of two variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code>. An option of <code>colormap</code> allows a function that specifies the variable hue in the range 0 to 1.</p>
 
-<p><b>wireframe( vector, xRange, yRange, options )</b> &mdash; wireframe plot of a vector function of two variables over ranges given as arrays [begin,end] or [begin,end,points]</p>
+<blockquote>
+For visualizing complex surfaces, an option of <code>complexFunction</code> can be set to <code>'re'</code>, <code>'im'</code> or <code>'abs'</code> to display the real part, imaginary part or absoluate value of a function returned as the object <code>{ re: re, im: im }</code>. Setting the <code>colormap</code> to the string <code>'complexArgument'</code> rather than a function will then color the surface accordingly without significant computational overhead.
+</blockquote>
 
-<br/><p><b>isoline( <i>f</i>, xRange, yRange, options )</b> &mdash; implicit line plot of a function of two variables over ranges given as arrays [begin,end] or [begin,end,points]</p>
+<p><b>wireframe( vector, xRange, yRange, options )</b> &mdash; wireframe plot of a vector function of two variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 
-<p><b>isoband( <i>f</i>, xRange, yRange, options )</b> &mdash; implicit filled contour plot of a function of two variables over ranges given as arrays [begin,end] or [begin,end,points]</p>
+<br/><p><b>isoline( <i>f</i>, xRange, yRange, options )</b> &mdash; implicit line plot of a function of two variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 
-<p><b>isosurface( <i>f</i>, xRange, yRange, zRange, options )</b> &mdash; implicit surface plot of a function of three variables over ranges given as arrays [begin,end] or [begin,end,points]</p>
+<p><b>isoband( <i>f</i>, xRange, yRange, options )</b> &mdash; implicit filled contour plot of a function of two variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
+
+<p><b>isosurface( <i>f</i>, xRange, yRange, zRange, options )</b> &mdash; implicit surface plot of a function of three variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 
 </body>
 </html>

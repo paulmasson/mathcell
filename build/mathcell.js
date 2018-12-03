@@ -721,6 +721,30 @@ function wireframe( vector, xRange, yRange, options={} ) {
 }
 
 
+function surfaceFromLines( lines, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var vertices = [], faces = [];
+
+  vertices = vertices.concat( lines[0] );
+  var l = vertices.length;
+
+  for ( var i = 1 ; i < lines.length ; i++ ) {
+
+    vertices = vertices.concat( lines[i] );
+
+    for ( var j = 0 ; j < l - 1 ; j++ )
+      faces.push( [ (i-1)*l + j, (i-1)*l + j + 1, i*l + j + 1, i*l + j ] ); 
+
+  }
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+
 // return arrays of objects for all graphics
 // face indices always counter-clockwise for consistency
 

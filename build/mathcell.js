@@ -161,6 +161,36 @@ function generateId() {
 }
 
 
+function getVariable( id, name ) {
+
+  // plus sign invokes Number object to ensure numeric result
+  // input type already validated on creation
+
+  var input = document.getElementById( id + name );
+
+  if ( input ) switch ( input.type ) {
+
+    case 'number':
+    case 'range':
+
+      return +input.value;
+
+    case 'checkbox':
+
+      return input.checked;
+
+  } else {
+
+    var value = document.querySelector( 'input[name=' + id + name + ']:checked' ).value;
+
+    if ( isNaN(value) ) return value;
+    else return +value;
+
+  }
+
+}
+
+
 function evaluate( id, data, config ) {
 
   var output = document.getElementById( id + 'output' );

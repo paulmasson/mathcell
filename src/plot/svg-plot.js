@@ -190,6 +190,13 @@ function svgPlot( id, data, config ) {
   for ( var i = 0 ; i < lines.length ; i++ ) {
 
     var l = lines[i];
+
+    l.points.forEach( p => {
+      // set possibly huge values to just beyond limits
+      if ( p[1] < yMin ) p[1] = yMin - 1;
+      if ( p[1] > yMax ) p[1] = yMax + 1;
+    } );
+
     var x = l.points[0][0];
     var y = l.points[0][1];
 

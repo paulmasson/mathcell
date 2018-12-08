@@ -7,9 +7,9 @@
 
 <body>
 
-<p>There are currently four kinds of inputs: <code>slider</code>, <code>buttons</code>, <code>number</code> and <code>checkbox</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these values followed by a comma-separated list of optional attributes.</p>
+<p>There are currently four kinds of input: slider, buttons, number and checkbox. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to <code>'slider'</code>, <code>'buttons'</code>, <code>'number'</code> or <code>'checkbox'</code>, followed by a comma-separated list of optional attributes.</p>
 
-<p>All inputs have two text options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
+<p>All inputs have two additional string options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
 
 <p>All variables are assigned in code via the helper function</p>
 
@@ -19,7 +19,7 @@ var x = getVariable( id, 'x' );
 
 <p>where <i>x</i> is the <code>name</code> of the variable.</p>
 
-<br/><p>A <code>slider</code> input has four numeric options with default values</p>
+<br/><p>A slider input has four numeric options with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
   <code>min</code></td><td>0
@@ -31,7 +31,7 @@ var x = getVariable( id, 'x' );
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
 
-<br/><p>A <code>buttons</code> input has four additional options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
+<br/><p>A buttons input has four additional options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
   <code>values</code></td><td>[1,2,3]
@@ -43,7 +43,7 @@ var x = getVariable( id, 'x' );
   <code>width</code></td><td>empty
 </td></tr></table>
 
-<br/><p>A <code>number</code> input has three numeric options with default values</p>
+<br/><p>A number input has three numeric options with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
   <code>min</code></td><td>0
@@ -53,7 +53,17 @@ var x = getVariable( id, 'x' );
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
 
-<br/><p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked.</p>
+<br/><p>A checkbox input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked.</p>
+
+<br/><p>The minimum and maximum values of slider and number inputs can be set via the helper function</p>
+
+<pre>
+setLimit( id, name, end, value );
+</pre>
+
+<p>where <code>end</code> is either <code>'min'</code> or <code>'max'</code>. This can be used to avoid invalid numerical input.</p>
+
+
 
 </body>
 </html>

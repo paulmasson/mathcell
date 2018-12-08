@@ -32,11 +32,11 @@ MathCell( id, [ { type: 'slider', min: 1, max: 80, default: 1,
 
 parent.update = function( id ) {
 
-  var e = +document.getElementById( id + 'e' ).value;
-  var f = +document.getElementById( id + 'f' ).value;
-  var g = +document.getElementById( id + 'g' ).value;
-  var h = +document.getElementById( id + 'h' ).value;
-  var i = +document.getElementById( id + 'i' ).value;
+  var e = getVariable( id, 'e' );
+  var f = getVariable( id, 'f' );
+  var g = getVariable( id, 'g' );
+  var h = getVariable( id, 'h' );
+  var i = getVariable( id, 'i' );
 
   function x( t ) {
     return Math.cos(e*t) - Math.cos(f*t) * Math.sin(g*t);

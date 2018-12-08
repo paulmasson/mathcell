@@ -32,11 +32,11 @@ MathCell( id, [ { type: 'slider', max: 1, default: 1,
 
 parent.update = function( id ) {
 
-  var c1 = +document.getElementById( id + 'c1' ).value;
-  var c2 = +document.getElementById( id + 'c2' ).value;
-  var c3 = +document.getElementById( id + 'c3' ).value;
-  var c4 = +document.getElementById( id + 'c4' ).value;
-  var c5 = +document.getElementById( id + 'c5' ).value;
+  var c1 = getVariable( id, 'c1' );
+  var c2 = getVariable( id, 'c2' );
+  var c3 = getVariable( id, 'c3' );
+  var c4 = getVariable( id, 'c4' );
+  var c5 = getVariable( id, 'c5' );
 
   function sine( n, x ) { return Math.sin( 2 * Math.PI * n * x ); }
 

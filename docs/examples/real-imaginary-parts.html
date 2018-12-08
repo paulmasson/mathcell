@@ -27,10 +27,8 @@ MathCell( id, [ { type: 'slider', max: 5, default: 2.5,
 
 parent.update = function( id ) {
 
-  var n = +document.getElementById( id + 'n' ).value;
-
-  // omit the plus sign here to use string values
-  var part = document.querySelector( 'input[name=' + id + 'part]:checked' ).value;
+  var n = getVariable( id, 'n' );
+  var part = getVariable( id, 'part' );
 
   function real( x, y ) {
 

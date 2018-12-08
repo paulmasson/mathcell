@@ -30,10 +30,10 @@ MathCell( id, [ { type: 'slider', min: -20, max: 20, default: 1,
 
 parent.update = function( id ) {
 
-  var a = +document.getElementById( id + 'a' ).value;
-  var b = +document.getElementById( id + 'b' ).value;
-  var c = +document.getElementById( id + 'c' ).value;
-  var d = +document.getElementById( id + 'd' ).value;
+  var a = getVariable( id, 'a' );
+  var b = getVariable( id, 'b' );
+  var c = getVariable( id, 'c' );
+  var d = getVariable( id, 'd' );
 
   function x( t ) {
     return Math.cos(a*t) - Math.cos(b*t)/2 - Math.sin(c*t)/3 + Math.cos(d*t)/4;

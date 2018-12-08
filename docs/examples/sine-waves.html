@@ -28,9 +28,9 @@ MathCell( id, [ { type: 'buttons', values: [1,2,3,4,5], name: 'omega1',
 
 parent.update = function( id ) {
 
-  var omega1 = +document.querySelector( 'input[name=' + id + 'omega1]:checked' ).value;
-  var omega2 = +document.getElementById( id + 'omega2' ).value;
-  var combine = document.getElementById( id + 'combine' ).checked;
+  var omega1 = getVariable( id, 'omega1' );
+  var omega2 = getVariable( id, 'omega2' );
+  var combine = getVariable( id, 'combine' );
 
   function sine1( x ) { return Math.sin( omega1 * x ); }
 

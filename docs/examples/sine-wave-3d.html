@@ -24,7 +24,7 @@ MathCell( id, [ { type: 'slider', min: 1, max: 5, default: 2.5,
 
 parent.update = function( id ) {
 
-  var omega = +document.getElementById( id + 'omega' ).value;
+  var omega = getVariable( id, 'omega' );
 
   function z(x,y) { return [ x, y, Math.sin( omega * x * y ) ]; }
 

@@ -24,7 +24,7 @@ MathCell( id, [ { type: 'slider', min: 1, max: 5, default: 2.5,
 
 parent.update = function( id ) {
 
-  var omega = +document.getElementById( id + 'omega' ).value;
+  var omega = getVariable( id, 'omega' );
 
   var p1 = plot( x => Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(0,255,0)' } );
   var p2 = plot( x => 1/Math.tan( omega * x ), [-Math.PI, Math.PI], { color: 'rgb(255,0,255)' } );

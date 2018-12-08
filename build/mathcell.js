@@ -191,6 +191,34 @@ function getVariable( id, name ) {
 }
 
 
+function setLimit( id, name, end, value ) {
+
+  var input = document.getElementById( id + name );
+
+  switch( end ) {
+
+    case 'min' :
+
+      input.min = value;
+      break;
+
+    case 'max' :
+
+      input.max = value;
+
+  }
+
+  if ( input.type === 'range' ) {
+    // update slider box
+    var box = document.getElementById( id + name + 'Box' );
+    box.min = input.min;
+    box.max = input.max;
+    box.value = input.value;
+  }
+
+}
+
+
 function evaluate( id, data, config ) {
 
   var output = document.getElementById( id + 'output' );

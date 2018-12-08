@@ -53,7 +53,7 @@ MathCell( id, [ { type: '' } ] );
 
 parent.update = function( id ) {
 
-  var x = +document.getElementById( id + 'x' ).value;
+  var x = getVariable( id, 'x' );
 
   var data = [];
 

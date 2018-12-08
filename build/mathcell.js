@@ -1298,7 +1298,7 @@ function threejsPlot( id, data, config ) {
 
   if ( !config.frame ) config.axesLabels = false;
 
-  if ( output.children.length > 0 ) {
+  if ( output.children.length > 0 && output.children[0].contentWindow ) {
 
     var cw = output.children[0].contentWindow;
     var v = cw.camera.position;

@@ -11,6 +11,14 @@
 
 <p>All inputs have two text options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
 
+<p>All variables are assigned in code via the helper function</p>
+
+<pre>
+var x = getVariable( id, 'x' );
+</pre>
+
+<p>where <i>x</i> is the <code>name</code> of the variable.</p>
+
 <br/><p>A <code>slider</code> input has four numeric options with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
@@ -22,12 +30,6 @@
 </td></tr><tr><td>
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
-
-<p>and the variable is assigned in code using</p>
-
-<pre>
-var x = +document.getElementById( id + 'x' ).value;
-</pre>
 
 <br/><p>A <code>buttons</code> input has four additional options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
 
@@ -41,14 +43,6 @@ var x = +document.getElementById( id + 'x' ).value;
   <code>width</code></td><td>empty
 </td></tr></table>
 
-<p>and the variable is assigned in code using</p>
-
-<pre>
-var x = +document.querySelector( 'input[name=' + id + 'x]:checked' ).value;
-</pre>
-
-<p>Omit the plus sign in the assignment when using string values.</p>
-
 <br/><p>A <code>number</code> input has three numeric options with default values</p>
 
 <table style="width: 2in; margin-left: 2in"><tr><td>
@@ -59,19 +53,7 @@ var x = +document.querySelector( 'input[name=' + id + 'x]:checked' ).value;
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
 
-<p>and the variable is assigned in code using</p>
-
-<pre>
-var x = +document.getElementById( id + 'x' ).value;
-</pre>
-
-<br/><p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked. The variable is assigned in code using</p>
-
-<pre>
-var x = document.getElementById( id + 'x' ).checked;
-</pre>
-
-<br/><p>IMPORTANT: for inputs that are intended to provide numeric values, be sure to include the plus signs appearing here. This unary operator invokes the <code>Number</code> object and ensures that the value will truly be numeric.</p>
+<br/><p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked.</p>
 
 </body>
 </html>

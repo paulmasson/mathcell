@@ -200,11 +200,13 @@ function setLimit( id, name, end, value ) {
     case 'min' :
 
       input.min = value;
+      if ( input.value < value ) input.value = value;
       break;
 
     case 'max' :
 
       input.max = value;
+      if ( input.value > value ) input.value = value;
 
   }
 

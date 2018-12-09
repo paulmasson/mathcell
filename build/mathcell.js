@@ -1211,7 +1211,8 @@ function svgPlot( id, data, config ) {
 
   for ( var i = 0 ; i < lines.length ; i++ ) {
 
-    var l = lines[i];
+    // working copy of line
+    var l = JSON.parse( JSON.stringify( lines[i] ) );
 
     l.points.forEach( p => {
       // set possibly huge values to just beyond limits

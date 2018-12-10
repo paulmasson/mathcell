@@ -1,0 +1,100 @@
+<html>
+<head>
+<title>Taubin's Heart</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The pseudo-spherical harmonics of <a href="http://paulbourke.net/geometry/sphericalh/">Paul Bourke</a> with &theta; and &phi; interchanged:</p>
+
+<div class="mathcell" style="width: 6in; height: 8in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm0', label: '<i>m</i><sub>0</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm1', label: '<i>m</i><sub>1</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm2', label: '<i>m</i><sub>2</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm3', label: '<i>m</i><sub>3</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm4', label: '<i>m</i><sub>4</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm5', label: '<i>m</i><sub>5</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm6', label: '<i>m</i><sub>6</sub>' },
+                { type: 'buttons', values: [0,1,2,3,4,5],
+                                   default: Math.floor( 6*Math.random() ),
+                                   name: 'm7', label: '<i>m</i><sub>7</sub>' } ] );
+
+parent.update = function( id ) {
+
+  var m0 = getVariable( id, 'm0' );
+  var m1 = getVariable( id, 'm1' );
+  var m2 = getVariable( id, 'm2' );
+  var m3 = getVariable( id, 'm3' );
+  var m4 = getVariable( id, 'm4' );
+  var m5 = getVariable( id, 'm5' );
+  var m6 = getVariable( id, 'm6' );
+  var m7 = getVariable( id, 'm7' );
+
+  function parametrize( theta, phi ) {
+
+    var r = Math.sin( m0 * theta )**m1 + Math.cos( m2 * theta )**m3
+           + Math.sin( m4 * phi )**m5 + Math.cos( m6 * phi )**m7;
+
+    return [ r*Math.sin(theta)*Math.cos(phi),
+             r*Math.sin(theta)*Math.sin(phi), r*Math.cos(theta) ];
+  }
+
+  var p = parametric( parametrize, [0,Math.PI,100], [0,2*Math.PI,100],
+                      { colormap: (theta,phi) => phi / 2 / Math.PI } );
+
+  var data = [ p ];
+
+  var config = { type: 'threejs', frame: false, viewpoint: [1,1,3] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The surface is defined parametrically by</p>
+
+\[ r = \sin( m_0 \theta )^{m_1} + \cos( m_2 \theta )^{m_3}
+     + \sin( m_4 \phi )^{m_5} + \cos( m_6 \phi )^{m_7} \]
+
+<p>The eight integer parameters are randomized on page load. Also available are <a href="https://paulmasson.github.io/math/docs/functions/sphericalHarmonic.html">visualizations</a> of proper spherical harmonics using <a href="https://github.com/paulmasson/math">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -63,7 +63,6 @@ function isoline( f, xRange, yRange, options={} ) {
         case 15:
 
           continue;
-          break;
 
         case 1:
 
@@ -209,7 +208,6 @@ function isoband( f, xRange, yRange, options={} ) {
         case 0:
 
           continue;
-          break;
 
         case 1:
 

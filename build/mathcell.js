@@ -2395,7 +2395,7 @@ function isoline( f, xRange, yRange, options={} ) {
       // segments can be determined using lookup tables as
       //   for marching cubes but code would be about same size
 
-      var points = [];
+      var points = [], points2 = [];
 
       switch( index ) {
 
@@ -2427,7 +2427,7 @@ function isoline( f, xRange, yRange, options={} ) {
         case 5:
 
           points = [ lerp( v2, v3 ), lerp( v3, v0 ) ];
-          points = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
+          points2 = [ lerp( v0, v1 ), lerp( v1, v2 ) ];
           break;
 
         case 6:
@@ -2453,7 +2453,7 @@ function isoline( f, xRange, yRange, options={} ) {
         case 10:
 
           points = [ lerp( v3, v0 ), lerp( v0, v1 ) ];
-          points = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
+          points2 = [ lerp( v1, v2 ), lerp( v2, v3 ) ];
           break;
 
         case 11:
@@ -2478,6 +2478,9 @@ function isoline( f, xRange, yRange, options={} ) {
       }
 
       segments.push( { points: points, options: options, type: 'line' } );
+
+      if ( points2.length > 0 )
+        segments.push( { points: points2, options: options, type: 'line' } );
 
     }
   }

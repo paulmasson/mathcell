@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Cardinal Sine 3D</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A three-dimensional cardinal sine function. The vertical aspect ratio is increased to show the function more clearly. The colormap is the function itself.</p>
+
+<div class="mathcell" style="width: 6in; height: 5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  function sinc( x, y ) {
+ 
+    var r = Math.sqrt( x*x + y*y );
+
+    if ( r === 0 ) return 1;
+
+    return Math.sin(r) / r;
+
+  }
+
+  var s = parametric( (x,y) => [ x, y, sinc(x,y) ], [-10,10,150], [-10,10,150],
+                      { colormap: (x,y) => sinc(x,y) } );
+
+  var data = [ s ];
+
+  var config = { type: 'threejs', frame: false, aspectRatio: [1,1,10] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The rotationally symmetric cardinal sine function used here is defined by</p>
+
+\[ \operatorname{sinc} r = \frac{ \sin r }{ r } \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

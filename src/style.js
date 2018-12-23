@@ -199,7 +199,7 @@ input[type=range]::-moz-focus-outer {
   border: 0;
 }
 
-  `;
+`;
 
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 

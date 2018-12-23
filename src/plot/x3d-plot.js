@@ -111,8 +111,7 @@ function x3dPlot( id, data, config ) {
 <Scene>
 <Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
            orientation="${cr[1].join(' ')} ${cr[0]}"
-           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>
-  `;
+           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
 
   if ( frame ) boxHelper.forEach( a =>
     html += `
@@ -120,8 +119,7 @@ function x3dPlot( id, data, config ) {
 <LineSet>
 <Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"/>
 </LineSet>
-</Shape>
-    ` );
+</Shape>` );
 
   for ( var i = 0 ; i < surfaces.length ; i++ ) {
 
@@ -164,8 +162,7 @@ function x3dPlot( id, data, config ) {
 <TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"/>
 </Appearance>
 <IndexedFaceSet coordIndex="${indices}">
-<Coordinate point="${points}"></Coordinate>
-    `;
+<Coordinate point="${points}"></Coordinate>`;
 
     if ( 'colors' in s.options ) {
       var colors = '';
@@ -177,14 +174,12 @@ function x3dPlot( id, data, config ) {
         colors +=  rgb.join(' ') + ' ';
       }
       html += `
-<Color color="${colors}"></Color>
-      `;
+<Color color="${colors}"></Color>`;
     }
 
     html += `
 </IndexedFaceSet>
-</Shape>
-    `;
+</Shape>`;
 
   }
 
@@ -193,8 +188,7 @@ function x3dPlot( id, data, config ) {
 </X3D>
 
 </body>
-</html>
-  `;
+</html>`;
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

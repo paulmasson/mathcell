@@ -12,16 +12,14 @@ function MathCell( id, inputArray ) {
 <div style="min-width: .5in; display: inline-block">${label}</div>
 <div style="width: 100%; display: inline-block; white-space: nowrap">
   ${interact( id, input )} </div>
-</div>
-        `;
+</div>`;
     }
   s += `
 <div style="height: .25in"></div>
 <div id=${id}wrap style="width: 100%; flex: 1; position: relative">
 <div id=${id}output style="width: 100%; height: 100%;
                            position: absolute; top: 0; left: 0"></div>
-</div>
-  `;
+</div>`;
 
   var cell = document.createRange().createContextualFragment( s )
   document.getElementById( id ).appendChild( cell );
@@ -47,8 +45,7 @@ function interact( id, input ) {
        onchange="${id + name}Box.value=${id + name}.value;${id}.update('${id}')"/>
 <input id=${id + name}Box type=number min=${min} max=${max} step=${step} value=${value}
        title="" style="width: .5in"
-       onchange="${id + name}.value=${id + name}Box.value;${id}.update('${id}')"/>
-      `;
+       onchange="${id + name}.value=${id + name}Box.value;${id}.update('${id}')"/>`;
 
     case 'buttons':
 
@@ -65,8 +62,8 @@ function interact( id, input ) {
 <input id=${id + name}_${i} name=${id + name} type=radio
        value=${values[i]} ${ values[i] === select ? 'checked' : '' }
        onchange="${id}.update('${id}')">
-<label for=${id + name}_${i} ${style}> ${ labels ? labels[i] : values[i] } </label> &nbsp; </input>
-        `;
+<label for=${id + name}_${i} ${style}> ${ labels ? labels[i] : values[i] } </label> &nbsp; </input>`;
+
       return s;
 
     case 'number':
@@ -81,8 +78,7 @@ function interact( id, input ) {
 <input id=${id + name} type=number min=${min} max=${max} step=${step} value=${value}
        style="width: 1in" title="" onload=this.onchange
        onchange="if (+this.value < +this.min) this.value=this.min;
-                 if (+this.value > +this.max) this.value=this.max;${id}.update('${id}')"/>
-      `;
+                 if (+this.value > +this.max) this.value=this.max;${id}.update('${id}')"/>`;
 
     case 'checkbox':
 
@@ -91,8 +87,7 @@ function interact( id, input ) {
 
       return `
 <input id=${id + name} type=checkbox ${ checked ? 'checked' : '' }
-       onchange="${id}.update('${id}')"/>
-      `;
+       onchange="${id}.update('${id}')"/>`;
 
     default:
 

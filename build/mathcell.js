@@ -12,16 +12,14 @@ function MathCell( id, inputArray ) {
 <div style="min-width: .5in; display: inline-block">${label}</div>
 <div style="width: 100%; display: inline-block; white-space: nowrap">
   ${interact( id, input )} </div>
-</div>
-        `;
+</div>`;
     }
   s += `
 <div style="height: .25in"></div>
 <div id=${id}wrap style="width: 100%; flex: 1; position: relative">
 <div id=${id}output style="width: 100%; height: 100%;
                            position: absolute; top: 0; left: 0"></div>
-</div>
-  `;
+</div>`;
 
   var cell = document.createRange().createContextualFragment( s )
   document.getElementById( id ).appendChild( cell );
@@ -47,8 +45,7 @@ function interact( id, input ) {
        onchange="${id + name}Box.value=${id + name}.value;${id}.update('${id}')"/>
 <input id=${id + name}Box type=number min=${min} max=${max} step=${step} value=${value}
        title="" style="width: .5in"
-       onchange="${id + name}.value=${id + name}Box.value;${id}.update('${id}')"/>
-      `;
+       onchange="${id + name}.value=${id + name}Box.value;${id}.update('${id}')"/>`;
 
     case 'buttons':
 
@@ -65,8 +62,8 @@ function interact( id, input ) {
 <input id=${id + name}_${i} name=${id + name} type=radio
        value=${values[i]} ${ values[i] === select ? 'checked' : '' }
        onchange="${id}.update('${id}')">
-<label for=${id + name}_${i} ${style}> ${ labels ? labels[i] : values[i] } </label> &nbsp; </input>
-        `;
+<label for=${id + name}_${i} ${style}> ${ labels ? labels[i] : values[i] } </label> &nbsp; </input>`;
+
       return s;
 
     case 'number':
@@ -81,8 +78,7 @@ function interact( id, input ) {
 <input id=${id + name} type=number min=${min} max=${max} step=${step} value=${value}
        style="width: 1in" title="" onload=this.onchange
        onchange="if (+this.value < +this.min) this.value=this.min;
-                 if (+this.value > +this.max) this.value=this.max;${id}.update('${id}')"/>
-      `;
+                 if (+this.value > +this.max) this.value=this.max;${id}.update('${id}')"/>`;
 
     case 'checkbox':
 
@@ -91,8 +87,7 @@ function interact( id, input ) {
 
       return `
 <input id=${id + name} type=checkbox ${ checked ? 'checked' : '' }
-       onchange="${id}.update('${id}')"/>
-      `;
+       onchange="${id}.update('${id}')"/>`;
 
     default:
 
@@ -618,7 +613,7 @@ input[type=range]::-moz-focus-outer {
   border: 0;
 }
 
-  `;
+`;
 
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 
@@ -1164,8 +1159,7 @@ function svgPlot( id, data, config ) {
   var svg = `
 <svg width="${width}" height="${height}" preserveAspectRatio="none"
      viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
-     xmlns="http://www.w3.org/2000/svg">
-  `;
+     xmlns="http://www.w3.org/2000/svg">`;
 
   if ( axes ) {
 
@@ -1727,8 +1721,7 @@ if ( !animate ) render();
 </script>
 
 </body>
-</html>
-  `;
+</html>`;
 
 }
 
@@ -1845,8 +1838,7 @@ function x3dPlot( id, data, config ) {
 <Scene>
 <Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
            orientation="${cr[1].join(' ')} ${cr[0]}"
-           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>
-  `;
+           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
 
   if ( frame ) boxHelper.forEach( a =>
     html += `
@@ -1854,8 +1846,7 @@ function x3dPlot( id, data, config ) {
 <LineSet>
 <Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"/>
 </LineSet>
-</Shape>
-    ` );
+</Shape>` );
 
   for ( var i = 0 ; i < surfaces.length ; i++ ) {
 
@@ -1898,8 +1889,7 @@ function x3dPlot( id, data, config ) {
 <TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"/>
 </Appearance>
 <IndexedFaceSet coordIndex="${indices}">
-<Coordinate point="${points}"></Coordinate>
-    `;
+<Coordinate point="${points}"></Coordinate>`;
 
     if ( 'colors' in s.options ) {
       var colors = '';
@@ -1911,14 +1901,12 @@ function x3dPlot( id, data, config ) {
         colors +=  rgb.join(' ') + ' ';
       }
       html += `
-<Color color="${colors}"></Color>
-      `;
+<Color color="${colors}"></Color>`;
     }
 
     html += `
 </IndexedFaceSet>
-</Shape>
-    `;
+</Shape>`;
 
   }
 
@@ -1927,8 +1915,7 @@ function x3dPlot( id, data, config ) {
 </X3D>
 
 </body>
-</html>
-  `;
+</html>`;
 
   return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

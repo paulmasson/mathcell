@@ -337,8 +337,7 @@ if ( !animate ) render();
 </script>
 
 </body>
-</html>
-  `;
+</html>`;
 
 }
 

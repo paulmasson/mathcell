@@ -61,7 +61,7 @@ function interact( id, input ) {
         s += `
 <input id=${id + name}_${i} name=${id + name} type=radio
        value=${values[i]} ${ values[i] === select ? 'checked' : '' }
-       onchange="${id}.update('${id}')">
+       onchange="${id}.update('${id}')"/>
 <label for=${id + name}_${i} ${style}> ${ labels ? labels[i] : values[i] } </label> &nbsp; </input>`;
 
       return s;

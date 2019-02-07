@@ -1,10 +1,10 @@
 
-function MathCell( id, inputArray ) {
+function MathCell( id, inputs ) {
 
   // process array of dictionaries
   var s = '';
-    for ( var i = 0 ; i < inputArray.length ; i++ ) {
-      var input = inputArray[i];
+    for ( var i = 0 ; i < inputs.length ; i++ ) {
+      var input = inputs[i];
       var label = 'label' in input ? input.label : '';
       if ( label.length === 1 ) label = `<i>${label}</i>`;
         s += `

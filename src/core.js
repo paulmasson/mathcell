@@ -34,7 +34,7 @@ function MathCell( id, inputs ) {
       } );
 
       s += `
-<table style="width: 100%">
+<table style="width: 100%; line-height: inherit">
 ${t}
 </table>`;
 

@@ -1,19 +1,46 @@
 
 function MathCell( id, inputs ) {
 
-  // process array of dictionaries
-  var s = '';
-    for ( var i = 0 ; i < inputs.length ; i++ ) {
-      var input = inputs[i];
-      var label = 'label' in input ? input.label : '';
-      if ( label.length === 1 ) label = `<i>${label}</i>`;
-        s += `
+  function labeledInteract( id, input ) {
+
+    var label = 'label' in input ? input.label : '';
+    if ( label.length === 1 ) label = `<i>${label}</i>`;
+
+    return `
 <div style="white-space: nowrap">
 <div style="min-width: .5in; display: inline-block">${label}</div>
 <div style="width: 100%; display: inline-block; white-space: nowrap">
   ${interact( id, input )} </div>
 </div>`;
+
+  }
+
+  var s = '';
+  // process array of dictionaries
+  for ( var i = 0 ; i < inputs.length ; i++ ) {
+
+    var input = inputs[i];
+
+    if ( input.type !== 'inputArray' ) s += labeledInteract( id, input );
+    else {
+      // process nested array of dictionaries
+      var t = '';
+      input.inputs.forEach( row => {
+        t += '<tr>';
+        if ( Array.isArray( row ) )
+          row.forEach( column => t += '<td>' + labeledInteract( id, column ) + '</td>' );
+        else s += '<td>' + labeledInteract( id, row ) + '</td>';
+        s += '</tr>';
+      } );
+
+      s += `
+<table style="width: 100%">
+${t}
+</table>`;
+
     }
+  }
+
   s += `
 <div style="height: .25in"></div>
 <div id=${id}wrap style="width: 100%; flex: 1; position: relative">
@@ -56,7 +83,7 @@ function interact( id, input ) {
 
       var style = input.width ? 'style="width: ' + input.width + '"' : '';
 
-      var s = ''
+      var s = '';
       for ( var i = 0 ; i < values.length ; i++ )
         s += `
 <input id=${id + name}_${i} name=${id + name} type=radio

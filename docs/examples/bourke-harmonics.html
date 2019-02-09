@@ -12,7 +12,7 @@
 
 <p>The pseudo-spherical harmonics of <a href="http://paulbourke.net/geometry/sphericalh/">Paul Bourke</a> with &theta; and &phi; interchanged:</p>
 
-<div class="mathcell" style="width: 6in; height: 8in">
+<div class="mathcell" style="width: 6in; height: 7in">
 <script>
 
 var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
@@ -20,30 +20,33 @@ var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [ { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm0', label: '<i>m</i><sub>0</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm1', label: '<i>m</i><sub>1</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm2', label: '<i>m</i><sub>2</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm3', label: '<i>m</i><sub>3</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm4', label: '<i>m</i><sub>4</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm5', label: '<i>m</i><sub>5</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm6', label: '<i>m</i><sub>6</sub>' },
-                { type: 'buttons', values: [0,1,2,3,4,5],
-                                   default: Math.floor( 6*Math.random() ),
-                                   name: 'm7', label: '<i>m</i><sub>7</sub>' } ] );
+MathCell( id, [ { type: 'inputArray', inputs: [
+
+                [ { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm0', label: '<i>m</i><sub>0</sub>' },
+                  { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm1', label: '<i>m</i><sub>1</sub>' } ],
+                [ { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm2', label: '<i>m</i><sub>2</sub>' },
+                  { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm3', label: '<i>m</i><sub>3</sub>' } ],
+                [ { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm4', label: '<i>m</i><sub>4</sub>' },
+                  { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm5', label: '<i>m</i><sub>5</sub>' } ],
+                [ { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm6', label: '<i>m</i><sub>6</sub>' },
+                  { type: 'number', min: 0, max: 10, step: 1,
+                                    default: Math.floor( 6*Math.random() ),
+                                    name: 'm7', label: '<i>m</i><sub>7</sub>' } ]
+               ] } ] );
 
 parent.update = function( id ) {
 

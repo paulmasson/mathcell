@@ -29,8 +29,8 @@ function MathCell( id, inputs ) {
         t += '<tr>';
         if ( Array.isArray( row ) )
           row.forEach( column => t += '<td>' + labeledInteract( id, column ) + '</td>' );
-        else s += '<td>' + labeledInteract( id, row ) + '</td>';
-        s += '</tr>';
+        else t += '<td>' + labeledInteract( id, row ) + '</td>';
+        t += '</tr>';
       } );
 
       s += `

@@ -29,7 +29,7 @@ function MathCell( id, inputs ) {
         t += '<tr>';
         if ( Array.isArray( row ) )
           row.forEach( column => t += '<td>' + labeledInteract( id, column ) + '</td>' );
-        else t += '<td>' + labeledInteract( id, row ) + '</td>';
+        else t += '<td colspan=10>' + labeledInteract( id, row ) + '</td>';
         t += '</tr>';
       } );
 

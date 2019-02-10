@@ -20,7 +20,7 @@ var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [ { type: 'inputArray', inputs: [
+MathCell( id, [ [
 
                 [ { type: 'number', min: 0, max: 10, step: 1,
                                     default: Math.floor( 6*Math.random() ),
@@ -46,7 +46,7 @@ MathCell( id, [ { type: 'inputArray', inputs: [
                   { type: 'number', min: 0, max: 10, step: 1,
                                     default: Math.floor( 6*Math.random() ),
                                     name: 'm7', label: '<i>m</i><sub>7</sub>' } ]
-               ] } ] );
+               ] ] );
 
 parent.update = function( id ) {
 

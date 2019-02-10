@@ -1,7 +1,7 @@
 
-function MathCell( id, inputs ) {
+function MathCell( id, inputs, config={} ) {
 
-  function labeledInteract( id, input ) {
+  function labeledInteract( input ) {
 
     var label = 'label' in input ? input.label : '';
     if ( label.length === 1 ) label = `<i>${label}</i>`;
@@ -15,7 +15,7 @@ function MathCell( id, inputs ) {
 
   }
 
-  function tableOfInteracts( id, inputs ) {
+  function tableOfInputs( inputs ) {
 
     var t = '';
 
@@ -25,8 +25,8 @@ function MathCell( id, inputs ) {
       row.forEach( column => {
 
         t += '<td>';
-        if ( Array.isArray(column) )  t += tableOfInteracts( id, column );
-        else t += labeledInteract( id, column );
+        if ( Array.isArray(column) )  t += tableOfInputs( column );
+        else t += labeledInteract( column );
         t += '</td>';
 
       } );
@@ -47,16 +47,22 @@ ${t}
 
     var input = inputs[i];
 
-    if ( Array.isArray(input) ) s += tableOfInteracts( id, input );
-    else s += labeledInteract( id, input );
+    if ( Array.isArray(input) ) s += tableOfInputs( input );
+    else s += labeledInteract( input );
 
   }
 
   s += `
 <div style="height: .25in"></div>
-<div id=${id}wrap style="width: 100%; flex: 1; position: relative">
+<div id=${id}wrapper style="width: 100%; flex: 1; position: relative">`;
+
+  if ( config.multipleOutputs ) s += tableOfOutputs( id );
+
+  else s += `
 <div id=${id}output style="width: 100%; height: 100%;
-                           position: absolute; top: 0; left: 0"></div>
+                           position: absolute; top: 0; left: 0"></div>`;
+
+  s += `
 </div>`;
 
   var cell = document.createRange().createContextualFragment( s )

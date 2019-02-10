@@ -10,9 +10,9 @@ function threejsPlot( id, data, config ) {
   if ( !( 'frame' in config ) ) config.frame = true;
   if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
 
-  var output = document.getElementById( id + 'output' );
-
   if ( !config.frame ) config.axesLabels = false;
+
+  var output = document.getElementById( id + 'output' );
 
   if ( output.children.length > 0 && output.children[0].contentWindow ) {
 

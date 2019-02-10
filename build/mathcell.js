@@ -15,30 +15,41 @@ function MathCell( id, inputs ) {
 
   }
 
+  function tableOfInteracts( id, inputs ) {
+
+    var t = '';
+
+    inputs.forEach( row => {
+
+      t += '<tr>';
+      row.forEach( column => {
+
+        t += '<td>';
+        if ( Array.isArray(column) )  t += tableOfInteracts( id, column );
+        else t += labeledInteract( id, column );
+        t += '</td>';
+
+      } );
+      t += '</tr>';
+
+    } );
+
+    return `
+<table style="width: 100%; line-height: inherit">
+${t}
+</table>`;
+
+  }
+
   var s = '';
   // process array of dictionaries
   for ( var i = 0 ; i < inputs.length ; i++ ) {
 
     var input = inputs[i];
 
-    if ( input.type !== 'inputArray' ) s += labeledInteract( id, input );
-    else {
-      // process nested array of dictionaries
-      var t = '';
-      input.inputs.forEach( row => {
-        t += '<tr>';
-        if ( Array.isArray( row ) )
-          row.forEach( column => t += '<td>' + labeledInteract( id, column ) + '</td>' );
-        else t += '<td colspan=10>' + labeledInteract( id, row ) + '</td>';
-        t += '</tr>';
-      } );
+    if ( Array.isArray(input) ) s += tableOfInteracts( id, input );
+    else s += labeledInteract( id, input );
 
-      s += `
-<table style="width: 100%; line-height: inherit">
-${t}
-</table>`;
-
-    }
   }
 
   s += `

@@ -24,11 +24,11 @@ MathCell( id, [ ] );
 
 parent.update = function( id ) {
 
-  var p = isosurface( (x,y,z) => Math.cos(x) + Math.cos(y) + Math.cos(z),
+  var s = isosurface( (x,y,z) => Math.cos(x) + Math.cos(y) + Math.cos(z),
                       [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI],
                       { normalMaterial: true } );
 
-  var data = [ p ];
+  var data = [ s ];
 
   var config = { type: 'threejs', frame: false, viewpoint: [0,1,0] };
 

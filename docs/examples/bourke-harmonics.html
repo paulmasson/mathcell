@@ -68,10 +68,10 @@ parent.update = function( id ) {
              r*Math.sin(theta)*Math.sin(phi), r*Math.cos(theta) ];
   }
 
-  var p = parametric( parametrize, [0,Math.PI,100], [0,2*Math.PI,100],
+  var s = parametric( parametrize, [0,Math.PI,100], [0,2*Math.PI,100],
                       { colormap: (theta,phi) => phi / 2 / Math.PI } );
 
-  var data = [ p ];
+  var data = [ s ];
 
   var config = { type: 'threejs', frame: false, viewpoint: [1,1,3] };
 

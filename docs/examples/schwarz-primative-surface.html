@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Schwarz Primative Surface</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Schwarz primative minimal surface generated using marching cubes:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ ] );
+
+parent.update = function( id ) {
+
+  var p = isosurface( (x,y,z) => Math.cos(x) + Math.cos(y) + Math.cos(z),
+                      [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI],
+                      { normalMaterial: true } );
+
+  var data = [ p ];
+
+  var config = { type: 'threejs', frame: false, viewpoint: [0,1,0] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The surface is defined implicitly by</p>
+
+\[ \cos x + \cos y + \cos z = 0 \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

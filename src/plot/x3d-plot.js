@@ -26,8 +26,11 @@ function x3dPlot( id, data, config ) {
 
   var frame = 'frame' in config ? config.frame : true;
 
-  var width = document.getElementById( id + 'output' ).offsetWidth;
-  var height = document.getElementById( id + 'output' ).offsetHeight;
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
+
+  var width = output.offsetWidth;
+  var height = output.offsetHeight;
 
   var texts = [], points = [], lines = [], surfaces = [];
 

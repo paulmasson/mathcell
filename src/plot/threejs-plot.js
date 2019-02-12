@@ -12,7 +12,8 @@ function threejsPlot( id, data, config ) {
 
   if ( !config.frame ) config.axesLabels = false;
 
-  var output = document.getElementById( id + 'output' );
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
 
   if ( output.children.length > 0 && output.children[0].contentWindow ) {
 

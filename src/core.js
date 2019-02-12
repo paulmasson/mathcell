@@ -56,11 +56,40 @@ ${t}
 <div style="height: .25in"></div>
 <div id=${id}wrapper style="width: 100%; flex: 1; position: relative">`;
 
-  if ( config.multipleOutputs ) s += tableOfOutputs( id );
+  var outputIndex = 1;
+
+  function tableOfOutputs( outputs ) {
+
+    var t = '';
+
+    outputs.forEach( row => {
+
+      t += '<tr>';
+      row.forEach( column => {
+
+        if ( Array.isArray(column) )  t += tableOfOutputs( column );
+        else {
+          t += `
+<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: ${100/outputs.length}%"></td>`;
+          outputIndex++;
+        }
+
+      } );
+      t += '</tr>';
+
+    } );
+
+    return `
+<table style="width: 100%; height: 100%">
+${t}
+</table>`;
+
+  }
+
+  if ( 'multipleOutputs' in config ) s += tableOfOutputs( config.multipleOutputs );
 
   else s += `
-<div id=${id}output style="width: 100%; height: 100%;
-                           position: absolute; top: 0; left: 0"></div>`;
+<div id=${id}output style="width: 100%; height: 100%"></div>`;
 
   s += `
 </div>`;
@@ -262,10 +291,32 @@ function setLimit( id, name, end, value ) {
 
 function evaluate( id, data, config ) {
 
-  var output = document.getElementById( id + 'output' );
-  output.innerHTML = graphic( id, data, config );
+  var outputs = document.querySelectorAll( '[id^=' + id + 'output]' );
 
-  if ( config.type === 'threejs' ) {
+  if ( outputs.length === 1 ) {
+
+    var output = outputs[0];
+    output.innerHTML = graphic( id, data, config );
+    if ( config.type === 'threejs' ) iOSFix( output );
+
+  } else {
+
+    for ( var i = 0 ; i < outputs.length ; i ++ ) {
+
+      var output = outputs[i];
+      var n = output.id.substr( output.id.indexOf('output') + 6 );
+
+      var c = Array.isArray(config) ? config[i] : config;
+      c.output = n;
+
+      output.innerHTML = graphic( id, data[i], c );
+      if ( config.type === 'threejs' ) iOSFix( output );
+
+    }
+
+  }
+
+  function iOSFix( output ) {
 
     var iframe = output.children[0];
 

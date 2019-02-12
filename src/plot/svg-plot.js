@@ -24,9 +24,11 @@ function svgPlot( id, data, config ) {
 
   }
 
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
 
-  var width = document.getElementById( id + 'output' ).offsetWidth;
-  var height = document.getElementById( id + 'output' ).offsetHeight;
+  var width = output.offsetWidth;
+  var height = output.offsetHeight;
   var ext = 20; // axis extension
 
   if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );

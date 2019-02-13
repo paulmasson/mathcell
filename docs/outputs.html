@@ -9,6 +9,8 @@
 
 <p>There are four kinds of output: <code>svg</code>, <code>threejs</code>, <code>matrix</code> and <code>text</code>. An experimental <code>x3d</code> output is also available. The <code>config</code> dictionary in the <code>update</code> function should have its <code>type</code> set equal to one of these string values.</p>
 
+<p>Multiple outputs are available by including a configuration dictionary containing a <code>multipleOutputs</code> entry as the third argument of the <code>MathCell()</code> command. The value for this key is then a two-dimensional array of arbitrary numerical values indicating the layout of the outputs. The data for the <code>evaluate()</code> function should then be an array of the usual data arrays. The configuration supplied to this function can either be a single dictionary for identical formatting of all outputs or an array of individual dictionaries.</p>
+
 <br/><p>An <code>svg</code> output displays a two-dimensional plot of the data. The input data should be an array of arrays of data points, <i>i.e.</i> a three-dimensional array. The output has the options and default values</p>
 
 <table style="width: 3.5in; margin-left: 1in"><tr><td>

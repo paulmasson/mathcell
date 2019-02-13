@@ -89,7 +89,7 @@ ${t}
   if ( 'multipleOutputs' in config ) s += tableOfOutputs( config.multipleOutputs );
 
   else s += `
-<div id=${id}output style="width: 100%; height: 100%"></div>`;
+<div id=${id}output style="width: 100%; height: 100%; position: absolute"></div>`;
 
   s += `
 </div>`;

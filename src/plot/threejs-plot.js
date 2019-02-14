@@ -69,7 +69,7 @@ function threejsPlot( id, data, config ) {
 
   var html = template( config, lights, texts, points, lines, surfaces );
 
-  return `<iframe style="width: ${output.offsetWidth}; height: ${output.offsetHeight}; border: 1px solid black"
+  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }

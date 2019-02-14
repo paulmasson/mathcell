@@ -80,9 +80,10 @@ ${t}
     } );
 
     return `
-<table style="width: 100%; height: 100%">
+<div style="width: 100%; height: 100%; position: absolute">
+<table style="width: 100%; height: 100%; position: absolute">
 ${t}
-</table>`;
+</table></div>`;
 
   }
 
@@ -1475,7 +1476,7 @@ function threejsPlot( id, data, config ) {
 
   var html = template( config, lights, texts, points, lines, surfaces );
 
-  return `<iframe style="width: 100%; height: 100%; border: 1px solid black"
+  return `<iframe style="width: ${output.offsetWidth}; height: ${output.offsetHeight}; border: 1px solid black"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }

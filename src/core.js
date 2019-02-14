@@ -70,7 +70,9 @@ ${t}
         if ( Array.isArray(column) )  t += tableOfOutputs( column );
         else {
           t += `
-<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: ${100/outputs.length}%"></td>`;
+<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%;
+                                        height: ${100/outputs.length}%;
+                                        border: 1px solid black"></td>`;
           outputIndex++;
         }
 
@@ -309,9 +311,10 @@ function evaluate( id, data, config ) {
 
       var c = Array.isArray(config) ? config[i] : config;
       c.output = n;
+      c.no3DBorder = true;
 
       output.innerHTML = graphic( id, data[i], c );
-      if ( config.type === 'threejs' ) iOSFix( output );
+      if ( c.type === 'threejs' ) iOSFix( output );
 
     }
 

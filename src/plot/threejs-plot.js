@@ -58,6 +58,8 @@ function threejsPlot( id, data, config ) {
   if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
+  var border = config.no3DBorder ? 'border: none' : 'border: 1px solid black';
+
   config = JSON.stringify( config );
 
   var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
@@ -69,7 +71,7 @@ function threejsPlot( id, data, config ) {
 
   var html = template( config, lights, texts, points, lines, surfaces );
 
-  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: 1px solid black"
+  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; ${border}"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }

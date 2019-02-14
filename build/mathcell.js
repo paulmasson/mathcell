@@ -70,7 +70,9 @@ ${t}
         if ( Array.isArray(column) )  t += tableOfOutputs( column );
         else {
           t += `
-<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: ${100/outputs.length}%"></td>`;
+<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%;
+                                        height: ${100/outputs.length}%;
+                                        border: 1px solid black"></td>`;
           outputIndex++;
         }
 
@@ -309,9 +311,10 @@ function evaluate( id, data, config ) {
 
       var c = Array.isArray(config) ? config[i] : config;
       c.output = n;
+      c.no3DBorder = true;
 
       output.innerHTML = graphic( id, data[i], c );
-      if ( config.type === 'threejs' ) iOSFix( output );
+      if ( c.type === 'threejs' ) iOSFix( output );
 
     }
 
@@ -1465,6 +1468,8 @@ function threejsPlot( id, data, config ) {
   if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
+  var border = config.no3DBorder ? 'border: none' : 'border: 1px solid black';
+
   config = JSON.stringify( config );
 
   var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
@@ -1476,7 +1481,7 @@ function threejsPlot( id, data, config ) {
 
   var html = template( config, lights, texts, points, lines, surfaces );
 
-  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: 1px solid black"
+  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; ${border}"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }

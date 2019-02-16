@@ -58,7 +58,7 @@ function threejsPlot( id, data, config ) {
   if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
-  var border = config.no3DBorder ? 'border: none' : 'border: 1px solid black';
+  var border = config.no3DBorder ? 'none' : '1px solid black';
 
   config = JSON.stringify( config );
 
@@ -71,7 +71,7 @@ function threejsPlot( id, data, config ) {
 
   var html = template( config, lights, texts, points, lines, surfaces );
 
-  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; ${border}"
+  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: ${border}"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }

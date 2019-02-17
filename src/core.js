@@ -19,6 +19,8 @@ function MathCell( id, inputs, config={} ) {
 
     var t = '';
 
+    if ( !Array.isArray(inputs[0]) ) inputs = [ inputs ];
+
     inputs.forEach( row => {
 
       t += '<tr>';
@@ -61,6 +63,8 @@ ${t}
   function tableOfOutputs( outputs ) {
 
     var t = '';
+
+    if ( !Array.isArray(outputs[0]) ) outputs = [ outputs ];
 
     outputs.forEach( row => {
 

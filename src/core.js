@@ -15,7 +15,7 @@ function MathCell( id, inputs, config={} ) {
 
   }
 
-  function tableOfInputs( inputs ) {
+  function inputTable( inputs ) {
 
     var t = '';
 
@@ -27,7 +27,7 @@ function MathCell( id, inputs, config={} ) {
       row.forEach( column => {
 
         t += '<td>';
-        if ( Array.isArray(column) )  t += tableOfInputs( column );
+        if ( Array.isArray(column) )  t += inputTable( column );
         else t += labeledInteract( column );
         t += '</td>';
 
@@ -49,7 +49,7 @@ ${t}
 
     var input = inputs[i];
 
-    if ( Array.isArray(input) ) s += tableOfInputs( input );
+    if ( Array.isArray(input) ) s += inputTable( input );
     else s += labeledInteract( input );
 
   }
@@ -60,40 +60,41 @@ ${t}
 
   var outputIndex = 1;
 
-  function tableOfOutputs( outputs ) {
+  function outputTable( outputs ) {
 
+    // table inside flex box grows on each update, divs do not!
     var t = '';
 
     if ( !Array.isArray(outputs[0]) ) outputs = [ outputs ];
 
     outputs.forEach( row => {
 
-      t += '<tr>';
+      t += `
+<div style="width: 100%; height: ${100/outputs.length}%; white-space: nowrap">`;
       row.forEach( column => {
 
-        if ( Array.isArray(column) )  t += tableOfOutputs( column );
+        if ( Array.isArray(column) )  t += outputTable( column );
         else {
           t += `
-<td id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%;
-                                        height: ${100/outputs.length}%;
-                                        border: 1px solid black"></td>`;
+<div id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: 95%;
+                                         border: 1px solid black; display: inline-block"></div>`;
           outputIndex++;
         }
 
       } );
-      t += '</tr>';
+      t += `
+</div>`;
 
     } );
 
     return `
 <div style="width: 100%; height: 100%; position: absolute">
-<table style="width: 100%; height: 100%; position: absolute">
 ${t}
-</table></div>`;
+</div>`;
 
   }
 
-  if ( 'multipleOutputs' in config ) s += tableOfOutputs( config.multipleOutputs );
+  if ( 'multipleOutputs' in config ) s += outputTable( config.multipleOutputs );
 
   else s += `
 <div id=${id}output style="width: 100%; height: 100%; position: absolute"></div>`;

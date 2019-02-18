@@ -69,7 +69,11 @@ function svgPlot( id, data, config ) {
   if ( config.equalAspect ) yScale = xScale;
 
   var axes = 'axes' in config ? config.axes : true;
+  if ( !axes ) config.ticks = false;
+
   var ticks = 'ticks' in config ? config.ticks : [ 'auto', 'auto' ];
+  if ( ticks === 'auto' ) ticks = [ 'auto', 'auto' ];
+  if ( ticks === 'none' ) ticks = false;
   var tickSize = 5;
 
   if ( ticks[0] === 'auto' ) {
@@ -104,21 +108,21 @@ function svgPlot( id, data, config ) {
   // mathematical origin vs. location of axis
   var xOrigin = Math.round( -xMin * xScale );
   var xAxis = xOrigin;
-  var gutter = Math.max( ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin );
+  var gutter = ticks ? Math.max( ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin ) : ext;
   var xTotal = width + gutter + ext + xLabel;
   var xShift = gutter;
 
   if ( xOrigin < 0 ) {
     xAxis = -1.5*ext;
-    gutter = Math.max( yNumSize + xOffset, yLabelSize );
+    gutter = ticks ? Math.max( ext, yNumSize + xOffset, yLabelSize ) : ext;
     xTotal = width + gutter + 2.5*ext + xLabel;
     xShift = gutter + 1.5*ext;
   }
   if ( xOrigin > width ) {
     xAxis = width + 1.5*ext;
-    gutter = Math.max( yNumSize, yLabelSize, xLabel );
+    gutter = ticks ? Math.max( yNumSize, yLabelSize, xLabel ) : xLabel;
     xTotal = width + gutter + 2.5*ext;
-    xOffset = -yNumSize;
+    xOffset = ticks ? -yNumSize : ext;
   }
 
   // mathematical origin vs. location of axis
@@ -149,28 +153,32 @@ function svgPlot( id, data, config ) {
     svg += `<path d="M ${-ext} ${yAxis} L ${width + ext} ${yAxis}" stroke="black"/>`;
     svg += `<path d="M ${xAxis} ${-ext} L ${xAxis} ${height + ext}" stroke="black"/>`;
 
-    var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
-    for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
-      if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
-        var x = Math.round( xOrigin + xScale*i );
-        svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
-                      stroke="black" />`;
-        svg += `<text x="${x}" y="${yAxis + yOffset}"
-                      font-family="monospace" text-anchor="middle">
-                ${+i.toFixed(xTickDecimals)}</text>`;
-      }
-    }
+    if ( ticks ) {
 
-    var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
-    for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
-      if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
-        var y = Math.round( yOrigin - yScale*i );
-        svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
-                      stroke="black" />`;
-        svg += `<text x="${xAxis - xOffset}" y="${y}"
-                      font-family="monospace" text-anchor="end" dominant-baseline="central">
-                ${+i.toFixed(yTickDecimals)}</text>`;
+      var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
+      for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
+        if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
+          var x = Math.round( xOrigin + xScale*i );
+          svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
+                        stroke="black" />`;
+          svg += `<text x="${x}" y="${yAxis + yOffset}"
+                        font-family="monospace" text-anchor="middle">
+                  ${+i.toFixed(xTickDecimals)}</text>`;
+        }
       }
+
+      var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
+      for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
+        if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
+          var y = Math.round( yOrigin - yScale*i );
+          svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
+                        stroke="black" />`;
+          svg += `<text x="${xAxis - xOffset}" y="${y}"
+                        font-family="monospace" text-anchor="end" dominant-baseline="central">
+                  ${+i.toFixed(yTickDecimals)}</text>`;
+        }
+      }
+
     }
 
     svg += `<text x="${width + ext + Math.abs(xOffset)}" y="${yAxis}"

@@ -76,7 +76,7 @@ ${t}
         if ( Array.isArray(column) )  t += outputTable( column );
         else {
           t += `
-<div id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: 95%;
+<div id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: calc(100% - 5px);
                                          border: 1px solid black; display: inline-block"></div>`;
           outputIndex++;
         }

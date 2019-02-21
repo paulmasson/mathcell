@@ -103,7 +103,10 @@ function parametric( vector, xRange, yRange, options={} ) {
           if ( p < 0 ) p += 1;
           options.colors.push( p );
         }
-      else options.colors.push( options.colormap(x,y) );
+      else {
+        var p = ( options.colormap(x,y) % 1 + 1 ) % 1;
+        options.colors.push( p );
+      }
     }
   }
 

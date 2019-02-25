@@ -31,7 +31,7 @@ textarea {
 function copyTemplate() {
 
   var textArea = document.createElement( 'textarea' );
-  textArea.textContent = document.getElementById( 'template' ).textContent;
+  textArea.textContent = document.getElementById( 'template' ).textContent + '\n';
   document.body.append( textArea );
   textArea.select();
   document.execCommand( 'copy' );

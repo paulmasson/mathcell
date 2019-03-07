@@ -78,13 +78,13 @@ function svgPlot( id, data, config ) {
 
   if ( ticks[0] === 'auto' ) {
     ticks[0] = Math.pow( 10, Math.floor( Math.log10(xRange) ) );
-    if ( 3*ticks[0] > xRange ) ticks[0] = ticks[0] / 2;
-    if ( 4*ticks[0] > xRange ) ticks[0] = ticks[0] / 2;
+    if ( 3*ticks[0] > xRange ) ticks[0] /= 2;
+    if ( 4*ticks[0] > xRange ) ticks[0] /= 2;
   }
   if ( ticks[1] === 'auto' ) {
     ticks[1] = Math.pow( 10, Math.floor( Math.log10(yRange) ) );
-    if ( 3*ticks[1] > yRange ) ticks[1] = ticks[1] / 2;
-    if ( 4*ticks[1] > yRange ) ticks[1] = ticks[1] / 2;
+    if ( 3*ticks[1] > yRange ) ticks[1] /= 2;
+    if ( 4*ticks[1] > yRange ) ticks[1] /= 2;
   }
 
   var xTickDecimals = decimalsInNumber( ticks[0] );

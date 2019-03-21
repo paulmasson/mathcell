@@ -771,6 +771,14 @@ function listPlot( points, options={} ) {
 
 }
 
+function polarPlot( f, aRange, options={} ) {
+
+  if ( aRange.length < 3 ) aRange[2] = 200;
+
+  return parametric( a => [ f(a)*Math.cos(a), f(a)*Math.sin(a) ], aRange, options );
+
+}
+
 
 function parametric( vector, xRange, yRange, options={} ) {
 

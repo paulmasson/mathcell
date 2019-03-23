@@ -61,12 +61,21 @@ function svgPlot( id, data, config ) {
 
   if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
 
+  if ( config.equalAspect ) {
+
+    if ( xMin < yMin ) yMin = xMin;
+    else xMin = yMin;
+
+    if ( xMax > yMax ) yMax = xMax;
+    else xMax = yMax;
+
+  }
+
   var xRange = xMax - xMin;
   var yRange = yMax - yMin;
 
   var xScale = width / xRange;
   var yScale = height / yRange;
-  if ( config.equalAspect ) yScale = xScale;
 
   var axes = 'axes' in config ? config.axes : true;
   if ( !axes ) config.ticks = false;

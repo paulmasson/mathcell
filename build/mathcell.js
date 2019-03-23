@@ -1195,7 +1195,7 @@ function svgPlot( id, data, config ) {
 
   if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
 
-  if ( config.equalAspect ) {
+  if ( config.equalLimits ) {
 
     if ( xMin < yMin ) yMin = xMin;
     else xMin = yMin;
@@ -1210,6 +1210,7 @@ function svgPlot( id, data, config ) {
 
   var xScale = width / xRange;
   var yScale = height / yRange;
+  if ( config.equalAspect ) yScale = xScale;
 
   var axes = 'axes' in config ? config.axes : true;
   if ( !axes ) config.ticks = false;

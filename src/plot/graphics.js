@@ -114,6 +114,8 @@ function box( width, depth, height, options={} ) {
   var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
                 [0,3,7,4], [1,5,6,2] ];
 
+  if ( 'center' in options ) translate( vertices, options.center );
+
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 
 }

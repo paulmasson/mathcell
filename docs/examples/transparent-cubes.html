@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>Transparent Cubes</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A set of cubes to test handling of transparency by the Three.js template:</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var centers = [], data = [];
+
+  for ( var i = -1 ; i <= 1 ; i++ )
+    for ( var j = -1 ; j <= 1 ; j++ )
+      for ( var k = -1 ; k <= 1 ; k++ ) centers.push( [i,j,k] );
+
+  centers.forEach( c => data.push( box( .25, .25, .25, { center: c, opacity: .5 } ) ) );
+
+  var config = { type: 'threejs', frame: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

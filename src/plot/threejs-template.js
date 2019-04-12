@@ -17,8 +17,8 @@ function template( config, lights, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r90/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r90/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/examples/js/controls/OrbitControls.js"></script>
 
 <script>
 
@@ -296,7 +296,11 @@ function addSurface( s ) {
 
   if ( s.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
 
-  var c = geometry.center().negate();
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;

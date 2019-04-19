@@ -1729,7 +1729,11 @@ function addPoint( p ) {
                                              transparent: transparent, opacity: p.options.opacity,
                                              alphaTest: .1 } );
 
-  var c = geometry.center().negate();
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
   var mesh = new THREE.Points( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   scene.add( mesh );
@@ -1752,7 +1756,11 @@ function addLine( l ) {
   var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
                                                 transparent: transparent, opacity: l.options.opacity } );
 
-  var c = geometry.center().negate();
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
   var mesh = new THREE.Line( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   scene.add( mesh );

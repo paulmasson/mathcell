@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>LaTeX Display</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Display of a LaTeX expression selected from an array:</p>
+
+<div class="mathcell" style="height: 2in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 1, max: 5, step: 1,
+                                  name: 'n', label: 'Entry:' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  var expressions = [ '\\sin x + \\cos y', '\\frac{1}{1-x^2}', '\\tan x + \\cot y',
+                      '\\sqrt{1-x^2}', '\\frac{1}{1-x^n}' ];
+
+  var text = '\\[' + expressions[n-1] + '\\]';
+  text = text.replace( /\\/g, '&#92;' );
+
+  var config = { type: 'text', center: true };
+
+  evaluate( id, text, config );
+
+  MathJax.Hub.Queue( [ 'Typeset', MathJax.Hub, id ] );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Since backslashes are used in JavaScript to escape characters, the simplest way to avoid problems and save typing is to double them in all LaTeX expressions. They they are replaced by an HTML entity that renders as a single backslash in the browser. Note also that MathJax needs to be told that a part of the page has changed and needs to be typeset.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

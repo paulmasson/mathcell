@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>Random Points</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A set of randomly located and colored points, in either two dimensions or three:</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'buttons', values: [ 'two', 'three' ], width: '1in',
+                                   name: 'dim', label: 'Dimensions: ' } ] );
+
+parent.update = function( id ) {
+
+  var dim = getVariable( id, 'dim' );
+
+  var data = [];
+
+  for ( var i = 0 ; i < 10 ; i++ )
+    data.push( point( [ 2*Math.random() - 1, 2*Math.random() - 1, 2*Math.random() - 1 ],
+                      { color: 'hsl(' + 360*Math.random() + ',100%,50%)', size: 5 } ) );
+
+  var config = dim === 'two' ? { type: 'svg', ticks: false }
+                             : { type: 'threejs', axesLabels: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

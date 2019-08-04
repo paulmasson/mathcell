@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Hyperbolic Helicoid</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A hyperbolic helicoid with torsion &tau;. The colormap is simply the parameter <i>v</i>.</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 1, max: 5, default: 3,
+                                  name: 'tau', label: '&tau;' } ] );
+
+parent.update = function( id ) {
+
+  var tau = getVariable( id, 'tau' );
+
+  var s = parametric( (u,v) => [ Math.sinh(v) * Math.cos(tau*u) / ( 1 + Math.cosh(u)*Math.cosh(v) ),
+                                 Math.sinh(v) * Math.sin(tau*u) / ( 1 + Math.cosh(u)*Math.cosh(v) ),
+                                 Math.cosh(v) * Math.sinh(u) / ( 1 + Math.cosh(u)*Math.cosh(v) )     ],
+                      [-5,5,200], [-2,2], { colormap: (u,v) => v } );
+
+  var data = [ s ];
+
+  var config = { type: 'threejs', frame: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The surface is defined by the parametric equations</p>
+
+\[ \begin{align}
+x &= \frac{ \sinh v \cos \tau u }{ 1 + \cosh u \cosh v } \\
+y &= \frac{ \sinh v \sin \tau u }{ 1 + \cosh u \cosh v }\\
+z &= \frac{ \cosh v \sinh u }{ 1 + \cosh u \cosh v }
+\end{align} \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

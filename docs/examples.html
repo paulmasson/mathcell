@@ -17,6 +17,18 @@
 
 <script>
 
+var observer = new IntersectionObserver( entries => {
+
+  entries.forEach( entry => {
+
+    if ( entry.intersectionRatio > 0 ) entry.target.srcdoc = entry.target.source;
+    else entry.target.srcdoc = '';
+
+  } );
+
+}, { rootMargin: '200px 0px 200px 0px' } );
+
+
 var xhr = new XMLHttpRequest();
 
 xhr.open( 'GET', 'https://api.github.com/repos/paulmasson/mathcell/contents/docs/examples', true );
@@ -30,6 +42,7 @@ xhr.onload = function() {
 
     xhrs[i] = new XMLHttpRequest();
     xhrs[i].fileName = 'examples/' + files[i].name;
+    xhrs[i].responseType = 'text';
 
     xhrs[i].open( 'GET', xhrs[i].fileName, true );
 
@@ -45,14 +58,22 @@ xhr.onload = function() {
       var div = document.createElement( 'div' );
       a.appendChild( div );
 
+      var latex = this.fileName.search( 'latex' ) > -1 ? `
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
+
       var iframe = document.createElement( 'iframe' );
-      iframe.srcdoc = '<html><body style="overflow: hidden">'
-                      + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
-                      + cell.outerHTML + '</body></html>';
+      iframe.source = `
+<html>
+<body style="overflow: hidden">
+<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script> ${latex}
+${cell.outerHTML}
+</body></html>`;
       iframe.scrolling = 'no';
-      a.appendChild( iframe);
+      a.appendChild( iframe );
 
       document.body.appendChild( a );
+
+      observer.observe( iframe );
 
     }
 

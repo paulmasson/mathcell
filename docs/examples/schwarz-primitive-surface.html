@@ -26,7 +26,7 @@ parent.update = function( id ) {
 
   var s = isosurface( (x,y,z) => Math.cos(x) + Math.cos(y) + Math.cos(z),
                       [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI], [-2*Math.PI,2*Math.PI],
-                      { normalMaterial: true } );
+                      { material: 'normal' } );
 
   var data = [ s ];
 

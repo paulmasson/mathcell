@@ -784,6 +784,7 @@ function parametric( vector, xRange, yRange, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
@@ -895,6 +896,7 @@ function surfaceFromLines( lines, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
 
   var vertices = [], faces = [];
 
@@ -1810,10 +1812,31 @@ function addSurface( s ) {
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
   var transparent = s.options.opacity < 1 ? true : false;
-  var material = new THREE.MeshPhongMaterial( {
+  var material;
+
+  switch ( s.options.material ) {
+
+    case 'normal':
+
+      material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
+      break;
+
+    case 'standard':
+
+      material = new THREE.MeshStandardMaterial( {
+                               color: s.options.color, side: side,
+                               transparent: transparent, opacity: s.options.opacity } );
+      break;
+
+    case 'phong':
+    default:
+
+      material = new THREE.MeshPhongMaterial( {
                                color: s.options.color, side: side,
                                transparent: transparent, opacity: s.options.opacity,
                                shininess: 20 } );
+
+  }
 
   if ( 'colors' in s.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
@@ -1825,8 +1848,6 @@ function addSurface( s ) {
     material.vertexColors = THREE.VertexColors;
     material.color.set( 'white' ); // crucial!
   }
-
-  if ( s.options.normalMaterial ) material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
 
   var c = new THREE.Vector3();
   geometry.computeBoundingBox();

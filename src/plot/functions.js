@@ -61,6 +61,7 @@ function parametric( vector, xRange, yRange, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
 
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
@@ -172,6 +173,7 @@ function surfaceFromLines( lines, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
 
   var vertices = [], faces = [];
 

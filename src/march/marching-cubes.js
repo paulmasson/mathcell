@@ -7,6 +7,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
 
   var level = 'level' in options ? options.level : 0;
 

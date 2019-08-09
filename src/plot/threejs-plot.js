@@ -2,6 +2,7 @@
 function threejsPlot( id, data, config ) {
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
+  if ( !( 'animate' in config ) ) config.animate = false;
   if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
   if ( !( 'axes' in config ) ) config.axes = false;
   if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];

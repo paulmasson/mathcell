@@ -71,9 +71,13 @@
   <code>ambientLight</code></td><td>rgb(127,127,127)
 </td></tr><tr><td>
   <code>clearColor</code></td><td>'white'
+</td></tr><tr><td>
+  <code>animate</code></td><td><code>false</code>
 </td></tr></table>
 
 <p><code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates. It is automatically preserved between renderings upon manipulation of inputs. <code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin.</p>
+
+<p><code>animate</code> can be used in conjuction with an option <code>rotationAxisAngle</code> on surfaces, where the latter option is an array with a three-dimensional normal vector and an angle. More animations will be coming.</p>
 
 <br/><p>A <code>matrix</code> output displays the contents of a two-dimensional array in matrix form. You may need to adjust the width and height of the MathCell to show the entire array properly.</p>
 

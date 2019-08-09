@@ -32,7 +32,7 @@ renderer.setClearColor( config.clearColor, 1 );
 document.body.appendChild( renderer.domElement );
 
 var a = config.aspectRatio; // aspect multipliers
-var animate = false; // config.animate;
+var animate = config.animate;
 
 var xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
 var xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
@@ -331,6 +331,12 @@ function addSurface( s ) {
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
+  if ( s.options.rotationAxisAngle ) {
+    mesh.userData.rotateOnAxis = true;
+    var v = s.options.rotationAxisAngle[0];
+    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
+    mesh.userData.angle = s.options.rotationAxisAngle[1];
+  }
   scene.add( mesh );
 
 }
@@ -346,18 +352,24 @@ if ( config.clippingPlane ) {
 
 var scratch = new THREE.Vector3();
 
+var axis = new THREE.Vector3( 2*Math.random()-1, 2*Math.random()-1, 2*Math.random()-1 ).normalize();
+
 function render() {
 
   if ( animate ) requestAnimationFrame( render );
   renderer.render( scene, camera );
 
-  for ( var i = 0 ; i < scene.children.length ; i++ )
-    if ( scene.children[i].type === 'Sprite' ) {
-      var sprite = scene.children[i];
-      var adjust = scratch.addVectors( sprite.position, scene.position )
+  scene.children.forEach( child => {
+
+    if ( child.type === 'Sprite' ) {
+      var adjust = scratch.addVectors( child.position, scene.position )
                           .sub( camera.position ).length() / 5;
-      sprite.scale.set( adjust, .25*adjust ); // ratio of canvas width to height
+      child.scale.set( adjust, .25*adjust ); // ratio of canvas width to height
     }
+
+    if ( child.userData.rotateOnAxis ) child.rotateOnAxis( child.userData.axis, child.userData.angle );
+
+  } );
 
 }
 

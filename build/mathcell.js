@@ -1698,6 +1698,22 @@ window.addEventListener( 'resize', function() {
 
 } );
 
+window.addEventListener( 'mousedown', suspendAnimation );
+window.addEventListener( 'mousemove', suspendAnimation );
+window.addEventListener( 'mousewheel', suspendAnimation );
+
+window.addEventListener( 'touchstart', suspendAnimation );
+window.addEventListener( 'touchmove', suspendAnimation );
+window.addEventListener( 'touchend', suspendAnimation );
+
+var suspendTimer;
+
+function suspendAnimation() {
+  clearInterval( suspendTimer );
+  animate = false;
+  suspendTimer = setTimeout( function() { animate = true; render(); }, 5000 );
+}
+
 var texts = ${texts};
 
 for ( var i = 0 ; i < texts.length ; i++ ) {

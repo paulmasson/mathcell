@@ -1711,7 +1711,7 @@ var suspendTimer;
 function suspendAnimation() {
   clearInterval( suspendTimer );
   animate = false;
-  suspendTimer = setTimeout( function() { animate = true; render(); }, 5000 );
+  suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
 }
 
 var texts = ${texts};

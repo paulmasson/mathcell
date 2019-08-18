@@ -1895,8 +1895,6 @@ if ( config.clippingPlane ) {
 
 var scratch = new THREE.Vector3();
 
-var axis = new THREE.Vector3( 2*Math.random()-1, 2*Math.random()-1, 2*Math.random()-1 ).normalize();
-
 function render() {
 
   if ( animate ) requestAnimationFrame( render );
@@ -1910,7 +1908,8 @@ function render() {
       child.scale.set( adjust, .25*adjust ); // ratio of canvas width to height
     }
 
-    if ( child.userData.rotateOnAxis ) child.rotateOnAxis( child.userData.axis, child.userData.angle );
+    if ( child.userData.rotateOnAxis && animate )
+      child.rotateOnAxis( child.userData.axis, child.userData.angle );
 
   } );
 

@@ -1880,7 +1880,25 @@ function addSurface( s ) {
     mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
     mesh.userData.angle = s.options.rotationAxisAngle[1];
   }
-  scene.add( mesh );
+
+  if ( 'group' in s.options ) {
+
+    var group = scene.getObjectByName( s.options.group );
+    if ( !group ) {
+      group = new THREE.Group();
+      group.name = s.options.group;
+      scene.add( group );
+    }
+    group.add( mesh );
+
+    if ( mesh.userData.rotateOnAxis ) {
+      mesh.userData.rotateOnAxis = false;
+      group.userData.rotateOnAxis = true;
+      group.userData.axis = mesh.userData.axis;
+      group.userData.angle = mesh.userData.angle;
+    }
+
+  } else scene.add( mesh );
 
 }
 

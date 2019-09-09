@@ -1,0 +1,62 @@
+<html>
+<head>
+<title>Dirichlet Kernels</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Plot of the Dirichlet kernel used in Fouier analysis:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 1, max: 30, default: 5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  var data = [ plot( x => Math.sin( (n+1/2)*x ) / Math.sin( x/2 ), [-Math.PI,Math.PI,1000] ) ];
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The unnormalized kernel is given by the analytic expression</p>
+
+\[ D_n (x) = \frac{ \sin \left( n + \frac{1}{2} \right) x }{ \sin \frac{1}{2} x } \]
+
+<p>For integral \(n\) this kernel is equal to a sum of exponential functions:</p>
+
+\[ D_n (x) = \sum_{ k=-n }^{ n } e^{ i k x } \]
+
+<p>The continuous input here allows one to see how the kernel changes in an analytic fashion, apart from whether the index is integral or not.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

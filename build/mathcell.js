@@ -1197,6 +1197,7 @@ function svgPlot( id, data, config ) {
   var yMin = 'yMin' in config ? config.yMin : floorTo( yMinMax.min, 4, false );
   var yMax = 'yMax' in config ? config.yMax : ceilTo( yMinMax.max, 4, false );
 
+  if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
   if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
 
   if ( config.equalLimits ) {

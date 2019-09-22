@@ -155,7 +155,7 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
     default:
 
-      throw 'Unsupported rotation dimension';
+      throw Error( 'Unsupported rotation dimension' );
 
     }
 

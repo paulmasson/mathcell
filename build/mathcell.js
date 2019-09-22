@@ -495,7 +495,7 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
     default:
 
-      throw 'Unsupported rotation dimension';
+      throw Error( 'Unsupported rotation dimension' );
 
     }
 
@@ -825,7 +825,7 @@ function parametric( vector, xRange, yRange, options={} ) {
             vertices.push( [ v[0], v[1], Math.sqrt( v[2].re**2 + v[2].im**2 ) ] );
             break;
           default:
-            throw 'Unsupported complex function case';
+            throw Error( 'Unsupported complex function case' );
         }
       else vertices.push( v );
 

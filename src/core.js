@@ -1,4 +1,8 @@
 
+window.onerror = function( message ) {
+  document.getElementById( this.id + 'output' ).innerHTML = message;
+}
+
 function MathCell( id, inputs, config={} ) {
 
   function labeledInteract( input ) {

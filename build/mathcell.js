@@ -1147,6 +1147,8 @@ function cylinder( radius, height, options={} ) {
 
 function svgPlot( id, data, config ) {
 
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
+
   function parsedLength( input ) {
 
     var frag = new DOMParser().parseFromString( input, 'text/html' );
@@ -1457,6 +1459,8 @@ function svgPlot( id, data, config ) {
 
 
 function threejsPlot( id, data, config ) {
+
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
   if ( !( 'animate' in config ) ) config.animate = false;
@@ -1955,6 +1959,8 @@ if ( !animate ) render();
 
 
 function x3dPlot( id, data, config ) {
+
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
 
   function compositeRotation( first, second ) {
 

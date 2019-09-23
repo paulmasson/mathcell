@@ -1,5 +1,5 @@
 
-function template( config, lights, texts, points, lines, surfaces ) {
+function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>

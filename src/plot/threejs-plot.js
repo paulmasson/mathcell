@@ -70,7 +70,7 @@ function threejsPlot( id, data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var html = template( config, lights, texts, points, lines, surfaces );
+  var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: ${border};"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

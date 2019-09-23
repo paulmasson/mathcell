@@ -938,6 +938,7 @@ function surfaceFromLines( lines, options={} ) {
 function arrow( begin, end, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  options.fill = true;
 
   // assume 2D for now
   var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );

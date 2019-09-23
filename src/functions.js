@@ -86,6 +86,16 @@ function floorTo( x, n, significant=true ) {
 
 // transformation functions
 
+function normalize( vector ) {
+
+  var len = 0;
+  for ( i = 0 ; i < vector.length ; i++ ) len += vector[i]**2;
+  len = Math.sqrt( len );
+  for ( i = 0 ; i < vector.length ; i++ ) vector[i] /= len;
+  return vector;
+
+}
+
 function translate( points, vector ) {
 
   for ( var i = 0 ; i < points.length ; i++ )

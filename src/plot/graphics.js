@@ -8,14 +8,7 @@ function arrow( begin, end, options={} ) {
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
 
   // assume 2D for now
-  var vector = [ end[0]-begin[0], end[1]-begin[1] ];
-
-  function normalize( v ) {
-    var len = Math.sqrt( v[0]*v[0] + v[1]*v[1] );
-    return [ v[0]/len, v[1]/len ];
-  }
-
-  var t = normalize( vector );
+  var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
   var n = [ t[1], -t[0] ];
   var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
 

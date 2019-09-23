@@ -943,7 +943,7 @@ function arrow( begin, end, options={} ) {
   var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
   var n = [ t[1], -t[0] ];
   var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
-console.log(begin)
+
   size = .05;
   var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
   var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];

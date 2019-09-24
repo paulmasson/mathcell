@@ -1,6 +1,6 @@
 
 window.onerror = function( message ) {
-  document.getElementById( this.id + 'output' ).innerHTML = message;
+  document.getElementById( window.id + 'output' ).innerHTML = message;
 }
 
 function MathCell( id, inputs, config={} ) {
@@ -11,7 +11,7 @@ function MathCell( id, inputs, config={} ) {
     if ( label.length === 1 ) label = `<i>${label}</i>`;
 
     return `
-<div style="white-space: nowrap">
+<div style="white-space: nowrap" onclick="window.id='${id}'">
 <div style="min-width: .5in; display: inline-block">${label}</div>
 <div style="width: 100%; display: inline-block; white-space: nowrap">
   ${interact( id, input )} </div>

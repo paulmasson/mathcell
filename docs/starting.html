@@ -52,7 +52,7 @@ function copyTemplate() {
 &lt;div class="mathcell" style="height: 4in">
 &lt;script>
 
-var parent = document.scripts[ document.scripts.length - 1 ].parentNode;
+var parent = document.currentScript.parentNode;
 
 var id = generateId();
 parent.id = id;

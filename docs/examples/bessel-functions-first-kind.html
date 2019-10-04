@@ -12,7 +12,7 @@
 
 <p>Bessel functions of the first kind for both positive (blue) and negative (red) real order <i>n</i>:</p>
 
-<div class="mathcell" style="height: 4.5in">
+<div class="mathcell" style="height: 5in">
 <script>
 
 var parent = document.currentScript.parentNode;
@@ -20,15 +20,21 @@ var parent = document.currentScript.parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [ { type: 'slider', max: 10, default: .5,
-                                  name: 'n', label: 'n' } ] );
+MathCell( id, [ { type: 'slider', max: 5, default: .5,
+                                  name: 'n', label: 'n' },
+                { type: 'checkbox', name: 'derivatives', label: 'Show derivatives:' } ] );
 
 parent.update = function( id ) {
 
   var n = getVariable( id, 'n' );
+  var derivatives = getVariable( id, 'derivatives' );
 
-  var data = [ plot( x => besselJ(n,x), [.01,20] ),
-                plot( x => besselJ(-n,x), [.01,20], { color: 'red' } ) ];
+  if ( derivatives )
+    var data = [ plot( x => diff( x => besselJ(n,x), x ), [.01,15] ),
+                 plot( x => diff( x => besselJ(-n,x), x ), [.01,15], { color: 'red' } ) ];
+
+  else var data = [ plot( x => besselJ(n,x), [.01,15] ),
+                    plot( x => besselJ(-n,x), [.01,15], { color: 'red' } ) ];
 
   var config = { type: 'svg', yMin: -.75, yMax: 1.1 };
 

@@ -58,14 +58,17 @@ xhr.onload = function() {
       var div = document.createElement( 'div' );
       a.appendChild( div );
 
-      var latex = this.fileName.search( 'latex' ) > -1 ? `
+      var math = this.response.search( 'math/' ) > -1 ? `
+<script src="../../math/build/math.js"><\/script>` : '';
+
+      var mathjax = this.response.search( 'mathjax' ) > -1 ? `
 <script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
 
       var iframe = document.createElement( 'iframe' );
       iframe.source = `
 <html>
 <body style="overflow: hidden">
-<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script> ${latex}
+<script src="../build/mathcell.js"><\/script> ${math} ${mathjax}
 ${cell.outerHTML}
 </body>
 </html>`;

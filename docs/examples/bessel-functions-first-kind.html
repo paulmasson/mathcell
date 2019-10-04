@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Bessel Functions of First Kind</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<p>Bessel functions of the first kind for both positive (blue) and negative (red) real order <i>n</i>:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 10, default: .5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  var data = [ plot( x => besselJ(n,x), [.01,20] ),
+                plot( x => besselJ(-n,x), [.01,20], { color: 'red' } ) ];
+
+  var config = { type: 'svg', yMin: -.75, yMax: 1.1 };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>This allows one to see explicitly that the two functions are linearly dependent for integer order, either coinciding for even order or being mirror images for odd order. It also allows one to see the relative location of the zeros of the two functions.</p>
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

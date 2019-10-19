@@ -941,12 +941,10 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
 
   var field = [];
 
-function scale( v, s ) {
-
-  for ( var i = 0 ; i < v.length ; i++ ) v[i] *= s;
-  return v;
-
-}
+  function scale( v, s ) {
+    for ( var i = 0 ; i < v.length ; i++ ) v[i] *= s;
+    return v;
+  }
 
   if ( !Array.isArray( zRange ) ) {
 

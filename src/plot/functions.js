@@ -234,7 +234,9 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
       var y = yRange[0] + j * yStep;
       for ( var k = 0 ; k <= zRange[2] ; k++ ) {
         var z = zRange[0] + k * yStep;
-        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), .25*Math.min( xStep, yStep, zStep ) );
+        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), 
+                                    .25*Math.min( xStep, yStep, zStep ) );
+        // individual lines sluggish to render - need LineSegements geometry
         field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
       }
     }

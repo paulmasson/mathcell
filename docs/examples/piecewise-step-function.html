@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Piecewise Step Function</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<p>A step function to illustrate the <code>piecewise()</code> function of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var data = [ plot( piecewise( [ x => 0, [0,1] ], [ x => 1, [1,2] ],
+                                [ x => 2, [2,3] ], [ x => 3, [3,4] ],
+                                [ x => 4, [4,5] ] ),
+                     [0,5] ) ];
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The plotting function can be written</p>
+
+<p style="text-align: center">
+<code>plot( x => piecewise( [], ... )(x), [] )</code></p>
+
+<p>if more clarity is desired in explicitly indicating the argument of the piecewise function.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

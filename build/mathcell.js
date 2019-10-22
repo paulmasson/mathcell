@@ -971,7 +971,9 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
       var y = yRange[0] + j * yStep;
       for ( var k = 0 ; k <= zRange[2] ; k++ ) {
         var z = zRange[0] + k * yStep;
-        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), .25*Math.min( xStep, yStep, zStep ) );
+        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), 
+                                    .25*Math.min( xStep, yStep, zStep ) );
+        // individual lines sluggish to render - need LineSegements geometry
         field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
       }
     }
@@ -1198,7 +1200,7 @@ function cylinder( radius, height, options={} ) {
 
 function svgPlot( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 
   function parsedLength( input ) {
 
@@ -1511,7 +1513,7 @@ function svgPlot( id, data, config ) {
 
 function threejsPlot( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
   if ( !( 'animate' in config ) ) config.animate = false;
@@ -2011,7 +2013,7 @@ if ( !animate ) render();
 
 function x3dPlot( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in input data' );
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 
   function compositeRotation( first, second ) {
 

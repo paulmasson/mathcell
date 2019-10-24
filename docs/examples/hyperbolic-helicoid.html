@@ -31,7 +31,7 @@ parent.update = function( id ) {
   var s = parametric( (u,v) => [ Math.sinh(v) * Math.cos(tau*u) / ( 1 + Math.cosh(u)*Math.cosh(v) ),
                                  Math.sinh(v) * Math.sin(tau*u) / ( 1 + Math.cosh(u)*Math.cosh(v) ),
                                  Math.cosh(v) * Math.sinh(u) / ( 1 + Math.cosh(u)*Math.cosh(v) )     ],
-                      [-5,5,200], [-2,2], { colormap: (u,v) => v } );
+                      [-5,5,200], [-2,2], { colormap: (u,v) => hueToHexString(v) } );
 
   var data = [ s ];
 

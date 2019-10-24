@@ -186,3 +186,27 @@ function getCompleteCode() {
 
 }
 
+function hueToHexString( h ) {
+
+  function hue2rgb( p, q, t ) {
+
+    if ( t < 0 ) t += 1;
+    if ( t > 1 ) t -= 1;
+    if ( t < 1/6 ) return p + ( q - p ) * 6 * t;
+    if ( t < 1/2 ) return q;
+    if ( t < 2/3 ) return p + ( q - p ) * 6 * ( 2/3 - t );
+    return p;
+
+  }
+
+  var r = hue2rgb( 0, 1, h + 1/3 );
+  var g = hue2rgb( 0, 1, h );
+  var b = hue2rgb( 0, 1, h - 1/3 );
+
+  var hex = ( r * 255 ) << 16 ^ ( g * 255 ) << 8 ^ ( b * 255 ) << 0;
+
+  return '#' + ( '000000' + hex.toString(16) ).slice(-6);
+
+
+}
+

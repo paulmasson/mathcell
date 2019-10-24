@@ -530,6 +530,30 @@ function getCompleteCode() {
 
 }
 
+function hueToHexString( h ) {
+
+  function hue2rgb( p, q, t ) {
+
+    if ( t < 0 ) t += 1;
+    if ( t > 1 ) t -= 1;
+    if ( t < 1/6 ) return p + ( q - p ) * 6 * t;
+    if ( t < 1/2 ) return q;
+    if ( t < 2/3 ) return p + ( q - p ) * 6 * ( 2/3 - t );
+    return p;
+
+  }
+
+  var r = hue2rgb( 0, 1, h + 1/3 );
+  var g = hue2rgb( 0, 1, h );
+  var b = hue2rgb( 0, 1, h - 1/3 );
+
+  var hex = ( r * 255 ) << 16 ^ ( g * 255 ) << 8 ^ ( b * 255 ) << 0;
+
+  return '#' + ( '000000' + hex.toString(16) ).slice(-6);
+
+
+}
+
 
 var defaultPlotColor = 'rgb(0,127,255)';
 
@@ -847,7 +871,7 @@ function parametric( vector, xRange, yRange, options={} ) {
         if ( options.colormap === 'complexArgument' ) {
           var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
           if ( p < 0 ) p += 1;
-          options.colors.push( p );
+          options.colors.push( hueToHexString(p) );
         }
       else {
         var p = ( options.colormap(x,y) % 1 + 1 ) % 1;
@@ -1550,7 +1574,6 @@ function threejsPlot( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
       if ( d.type === 'surface' ) {
         d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
-        if ( 'colors' in d.options ) d.options.colors = roundTo( d.options.colors, 3 );
         surfaces.push( d );
       }
     }
@@ -1956,7 +1979,7 @@ function addSurface( s ) {
 
   if ( 'colors' in s.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color().setHSL( s.options.colors[i], 1, .5 ) );
+      geometry.colors.push( new THREE.Color( s.options.colors[i] ) );
     for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
       var f = geometry.faces[i];
       f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];

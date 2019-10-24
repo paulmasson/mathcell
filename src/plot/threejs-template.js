@@ -363,7 +363,7 @@ function addSurface( s ) {
 
   if ( 'colors' in s.options ) {
     for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color().setHSL( s.options.colors[i], 1, .5 ) );
+      geometry.colors.push( new THREE.Color( s.options.colors[i] ) );
     for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
       var f = geometry.faces[i];
       f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];

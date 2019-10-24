@@ -188,6 +188,8 @@ function getCompleteCode() {
 
 function hueToHexString( h ) {
 
+  h = ( h % 1 + 1 ) % 1; // restrict to [0,1]
+
   function hue2rgb( p, q, t ) {
 
     if ( t < 0 ) t += 1;

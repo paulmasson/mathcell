@@ -109,13 +109,9 @@ function parametric( vector, xRange, yRange, options={} ) {
       if ( 'colormap' in options )
         if ( options.colormap === 'complexArgument' ) {
           var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
-          if ( p < 0 ) p += 1;
           options.colors.push( hueToHexString(p) );
         }
-      else {
-        var p = ( options.colormap(x,y) % 1 + 1 ) % 1;
-        options.colors.push( p );
-      }
+      else options.colors.push( options.colormap(x,y) );
     }
   }
 

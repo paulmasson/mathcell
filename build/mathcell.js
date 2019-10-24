@@ -1827,6 +1827,39 @@ function addPoint( p ) {
 
 var lines = ${lines};
 
+var newLines = [];
+
+for ( var i = 0 ; i < lines.length ; i++ ) {
+
+  lines[i].points.forEach( v => {
+    // apply aspect multipliers for convenience
+    //   and set points outside bounds to empty array
+    v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
+    if ( v[0] < xMin || v[0] > xMax || v[1] < yMin || v[1] > yMax
+           || v[2] < zMin || v[2] > zMax )
+      v.splice(0);
+  } );
+
+  // split lines at empty points
+  var tempPoints = [];
+  for ( var j = 0 ; j < lines[i].points.length ; j++ )
+    if ( lines[i].points[j].length === 0 ) tempPoints = lines[i].points.splice( j );
+
+  var l = [];
+  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
+    var p = tempPoints[j];
+    if ( p.length > 0 ) l.push( p );
+    else if ( l.length > 0 ) {
+      newLines.push( { points: l, options: lines[i].options } );
+      l = [];
+    }
+  }
+
+}
+
+newLines.forEach( l => lines.push( l ) );
+newLines = [];
+
 for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
 
 function addLine( l ) {
@@ -1834,7 +1867,7 @@ function addLine( l ) {
   var geometry = new THREE.Geometry();
   for ( var i = 0 ; i < l.points.length ; i++ ) {
     var v = l.points[i];
-    geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
   }
 
   var transparent = l.options.opacity < 1 ? true : false;

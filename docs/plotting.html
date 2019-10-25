@@ -7,6 +7,8 @@
 
 <body>
 
+<script src="../build/mathcell.js"></script>
+
 <p>Options for graphics objects are specified as JavaScript dictionaries. Common default options are</p>
 
 <table style="margin-left: 1in"><tr><td style="width: 1in">
@@ -15,7 +17,11 @@
   <code>opacity</code></td><td>1
 </td></tr></table>
 
-<p>Colors are specified using standard HTML color code strings. Surfaces can be assigned a <code>group</code> name for common animation operations.</p>
+<p>Colors are specified using standard HTML color code strings. Predefined colormaps can be accessed with the command <code>colormap('name')</code> where the name is one of the
+<a href="" onclick="window.open('','','width=200,height=500').document.write(Object.keys(colormaps).join('<br>'))" _target="blank">
+available maps</a>.</p>
+
+<p>Surfaces can be assigned a <code>group</code> name for common animation operations.</p>
 
 <br/><p><b>plot( <i>f</i>, range, options )</b> &mdash; plot of a function over a range given as an array <code>[begin,end]</code> or <code>[begin,end,points]</code></p>
 

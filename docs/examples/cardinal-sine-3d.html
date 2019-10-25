@@ -36,7 +36,7 @@ parent.update = function( id ) {
   }
 
   var s = parametric( (x,y) => [ x, y, sinc(x,y) ], [-10,10,150], [-10,10,150],
-                      { colormap: (x,y) => hueToHexString( sinc(x,y) ) } );
+                      { colormap: (x,y) => hueToColor( sinc(x,y) ) } );
 
   var data = [ s ];
 

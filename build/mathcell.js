@@ -530,7 +530,7 @@ function getCompleteCode() {
 
 }
 
-function hueToHexString( h ) {
+function hueToColor( h ) {
 
   h = ( h % 1 + 1 ) % 1; // restrict to [0,1]
 
@@ -549,10 +549,41 @@ function hueToHexString( h ) {
   var g = hue2rgb( 0, 1, h );
   var b = hue2rgb( 0, 1, h - 1/3 );
 
-  var hex = ( r * 255 ) << 16 ^ ( g * 255 ) << 8 ^ ( b * 255 ) << 0;
+  return { r: r, g: g, b: b };
+
+}
+
+function colorToHexString( color ) {
+
+  var hex = ( color.r * 255 ) << 16 ^ ( color.g * 255 ) << 8 ^ ( color.b * 255 ) << 0;
 
   return '#' + ( '000000' + hex.toString(16) ).slice(-6);
 
+
+}
+
+function colormap( name ) {
+
+  function piecewise( pieces ) { 
+
+    return function( x ) {
+
+      for ( var i = 0 ; i < pieces.length ; i++ ) {
+        var domain = pieces[i][1];
+        if ( x >= domain[0] && x <= domain[1] ) return pieces[i][0](x);
+      }
+
+      return 0;
+
+    }
+
+  }
+
+  var r = piecewise( colormaps[name].r );
+  var g = piecewise( colormaps[name].g );
+  var b = piecewise( colormaps[name].b );
+
+  return function(x) { return { r: r(x), g: g(x), b: b(x) }; };
 
 }
 
@@ -760,6 +791,27 @@ input[type=range]::-moz-focus-outer {
 `;
 
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
+
+
+var colormaps = {
+
+  autumn: { r: [ [ x => 1, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 0, [0,1] ] ] },
+
+  spring: { r: [ [ x => 1, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 1 - x, [0,1] ] ] },
+
+  summer: { r: [ [ x => x, [0,1] ] ],
+            g: [ [ x => .5*x + .5, [0,1] ] ],
+            b: [ [ x => .4, [0,1] ] ] },
+
+  winter: { r: [ [ x => 0, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 1 - .5*x, [0,1] ] ] },
+
+}
 
 
 // return arrays of objects for all plots

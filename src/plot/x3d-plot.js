@@ -158,7 +158,7 @@ function x3dPlot( id, data, config ) {
     var p = document.createElement( 'p' );
     p.style.color = s.options.color;
     var rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
-    rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
+    rgb.forEach( (e,i,a) => a[i] /= 255 );
     var color = rgb.join(' '); 
 
     html += `
@@ -172,9 +172,9 @@ function x3dPlot( id, data, config ) {
     if ( 'colors' in s.options ) {
       var colors = '';
       for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
-        p.style.color = 'hsl(' + 360*s.options.colors[j] + ',100%,50%)';
+        p.style.color = s.options.colors[j];
         rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
-        rgb.forEach( (e,i,a) => a[i] = a[i] / 255 );
+        rgb.forEach( (e,i,a) => a[i] /= 255 );
         rgb = roundTo( rgb, 3 );
         colors +=  rgb.join(' ') + ' ';
       }

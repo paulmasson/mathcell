@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>Test of the Experimental X3D Viewer</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A few colored objects to test the experimental X3D viewer:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  function sinc( x, y ) {
+ 
+    var r = Math.sqrt( x*x + y*y );
+
+    if ( r === 0 ) return 1;
+
+    return Math.sin(r) / r;
+
+  }
+
+  var data = [ sphere( .5, { center: [-2,0,0], steps: 50 } ),
+               sphere( .5, { center: [2,0,0], steps: 50, color: '#ff0000', opacity: .5 } ),
+               parametric( (x,y) => [ x, y, 1-x**2-y**2 ], [-1,1], [-1,1],
+                           { colormap: (x,y) => hueToColor( 1-x**2-y**2 ) } ) ];
+
+  var config = { type: 'x3d' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

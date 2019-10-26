@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>MathCell - Colormaps</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style>
+  .right { text-align: right }
+</style>
+</head>
+
+<body>
+
+<table id="maps"></table>
+
+<script src="../build/mathcell.js"></script>
+
+<script>
+
+// document not fully ready if use one loop...
+
+Object.keys( colormaps ).forEach ( cm => {
+
+  maps.innerHTML += `
+<tr><td class="right">${cm}</td><td><canvas id="${cm}"></canvas></td></tr>
+<tr><td>&nbsp;</td></tr>
+  `;
+
+});
+
+Object.keys( colormaps ).forEach ( cm => {
+
+  var canvas = document.getElementById( cm );
+  canvas.width = 500;
+  canvas.height = 20;
+
+  var context = canvas.getContext( '2d' );
+  var gradient = context.createLinearGradient( 0, 0, 500, 0 );
+
+  var f = colormap( cm );
+
+  for ( var i = 0 ; i <= 1 ; i += .05 ) {
+    var c = f(i);
+    gradient.addColorStop( i, `rgb(${255*c.r},${255*c.g},${255*c.b})` );
+  }
+
+  context.fillStyle = gradient;
+  context.fillRect( 0, 0, 500, 20 );
+
+} );
+
+</script>
+
+</body>
+</html>

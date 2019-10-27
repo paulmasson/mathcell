@@ -562,7 +562,7 @@ function colorToHexString( color ) {
 
 }
 
-function colormap( name ) {
+function colormap( name, reversed=false ) {
 
   function piecewise( pieces ) { 
 
@@ -582,6 +582,9 @@ function colormap( name ) {
   var r = piecewise( colormaps[name].r );
   var g = piecewise( colormaps[name].g );
   var b = piecewise( colormaps[name].b );
+
+  if ( reversed )
+    return function(x) { return { r: r(1-x), g: g(1-x), b: b(1-x) }; };
 
   return function(x) { return { r: r(x), g: g(x), b: b(x) }; };
 

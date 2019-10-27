@@ -937,12 +937,14 @@ function parametric( vector, xRange, yRange, options={} ) {
         }
       else vertices.push( v );
 
-      if ( 'colormap' in options )
+      if ( 'colormap' in options ) {
         if ( options.colormap === 'complexArgument' ) {
           var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
           options.colors.push( colorToHexString( hueToColor(p) ) );
         }
-      else options.colors.push( colorToHexString( options.colormap(x,y) ) );
+        if ( typeof( colormap ) === 'function' )
+          options.colors.push( colorToHexString( options.colormap(x,y) ) );
+      }
     }
   }
 

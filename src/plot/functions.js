@@ -111,7 +111,7 @@ function parametric( vector, xRange, yRange, options={} ) {
           var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
           options.colors.push( colorToHexString( hueToColor(p) ) );
         }
-        if ( typeof( colormap ) === 'function' )
+        if ( typeof( options.colormap ) === 'function' )
           options.colors.push( colorToHexString( options.colormap(x,y) ) );
       }
     }

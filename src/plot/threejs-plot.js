@@ -60,7 +60,23 @@ function threejsPlot( id, data, config ) {
   if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
-  var border = config.no3DBorder ? 'none' : '1px solid black';
+  surfaces.forEach( s => {
+    // process predefined colormaps
+    if ( 'colormap' in s.options && !( 'colors' in s.options ) ) s.options.colors = [];
+    if ( 'colormap' in s.options && s.options.colors.length === 0 ) {
+      var f = colormap( s.options.colormap );
+      var zMinMax = minMax( s.vertices, 2 );
+      var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
+      var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
+      for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+        var z = s.vertices[i][2];
+        if ( z < zMin ) z = zMin;
+        if ( z > zMax ) z = zMax;
+        var w = ( z - zMin ) / ( zMax - zMin );
+        s.options.colors.push( colorToHexString( f(w) ) );
+      }
+    }
+  } );
 
   config = JSON.stringify( config );
 
@@ -71,6 +87,7 @@ function threejsPlot( id, data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
+  var border = config.no3DBorder ? 'none' : '1px solid black';
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: ${border};"

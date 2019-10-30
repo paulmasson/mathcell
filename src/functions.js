@@ -25,6 +25,12 @@ function linspace( a, b, points ) {
 
 }
 
+function lerp( a, b ) {
+
+  return function( x ) { return a[1] + ( x - a[0] ) * ( b[1] - a[1] ) / ( b[0] - a[0] ) };
+
+}
+
 // rounding functions
 
 function roundTo( x, n, significant=true ) {

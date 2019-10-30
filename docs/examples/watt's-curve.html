@@ -1,0 +1,82 @@
+<html>
+<head>
+<title>Watt&rsquo;s Curve</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A graphic for exploring <a href="https://en.wikipedia.org/wiki/Watt%27s_curve">Watt&rsquo;s curve</a>:</p>
+
+<div class="mathcell" style="height: 6in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 5, default: 3,
+                                  name: 'a', label: 'a' },
+                { type: 'slider', max: 5, default: 4,
+                                  name: 'b', label: 'b' },
+                { type: 'slider', max: 5, default: 2,
+                                  name: 'c', label: 'c' } ] );
+
+parent.update = function( id ) {
+
+  var a = getVariable( id, 'a' );
+  var b = getVariable( id, 'b' );
+  var c = getVariable( id, 'c' );
+
+  function f( x, y ) {
+
+    var rSq = x**2 + y**2;
+    var dSq = a**2 + b**2 - c**2;
+
+    return rSq * ( rSq - dSq )**2 + 4*a**2*y**2 * ( rSq - b**2 );
+
+  }
+
+  var lim = 1.1 * Math.sqrt( b**2 - ( a - c )**2 );
+
+  data = [ isoline( f, [-lim,lim,500], [-lim,lim,500] ) ] 
+
+  var config = { type: 'svg', includeOrigin: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The entire curve is given in polar coordinates by</p>
+
+\[ r^2 = b^2 - \left[ a \sin\theta \pm \sqrt{ c^2 - a^2 \cos^2\theta } \right]^2 \]
+
+<p>Since <i>b</i> and <i>c</i> are both squared they can be assumed to have positive values. The parameter <i>a</i> is effectively positive as well, since altering its sign merely interchanges parts of the curve.</p>
+
+<p>Unfortunately a straightforward attempt to display this curve as a polar plot goes awry, because the expression as given becomes complex over significant portions of the angular domain. It is simpler to expand the definition to remove the square root</p>
+
+\[ r^2 ( r^2 - a^2 - b^2 + c^2 )^2 + 4 a^2 y^2 ( r^2 - b^2 ) = 0 \]
+
+<p>and then visualize the curve as an isoline using marching squares.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Colormap Tester</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>This simple example plots the RGB values of available <a href="../colormaps.html" target="_blank">colormaps</a> over the input domain [0,1] to ensure that all output values are clipped to the range [0,1]. This is useful for debugging new colormaps.</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+var maps = Object.keys( colormaps );
+
+MathCell( id, [ { type: 'slider', max: maps.length - 1, default: 1, step: 1,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  var f = colormap( maps[n] );
+
+  var data = [ plot( x => f(x).r, [0,1], { color: 'red' } ),
+               plot( x => f(x).g, [0,1], { color: 'green' } ),
+               plot( x => f(x).b, [0,1], { color: 'blue' } ) ];
+
+  var config = { type: 'svg', axesLabels: [ '', maps[n] ] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

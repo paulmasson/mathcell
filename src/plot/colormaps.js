@@ -1,5 +1,5 @@
 
-// data from lib/matplotlib/_cm.py
+// data from lib/matplotlib/_cm.py with clipping to [0,1] as for CSS
 
 var colormaps = {
 
@@ -27,7 +27,7 @@ var colormaps = {
           g: [ [ x => 1 - x, [0,1] ] ],
           b: [ [ x => 1, [0,1] ] ] },
 
-  hot: { r: [ [ lerp( [.0416,0], [.365079,1] ), [0,.365079] ], [ x => 1, [.365079,1] ] ],
+  hot: { r: [ [ lerp( [0,.0416], [.365079,1] ), [0,.365079] ], [ x => 1, [.365079,1] ] ],
          g: [ [ x => 0, [0,.365079] ], [ lerp( [.365079,0], [.746032,1] ), [.365079,.746032] ],
               [ x => 1, [.746032,1] ] ],
          b: [ [ x => 0, [0,.746032] ], [ lerp( [.746032,0], [1,1] ), [.746032,1] ] ] },
@@ -40,11 +40,11 @@ var colormaps = {
          g: [ [ x => hueToColor(x).g, [0,1] ] ],
          b: [ [ x => hueToColor(x).b, [0,1] ] ] },
 
-  ocean: { r: [ [ x => 3*x - 2, [0,1] ] ],
+  ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
            g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],
            b: [ [ x => x, [0,1] ] ] },
 
-  rainbow: { r: [ [ x => Math.abs( 2*x - 1/2 ), [0,1] ] ],
+  rainbow: { r: [ [ x => Math.abs( 2*x - 1/2 ), [0,.75] ], [ x => 1, [.75,1] ] ],
              g: [ [ x => Math.sin( Math.PI*x ), [0,1] ] ],
              b: [ [ x => Math.cos( Math.PI/2*x ), [0,1] ] ] },
 

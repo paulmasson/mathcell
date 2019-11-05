@@ -11,7 +11,7 @@
 
 <script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
 
-<p>A three-dimensional cardinal sine function. The vertical aspect ratio is increased to show the function more clearly. The colormap is the function itself.</p>
+<p>A three-dimensional cardinal sine function with various colormaps. The vertical aspect ratio is increased to show the function more clearly.</p>
 
 <div class="mathcell" style="width: 6in; height: 5in">
 <script>
@@ -21,9 +21,15 @@ var parent = document.currentScript.parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [] );
+MathCell( id, [ { type: 'buttons', values: ['cool','hot','spring','summer','autumn','winter'],
+                                   default: 'hot', width: '.6in',
+                                   name: 'map', label: 'Colormap: ' },
+                { type: 'checkbox', name: 'reversed', label: 'Reversed: ' } ] );
 
 parent.update = function( id ) {
+
+  var map = getVariable( id, 'map' );
+  var reversed = getVariable( id, 'reversed' );
 
   function sinc( x, y ) {
  
@@ -36,11 +42,11 @@ parent.update = function( id ) {
   }
 
   var s = parametric( (x,y) => [ x, y, sinc(x,y) ], [-10,10,150], [-10,10,150],
-                      { colormap: (x,y) => hueToColor( sinc(x,y) ) } );
+                      { colormap: map, reverseColormap: reversed } );
 
   var data = [ s ];
 
-  var config = { type: 'threejs', frame: false, aspectRatio: [1,1,10] };
+  var config = { type: 'threejs', frame: false, aspectRatio: [1,1,10], viewpoint: [1,1,.2] };
 
   evaluate( id, data, config );
 

@@ -1698,8 +1698,9 @@ function threejsPlot( id, data, config ) {
 
   surfaces.forEach( s => {
     // process predefined colormaps
-    if ( 'colormap' in s.options && !( 'colors' in s.options ) ) s.options.colors = [];
-    if ( 'colormap' in s.options && s.options.colors.length === 0 ) {
+    if ( 'colormap' in s.options &&
+          ( !( 'colors' in s.options ) || s.options.colors.length === 0 ) ) {
+      s.options.colors = [];
       var f = colormap( s.options.colormap, s.options.reverseColormap );
       var zMinMax = minMax( s.vertices, 2 );
       var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;

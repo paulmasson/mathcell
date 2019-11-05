@@ -10,9 +10,11 @@
 <br id="basic"/>
 <h1>Basic Functions</h1>
 
+<p><b>lerp( <i>a</i>, <i>b</i> )</b> &mdash; linear interpolation between two-dimensional points returned as a function</p>
+
 <p><b>linspace( <i>a</i>, <i>b</i>, number )</b> &mdash; equally spaced number of points from <i>a</i> to <i>b</i> inclusive</p>
 
-<p><b>minMax( data, index )</b> &mdash; minimum and maximum values in a data array for the specified index returned as a dictionary <code>{ min: min, max: max }</code></p>
+<p><b>minMax( data, index )</b> &mdash; minimum and maximum values in a data array of points for the specified index returned as <code>{ min: min, max: max }</code></p>
 
 <br id="rounding"/>
 <h1>Rounding Functions</h1>
@@ -39,6 +41,17 @@
 <p><b>rotate( points, angle )</b> &mdash; rotate an array of points by an angle about the <i>z</i>-axis</p>
 
 <p><b>rotate( points, angle, vector )</b> &mdash; rotate an array of points by an angle about an arbitrary axis</p>
+
+<br id="color"/>
+<h1>Color Functions</h1>
+
+<p><b>colormap( name )</b> &mdash; predefined colormap returned as a function taking an argument in [0,1]</p>
+
+<p><b>colormap( name, true )</b> &mdash; reversed predefined colormap returned as a function</p>
+
+<p><b>colorToHexString( color )</b> &mdash; HTML hex string for a color <code>{ r: r, g: g, b: b }</code></p>
+
+<p><b>hueToColor( <i>h</i> )</b> &mdash; RGB color for a hue in [0,1] returned as <code>{ r: r, g: g, b: b }</code></p>
 
 </body>
 </html>

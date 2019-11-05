@@ -329,8 +329,6 @@ function addSurface( s ) {
     for ( var j = 0 ; j < f.length - 2 ; j++ )
       geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
   }
-
-  geometry.mergeVertices(); // only need for lazy constructions
   geometry.computeVertexNormals();
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;

@@ -6,16 +6,16 @@
 
 button {
 
-	border: 1px solid black;
-	border-radius: 5px;
-	background-color: #eee;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #eee;
 
 }
 
-textarea {
+#scratchpad {
 
-	position: absolute;
-	top: -100%;
+  position: absolute;
+  top: -100%;
 
 }
 
@@ -23,6 +23,8 @@ textarea {
 </head>
 
 <body>
+
+<textarea id="scratchpad"></textarea>
 
 <p>Here are two simple examples to get started:</p>
 
@@ -38,10 +40,9 @@ textarea {
 
 function copyTemplate() {
 
-  var textArea = document.createElement( 'textarea' );
-  textArea.textContent = document.getElementById( 'template' ).textContent + '\n';
-  document.body.append( textArea );
-  textArea.select();
+  var scratchpad = document.getElementById( 'scratchpad' );
+  scratchpad.textContent = document.getElementById( 'template' ).textContent + '\n';
+  scratchpad.select();
   document.execCommand( 'copy' );
 
 }

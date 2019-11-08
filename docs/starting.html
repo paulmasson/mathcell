@@ -12,7 +12,7 @@ button {
 
 }
 
-#scratchpad {
+textarea {
 
   position: absolute;
   top: -100%;
@@ -23,8 +23,6 @@ button {
 </head>
 
 <body>
-
-<textarea id="scratchpad"></textarea>
 
 <p>Here are two simple examples to get started:</p>
 
@@ -40,9 +38,10 @@ button {
 
 function copyTemplate() {
 
-  var scratchpad = document.getElementById( 'scratchpad' );
-  scratchpad.textContent = document.getElementById( 'template' ).textContent + '\n';
-  scratchpad.select();
+  var textArea = document.createElement( 'textarea' );
+  textArea.textContent = document.getElementById( 'template' ).textContent + '\n';
+  document.body.append( textArea );
+  textArea.select();
   document.execCommand( 'copy' );
 
 }

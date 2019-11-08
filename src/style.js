@@ -7,64 +7,64 @@ mathcellStyle.innerHTML = `
 
 input[type=number] {
 
-	-webkit-appearance: none;
-	box-shadow: none;
-	border: 1px solid black;
-	border-radius: 5px;
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 1px solid black;
+  border-radius: 5px;
 
 }
 
 input[type=number]::-webkit-outer-spin-button,
 input[type=number]::-webkit-inner-spin-button {
 
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 
 }
 
 input[type=number] {
 
-    -moz-appearance:textfield;
+  -moz-appearance:textfield;
 
 }
 
 input[type=radio] {
 
-	display: none;
+  display: none;
 
 }
 
 input[type=radio] + label {
 
-	display: inline-block;
-	vertical-align: middle;
-	min-width: 25px;
-	height: 20px;
-	line-height: 20px;
-	text-align: center;
-	border: 1px solid black;
-	border-radius: 5px;
-	background-color: #eee;
+  display: inline-block;
+  vertical-align: middle;
+  min-width: 25px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #eee;
 
 }
 
 input[type=radio]:checked + label {
 
-	border-width: 2px;
-	background-color: #fafafa
+  border-width: 2px;
+  background-color: #fafafa
 
 }
 
 .mathcell {
 
-	width: 5in;
-	margin: .25in auto .25in auto;
-	border: 2px solid black;
-	display: flex;
-	flex-direction: column;
-	box-sizing: border-box;
-	padding: .25in .5in .5in .5in;
-	line-height: 2.5;
+  width: 5in;
+  margin: .25in auto .25in auto;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: .25in .5in .5in .5in;
+  line-height: 2.5;
 
 }
 
@@ -72,26 +72,26 @@ input[type=radio]:checked + label {
 
 .matrix:before, .matrix:after {
 
-	content: "";
-	position: absolute;
-	top: 0;
-	border: 1.5px solid black;
-	width: 10px;
-	height: 100%;
+  content: "";
+  position: absolute;
+  top: 0;
+  border: 1.5px solid black;
+  width: 10px;
+  height: 100%;
 
 }
 
 .matrix:before {
 
-	left: 5px;
-	border-right: 0px;
+  left: 5px;
+  border-right: 0px;
 
 }
 
 .matrix:after {
 
-	right: 5px;
-	border-left: 0px;
+  right: 5px;
+  border-left: 0px;
 
 }
 
@@ -104,14 +104,21 @@ Replace when major browsers support common styling
 */
 
 input[type=range] {
+
   -webkit-appearance: none;
   margin: 10px 0;
   width: 100%;
+
 }
+
 input[type=range]:focus {
+
   outline: none;
+
 }
+
 input[type=range]::-webkit-slider-runnable-track {
+
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -120,8 +127,11 @@ input[type=range]::-webkit-slider-runnable-track {
   background: #FFFFFF;
   border-radius: 3px;
   border: 1px solid #000000;
+
 }
+
 input[type=range]::-webkit-slider-thumb {
+
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid #000000;
   height: 20px;
@@ -131,11 +141,17 @@ input[type=range]::-webkit-slider-thumb {
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -6px;
+
 }
+
 input[type=range]:focus::-webkit-slider-runnable-track {
+
   background: #FFFFFF;
+
 }
+
 input[type=range]::-moz-range-track {
+
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -144,8 +160,11 @@ input[type=range]::-moz-range-track {
   background: #FFFFFF;
   border-radius: 3px;
   border: 1px solid #000000;
+
 }
+
 input[type=range]::-moz-range-thumb {
+
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid #000000;
   height: 20px;
@@ -153,8 +172,11 @@ input[type=range]::-moz-range-thumb {
   border-radius: 5px;
   background: #eee;
   cursor: pointer;
+
 }
+
 input[type=range]::-ms-track {
+
   width: 100%;
   height: 10px;
   cursor: pointer;
@@ -162,21 +184,30 @@ input[type=range]::-ms-track {
   background: transparent;
   border-color: transparent;
   color: transparent;
+
 }
+
 input[type=range]::-ms-fill-lower {
+
   background: #FFFFFF;
   border: 1px solid #000000;
   border-radius: 3px;
   box-shadow: 0px 0px 0px #000000;
+
 }
+
 input[type=range]::-ms-fill-upper {
+
   background: #FFFFFF;
   border: 1px solid #000000;
   border-radius: 3px;
   box-shadow: 0px 0px 0px #000000;
   margin-right: 1px;
+
 }
+
 input[type=range]::-ms-thumb {
+
   box-shadow: 0px 0px 0px #000000;
   border: 1px solid #000000;
   height: 18px;
@@ -185,18 +216,27 @@ input[type=range]::-ms-thumb {
   background: #eee;
   cursor: pointer;
   margin-top: 1px;
-}
-input[type=range]:focus::-ms-fill-lower {
-  background: #FFFFFF;
-}
-input[type=range]:focus::-ms-fill-upper {
-  background: #FFFFFF;
+
 }
 
+input[type=range]:focus::-ms-fill-lower {
+
+  background: #FFFFFF;
+
+}
+
+input[type=range]:focus::-ms-fill-upper {
+
+  background: #FFFFFF;
+
+}
 
 /* not in cssportal */
+
 input[type=range]::-moz-focus-outer {
+
   border: 0;
+
 }
 
 `;

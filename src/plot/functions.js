@@ -209,11 +209,13 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
 
   if ( !Array.isArray( zRange ) ) {
 
+    var size = .25 * Math.min( xStep, yStep );
+
     for ( var i = 0 ; i <= xRange[2] ; i++ ) {
       var x = xRange[0] + i * xStep;
       for ( var j = 0 ; j <= yRange[2] ; j++ ) {
         var y = yRange[0] + j * yStep;
-        var v = scale( normalize( [ 1, f(x,y) ] ), .25*Math.min( xStep, yStep ) );
+        var v = scale( normalize( [ 1, f(x,y) ] ), size );
         field.push( line( translate( [ [-v[0],-v[1]], [v[0],v[1]] ], [x,y] ), zRange )[0] );
       }
     }
@@ -226,14 +228,15 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
 
   var zStep = ( zRange[1] - zRange[0] ) / zRange[2];
 
+  var size = .25 * Math.min( xStep, yStep, zStep );
+
   for ( var i = 0 ; i <= xRange[2] ; i++ ) {
     var x = xRange[0] + i * xStep;
     for ( var j = 0 ; j <= yRange[2] ; j++ ) {
       var y = yRange[0] + j * yStep;
       for ( var k = 0 ; k <= zRange[2] ; k++ ) {
-        var z = zRange[0] + k * yStep;
-        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), 
-                                    .25*Math.min( xStep, yStep, zStep ) );
+        var z = zRange[0] + k * zStep;
+        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), size );
         // individual lines sluggish to render - need LineSegements geometry
         field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
       }

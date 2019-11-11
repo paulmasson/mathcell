@@ -134,10 +134,10 @@ function x3dPlot( id, data, config ) {
     for ( var j = s.faces.length - 1 ; j >= 0 ; j-- ) {
       var f = s.faces[j];
       var check = true;
-      f.forEach( index => check &= s.vertices[index][2] < zMin );
+      f.forEach( index => check = check && s.vertices[index][2] < zMin );
       if ( check ) s.faces.splice( j, 1 );
       var check = true;
-      f.forEach( index => check &= s.vertices[index][2] > zMax );
+      f.forEach( index => check = check && s.vertices[index][2] > zMax );
       if ( check ) s.faces.splice( j, 1 );
     }
 

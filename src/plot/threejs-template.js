@@ -305,10 +305,10 @@ function addSurface( s ) {
   for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = s.faces[i];
     var check = true;
-    f.forEach( index => check &= s.vertices[index][2] < zMin );
+    f.forEach( index => check = check && s.vertices[index][2] < zMin );
     if ( check ) s.faces.splice( i, 1 );
     var check = true;
-    f.forEach( index => check &= s.vertices[index][2] > zMax );
+    f.forEach( index => check = check && s.vertices[index][2] > zMax );
     if ( check ) s.faces.splice( i, 1 );
   }
 

@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Jacobi Elliptic Sine on Complex Lines</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Visualization in two and three dimensions of the Jacobi elliptic sine along straight lines in the complex plane:</p>
+
+<div class="mathcell" style="height: 6in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 3, default: .9,
+                                  name: 'a', label: 'a' },
+                { type: 'slider', max: 3, default: 1,
+                                  name: 'b', label: 'b' },
+                { type: 'slider', max: 1, default: .5,
+                                  name: 'm', label: 'm' },
+                { type: 'checkbox', name: 'three', label: 'Show in three dimensions:' } ] );
+
+parent.update = function( id ) {
+
+  var a = getVariable( id, 'a' );
+  var b = getVariable( id, 'b' );
+  var m = getVariable( id, 'm' );
+  var three = getVariable( id, 'three' );
+
+  var rate = .1;
+
+  var curve = parametric( x => [ sn( mul( complex(a,b), x ), m ).re,
+                                 sn( mul( complex(a,b), x ), m ).im, rate*x ], [0,100,5000] );
+
+  curve[0].points.forEach( p => {
+    if ( Math.sqrt( p[0]*p[0] + p[1]*p[1] ) > 50 ) console.log(
+`JacobiSN[${roundTo(p[2]/rate,2,false)}*(${a}+${b}I),${m}] = ${p[0]} ${ p[1] > 0 ? '+' : ''}${p[1]}i` )
+  } );
+
+  var data = [ curve ];
+
+  var config = { type: three ? 'threejs' : 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The two-dimensional parametrization combines the real and imaginary parts of the elliptic sine:</p>
+
+\[ [ ~ \operatorname{Re} \operatorname{sn}[ (a+ib)x, m ] ~ ,
+     ~ \operatorname{Im} \operatorname{sn}[ (a+ib)x, m ] ~ ] \]
+
+<p>The three-dimensional version adds an extra vertical parameter to make the periodic nature of the curves explicit.</p>
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>. What appear at first to be errors in calculation are in fact not. Large absolute values are reported in the JavaScript console as Mathematica strings that can be copied and evaluated in that program. Being able to step through a variety of input parameters indicates that these curves are not nearly as pretty as expected.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

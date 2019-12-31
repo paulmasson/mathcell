@@ -1,0 +1,59 @@
+<html>
+<head>
+<title>Cornu Spiral</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The spiral of Cornu appears in the study of diffraction in optics:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var data = [ parametric( x => [ fresnelC(x), fresnelS(x) ], [0,7.5,500] ),
+               parametric( x => [ fresnelC(x), fresnelS(x) ], [0,-7.5,500] ) ];
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The curve is parametrically defined by the Fresnel cosine and sine integrals:</p>
+
+\[ \left[ ~ \int_0^x \cos \left( \frac{\pi}{2} t^2 \right) dt ~ ,
+            \int_0^x \cos \left( \frac{\pi}{2} t^2 \right) dt \right] ~ \]
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

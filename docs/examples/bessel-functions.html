@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Bessel Functions of First Kind</title>
+<title>Bessel Functions</title>
 <link rel="stylesheet" type="text/css" href="../style.css">
 <style></style>
 </head>
@@ -10,9 +10,9 @@
 <script src="../../build/mathcell.js"></script>
 <script src="../../../math/build/math.js"></script>
 
-<p>Bessel functions of the first kind for both positive (blue) and negative (red) real order <i>n</i>:</p>
+<p>Bessel functions of the first kind or second kind for both positive (blue) and negative (red) real order <i>n</i>:</p>
 
-<div class="mathcell" style="height: 5in">
+<div class="mathcell" style="height: 5.5in">
 <script>
 
 var parent = document.currentScript.parentNode;
@@ -20,21 +20,36 @@ var parent = document.currentScript.parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [ { type: 'slider', max: 5, default: .5,
+MathCell( id, [ { type: 'buttons', values: [ 'first', 'second' ],
+                                   labels: [ 'First Kind', 'Second Kind' ],
+                                   name: 'kind', width: '1.5in' },
+                { type: 'slider', max: 5, default: .5,
                                   name: 'n', label: 'n' },
                 { type: 'checkbox', name: 'derivatives', label: 'Show derivatives:' } ] );
 
 parent.update = function( id ) {
 
+  var kind = getVariable( id, 'kind' );
   var n = getVariable( id, 'n' );
   var derivatives = getVariable( id, 'derivatives' );
 
-  if ( derivatives )
-    var data = [ plot( x => diff( x => besselJ(n,x), x ), [.01,15] ),
-                 plot( x => diff( x => besselJ(-n,x), x ), [.01,15], { color: 'red' } ) ];
+  var data;
 
-  else var data = [ plot( x => besselJ(n,x), [.01,15] ),
-                    plot( x => besselJ(-n,x), [.01,15], { color: 'red' } ) ];
+  if ( derivatives )
+
+    data = kind === 'first'
+           ? [ plot( x => diff( x => besselJ(n,x), x ), [.01,15] ),
+               plot( x => diff( x => besselJ(-n,x), x ), [.01,15], { color: 'red' } ) ]
+           : [ plot( x => diff( x => besselY(n,x), x ), [.01,15] ),
+               plot( x => diff( x => besselY(-n,x), x ), [.01,15], { color: 'red' } ) ];
+
+  else
+
+    data = kind === 'first'
+           ? [ plot( x => besselJ(n,x), [.01,15] ),
+               plot( x => besselJ(-n,x), [.01,15], { color: 'red' } ) ]
+           : [ plot( x => besselY(n,x), [.01,15] ),
+               plot( x => besselY(-n,x), [.01,15], { color: 'red' } ) ];
 
   var config = { type: 'svg', yMin: -.75, yMax: 1.1 };
 

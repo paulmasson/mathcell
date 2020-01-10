@@ -1295,7 +1295,7 @@ function sphere( radius, options={} ) {
 
     var a = Math.PI * i / steps;
 
-    for ( var j = 0 ; j <= steps ; j++ ) {
+    for ( var j = 0 ; j < steps ; j++ ) {
 
       var b = 2 * Math.PI * j / steps;
 
@@ -1307,21 +1307,27 @@ function sphere( radius, options={} ) {
 
   }
 
-  for ( var i = 2 ; i < steps + 2 ; i++ )
+  for ( var i = 2 ; i < steps + 1 ; i++ )
     faces.push( [ 0, i, i+1 ] ); // top
+
+  faces.push( [ 0, steps + 1, 2 ] ); // avoid seam
 
   for ( var i = 1 ; i < steps - 1 ; i++ ) {
 
-    var k = ( i - 1 ) * ( steps + 1 ) + 2;
+    var k = ( i - 1 ) * steps + 2;
 
-    for ( var j = 0 ; j < steps ; j++ )
+    for ( var j = 0 ; j < steps - 1 ; j++ )
 
-      faces.push( [ k+j, k+j + steps+1, k+j+1 + steps+1, k+j+1 ] );
+      faces.push( [ k+j, k+j + steps, k+j+1 + steps, k+j+1 ] );
+
+    faces.push( [ k + steps - 1, k + 2*steps - 1, k + steps, k ] ); // avoid seam
 
   }
 
-  for ( var i = vertices.length - steps - 1 ; i < vertices.length - 1 ; i++ )
+  for ( var i = vertices.length - steps ; i < vertices.length - 1 ; i++ )
     faces.push( [ 1, i+1, i ] ); // bottom
+
+  faces.push( [ 1, vertices.length - steps, vertices.length - 1 ] ); // avoid seam
 
   if ( 'center' in options ) translate( vertices, options.center );
 

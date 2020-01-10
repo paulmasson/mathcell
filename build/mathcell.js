@@ -1343,7 +1343,7 @@ function cylinder( radius, height, options={} ) {
   var vertices = [ [ 0, 0, h ], [ 0, 0, -h ] ];
   var faces = [];
 
-  for ( var i = 0 ; i <= steps ; i++ ) {
+  for ( var i = 0 ; i < steps ; i++ ) {
 
     var a = 2 * Math.PI * i / steps;
 
@@ -1352,16 +1352,28 @@ function cylinder( radius, height, options={} ) {
 
   }
 
-  if ( !options.openEnded )
+  if ( !options.openEnded ) {
+
    for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
      faces.push( [ 0, i, i+2 ] );
+
+   faces.push( [ 0, vertices.length - 2, 2 ] ); // avoid seam
+
+  }
 
   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
     faces.push( [ i, i+1, i+3, i+2 ] );
 
-  if ( !options.openEnded )
+  faces.push( [ vertices.length - 2, vertices.length - 1, 3, 2 ] ); // avoid seam
+
+  if ( !options.openEnded ) {
+
    for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
      faces.push( [ 1, i+3, i+1 ] );
+
+   faces.push( [ 1, 3, vertices.length - 1 ] ); // avoid seam
+
+  }
 
   if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
 

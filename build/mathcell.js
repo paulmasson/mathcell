@@ -1367,6 +1367,47 @@ function cylinder( radius, height, options={} ) {
 
 }
 
+function cone( radius, height, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
+  var h = height / 2;
+
+  var vertices = [ [ 0, 0, -h ], [ 0, 0, h ] ];
+  var faces = [];
+
+  for ( var i = 0 ; i < steps ; i++ ) {
+
+    var a = 2 * Math.PI * i / steps;
+
+    vertices.push( [ r * Math.cos(a), r * Math.sin(a), -h ] );
+
+  }
+
+  for ( var i = 2 ; i < vertices.length - 1 ; i++ )
+    faces.push( [ 0, i, i+1 ], [ 1, i, i+1 ] );
+
+  faces.push( [ 0, vertices.length - 1, 2 ], [ 1, vertices.length - 1, 2 ] ); // avoid seam
+console.log(vertices)
+console.log(faces)
+  if ( 'axis' in options ) {
+
+    var v = options.axis;
+    var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
+
+    rotate( vertices, angle, [ -v[1], v[0], 0 ] );
+
+  }
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
 
 function svgPlot( id, data, config ) {
 

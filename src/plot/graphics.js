@@ -6,18 +6,41 @@
 function arrow( begin, end, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  options.fill = true;
 
-  // assume 2D for now
-  var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
-  var n = [ t[1], -t[0] ];
-  var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
+  if ( begin.length === 2 ) {
 
-  size = .05;
-  var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
-  var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
+    options.fill = true;
 
-  return [ { points: [ begin, end, p1, p2, end ], options: options, type: 'line' } ];
+    var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
+    var n = [ t[1], -t[0] ];
+    var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
+
+    var size = .05 * ( options.size ? options.size : 1 );
+    var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
+    var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
+
+    return [ { points: [ begin, end, p1, p2, end ], options: options, type: 'line' } ];
+
+  } else {
+
+    var h = Math.sqrt( (end[0]-begin[0])**2 + (end[1]-begin[1])**2 + (end[2]-begin[2])**2 ) / 2;
+    var size = .1 * ( options.size ? options.size : 1 );
+
+    var center = [ (end[0]+begin[0])/2, (end[1]+begin[1])/2, (end[2]+begin[2])/2 ];
+    var axis = normalize( [ end[0]-begin[0], end[1]-begin[1], end[2]-begin[2] ] );
+
+    options.center = center;
+    options.axis = axis;
+    var body = cylinder( size/3, 2*h, options )[0];
+
+    var center2 = [ center[0] + h*axis[0], center[1] + h*axis[1], center[2] + h*axis[2] ];
+
+    options.center = center2;
+    var head = cone( size, size, options )[0];
+
+    return [ body, head ];
+
+  }
 
 }
 

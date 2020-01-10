@@ -524,6 +524,15 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
 }
 
+function rotateFromZAxis( points, vector ) {
+
+  var v = vector;
+  var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
+
+  rotate( points, angle, [ -v[1], v[0], 0 ] );
+
+}
+
 // presentation functions
 
 function getCompleteCode() {
@@ -1263,6 +1272,8 @@ function box( width, depth, height, options={} ) {
   var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
                 [0,3,7,4], [1,5,6,2] ];
 
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
+
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
@@ -1352,14 +1363,7 @@ function cylinder( radius, height, options={} ) {
    for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
      faces.push( [ 1, i+3, i+1 ] );
 
-  if ( 'axis' in options ) {
-
-    var v = options.axis;
-    var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
-
-    rotate( vertices, angle, [ -v[1], v[0], 0 ] );
-
-  }
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
 
   if ( 'center' in options ) translate( vertices, options.center );
 
@@ -1391,16 +1395,8 @@ function cone( radius, height, options={} ) {
     faces.push( [ 0, i, i+1 ], [ 1, i, i+1 ] );
 
   faces.push( [ 0, vertices.length - 1, 2 ], [ 1, vertices.length - 1, 2 ] ); // avoid seam
-console.log(vertices)
-console.log(faces)
-  if ( 'axis' in options ) {
 
-    var v = options.axis;
-    var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
-
-    rotate( vertices, angle, [ -v[1], v[0], 0 ] );
-
-  }
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
 
   if ( 'center' in options ) translate( vertices, options.center );
 

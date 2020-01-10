@@ -177,6 +177,15 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
 }
 
+function rotateFromZAxis( points, vector ) {
+
+  var v = vector;
+  var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
+
+  rotate( points, angle, [ -v[1], v[0], 0 ] );
+
+}
+
 // presentation functions
 
 function getCompleteCode() {

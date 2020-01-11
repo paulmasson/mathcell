@@ -6,6 +6,7 @@
 function arrow( begin, end, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
 
   if ( begin.length === 2 ) {
 
@@ -191,6 +192,20 @@ function sphere( radius, options={} ) {
   if ( 'center' in options ) translate( vertices, options.center );
 
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+function ellipsoid( a, b, c, options={} ) {
+
+  var e = sphere( 1, { steps: options.steps ? options.steps : 20 } )[0];
+
+  e.vertices.forEach( v => { v[0] *= a; v[1] *= b; v[2] *= c; } );
+
+  if ( 'axis' in options ) rotateFromZAxis( e.vertices, options.axis );
+
+  if ( 'center' in options ) translate( e.vertices, options.center );
+
+  return [ e ];
 
 }
 

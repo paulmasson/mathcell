@@ -1770,6 +1770,7 @@ function threejsPlot( id, data, config ) {
   if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];
   if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
   if ( !( 'decimals' in config ) ) config.decimals = 2;
+  if ( !( 'equalAspect' in config ) ) config.equalAspect = false;
   if ( !( 'frame' in config ) ) config.frame = true;
   if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
 
@@ -1908,7 +1909,7 @@ var yRange = yMax - yMin;
 var zRange = zMax - zMin;
 var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
-if ( zRange > rRange && a[2] === 1 ) {
+if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
   a[2] = rRange / zRange;
   zMin *= a[2];
   zMax *= a[2];

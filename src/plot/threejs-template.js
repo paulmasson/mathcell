@@ -50,7 +50,7 @@ var yRange = yMax - yMin;
 var zRange = zMax - zMin;
 var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
 
-if ( zRange > rRange && a[2] === 1 ) {
+if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
   a[2] = rRange / zRange;
   zMin *= a[2];
   zMax *= a[2];

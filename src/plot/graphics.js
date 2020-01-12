@@ -197,6 +197,9 @@ function sphere( radius, options={} ) {
 
 function ellipsoid( a, b, c, options={} ) {
 
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
   var e = sphere( 1, { steps: options.steps ? options.steps : 20 } )[0];
 
   e.vertices.forEach( v => { v[0] *= a; v[1] *= b; v[2] *= c; } );
@@ -205,7 +208,7 @@ function ellipsoid( a, b, c, options={} ) {
 
   if ( 'center' in options ) translate( e.vertices, options.center );
 
-  return [ e ];
+  return [ { vertices: e.vertices, faces: e.faces, options: options, type: 'surface' } ];
 
 }
 

@@ -215,8 +215,18 @@ function graphic( id, data, config ) {
 
     case 'matrix':
 
-      s = '<table class="matrix" style="width: 95%; margin: auto; \
-                                        line-height: 1.5; text-align: center">';
+      var leftBracket = `
+<svg width="2%" height="100%" preserveAspectRatio="none"
+     xmlns="http://www.w3.org/2000/svg"
+     style="border: 1.5px solid black; border-right: none"></svg>`;
+
+      var rightBracket = `
+<svg width="2%" height="100%" preserveAspectRatio="none"
+     xmlns="http://www.w3.org/2000/svg"
+     style="border: 1.5px solid black; border-left: none"></svg>`;
+
+      var s = `
+<table style="display: inline-block; width: auto; margin: auto; line-height: 1.5; text-align: center">`;
 
       for ( var i = 0 ; i < data.length ; i++ ) {
         s += '<tr>';
@@ -226,7 +236,9 @@ function graphic( id, data, config ) {
         s += '</tr>';
       }
 
-      return s + '</table>';
+      s += '</table>';
+
+      return leftBracket + s + rightBracket;
 
     default:
 
@@ -327,6 +339,10 @@ function evaluate( id, data, config ) {
 
       output.innerHTML = graphic( id, data[i], c );
       if ( c.type === 'threejs' ) iOSFix( output );
+      if ( c.type === 'matrix' ) {
+        output.style.border = 'none';
+        output.style.textAlign = 'center';
+      }
 
     }
 

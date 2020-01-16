@@ -696,33 +696,6 @@ input[type=radio]:checked + label {
 
 }
 
-/* Courtesy of http://jsfiddle.net/NQ6ww/38/ */
-
-.matrix:before, .matrix:after {
-
-  content: "";
-  position: absolute;
-  top: 0;
-  border: 1.5px solid black;
-  width: 10px;
-  height: 100%;
-
-}
-
-.matrix:before {
-
-  left: 5px;
-  border-right: 0px;
-
-}
-
-.matrix:after {
-
-  right: 5px;
-  border-left: 0px;
-
-}
-
 /*
 Generated at http://www.cssportal.com/style-input-range/
 Thumb is 20px by 25px with 5px radius

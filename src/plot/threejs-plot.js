@@ -80,6 +80,8 @@ function threejsPlot( id, data, config ) {
     }
   } );
 
+  var border = config.no3DBorder ? 'none' : '1px solid black';
+
   config = JSON.stringify( config );
 
   var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
@@ -89,7 +91,6 @@ function threejsPlot( id, data, config ) {
   lines = JSON.stringify( lines );
   surfaces = JSON.stringify( surfaces );
 
-  var border = config.no3DBorder ? 'none' : '1px solid black';
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: ${border};"

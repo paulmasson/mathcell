@@ -210,7 +210,7 @@ function graphic( id, data, config ) {
 
       var center = config.center ? 'text-align: center' : '';
 
-      return `<div style="white-space: nowrap; overflow-x: auto; ${center}">
+      return `<div style="height: 100%; white-space: nowrap; overflow-x: auto; ${center}">
               ${JSON.stringify( data ).replace( /\"/g, '' )} </div>`;
 
     case 'matrix':

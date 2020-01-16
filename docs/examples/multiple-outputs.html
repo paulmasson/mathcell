@@ -1,0 +1,56 @@
+<html>
+<head>
+<title>Multiple Outputs</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>An example showing multiple outputs, one for each main type of output:</p>
+
+<div class="mathcell" style="height: 4in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [], { multipleOutputs: [ [0,0], [0,0] ] } );
+
+parent.update = function( id ) {
+
+  var data = [ [ plot( Math.sin, [-Math.PI,Math.PI] ) ],
+               [ box( 1, 1, 1, { color: 'red' } ) ],
+               [ [1,2,3], [4,5,6], [7,8,9]  ],
+               'Hello World!' ];
+
+  var config =  [ { type: 'svg' },
+                  { type: 'threejs', frame: false },
+                  { type: 'matrix' },
+                  { type: 'text', center: true } ];
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Data for SVG and 3D plots are currently entered inside an explicit array to allow easily for multiple objects in each. Since a matrix is already expected to be an array, there is currently no additional outer array. Text output is intended to a display a single object or string, so again there is currently no additional outer array, but multiple lines are easily included via HTML line breaks.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -122,7 +122,7 @@ function x3dPlot( id, data, config ) {
     html += `
 <Shape>
 <LineSet>
-<Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"/>
+<Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"></Coordinate>
 </LineSet>
 </Shape>` );
 
@@ -164,9 +164,9 @@ function x3dPlot( id, data, config ) {
     html += `
 <Shape>
 <Appearance>
-<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"/>
+<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
 </Appearance>
-<IndexedFaceSet coordIndex="${indices}">
+<IndexedFaceSet creaseAngle="1.57" coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>`;
 
     if ( 'colors' in s.options ) {

@@ -11,7 +11,7 @@
 
 <p>A few colored objects to test the experimental X3D viewer:</p>
 
-<div class="mathcell" style="height: 5in">
+<div class="mathcell" style="height: 6in">
 <script>
 
 var parent = document.currentScript.parentNode;
@@ -19,9 +19,14 @@ var parent = document.currentScript.parentNode;
 var id = generateId();
 parent.id = id;
 
-MathCell( id, [] );
+MathCell( id, [ { type: 'buttons', values: [ 'x3dom', 'x_ite' ], width: '1in',
+                                   name: 'viewer', label: 'Viewer:' },
+                { type: 'checkbox', name: 'saveAsXML', label: 'Save as XML:' } ] );
 
 parent.update = function( id ) {
+
+  var viewer = getVariable( id, 'viewer' );
+  var saveAsXML = getVariable( id, 'saveAsXML' );
 
   function sinc( x, y ) {
  
@@ -38,7 +43,7 @@ parent.update = function( id ) {
                parametric( (x,y) => [ x, y, 1-x**2-y**2 ], [-1,1], [-1,1],
                            { colormap: (x,y) => hueToColor( 1-x**2-y**2 ) } ) ];
 
-  var config = { type: 'x3d' };
+  var config = { type: 'x3d', viewer: viewer, saveAsXML: saveAsXML };
 
   evaluate( id, data, config );
 

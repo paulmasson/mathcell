@@ -2421,26 +2421,16 @@ function x3dPlot( id, data, config ) {
 
   var cr = compositeRotation( zRotation, xyRotation );
 
-  var html = `
-<html>
-<head>
-<title></title>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="https://www.x3dom.org/download/x3dom.css">
-</head>
-
-<body style="margin: 0px">
-
-<script src="https://www.x3dom.org/download/x3dom.js"></script>
-
-<X3D width="${width}" height="${height}" style="border: none">
+  var x3d = `
+<X3D width="${width}" height="${height}">
 <Scene>
+<Background skyColor="1 1 1"></Background>
 <Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
            orientation="${cr[1].join(' ')} ${cr[0]}"
            centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
 
   if ( frame ) boxHelper.forEach( a =>
-    html += `
+    x3d += `
 <Shape>
 <LineSet>
 <Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"></Coordinate>
@@ -2482,7 +2472,7 @@ function x3dPlot( id, data, config ) {
     rgb.forEach( (e,i,a) => a[i] /= 255 );
     var color = rgb.join(' '); 
 
-    html += `
+    x3d += `
 <Shape>
 <Appearance>
 <TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
@@ -2499,19 +2489,58 @@ function x3dPlot( id, data, config ) {
         rgb = roundTo( rgb, 3 );
         colors +=  rgb.join(' ') + ' ';
       }
-      html += `
+      x3d += `
 <Color color="${colors}"></Color>`;
     }
 
-    html += `
+    x3d += `
 </IndexedFaceSet>
 </Shape>`;
 
   }
 
-  html += `
+  x3d += `
 </Scene>
-</X3D>
+</X3D>`;
+
+  if ( config.saveAsXML ) {
+
+    var xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
+${x3d}`;
+
+    var blob = new Blob( [ xml ] );
+    var a = document.body.appendChild( document.createElement( 'a' ) );
+    a.href = window.URL.createObjectURL( blob );
+    a.download = 'scene.xml';
+    a.click();
+
+  }
+
+  var stylesheet = config.viewer === 'x3dom' ?
+`<link rel="stylesheet" type="text/css" href="https://www.x3dom.org/download/x3dom.css">` :
+`<link rel="stylesheet" type="text/css" href="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.css"/>`;
+
+  var script = config.viewer === 'x3dom' ?
+`<script src="https://www.x3dom.org/download/x3dom.js"></script>` :
+`<script src="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.min.js"></script>
+<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>`;
+
+  var html = `
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+${stylesheet}
+</head>
+
+<body style="margin: 0px">
+
+${script}
+
+<X3DCanvas style="width: ${width}px; height: ${height}px">
+${x3d}
+</X3DCanvas>
 
 </body>
 </html>`;

@@ -34,14 +34,17 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
 
   function lerp( u1, u2 ) {
 
+    // Szudzik pairing ignoring ordering
+    var n = u1[4] < u2[4] ? u1[4] + u2[4]*u2[4] : u1[4]*u1[4] + u2[4];
+
+    var p = inVertices.indexOf( n );
+    if ( p >= 0 ) return p;
+
     var m = ( level - u1[3] ) / ( u2[3] - u1[3] );
 
     var x = u1[0] + m * ( u2[0] - u1[0] );
     var y = u1[1] + m * ( u2[1] - u1[1] );
     var z = u1[2] + m * ( u2[2] - u1[2] );
-
-    // Szudzik pairing ignoring ordering
-    var n = u1[4] < u2[4] ? u1[4] + u2[4]*u2[4] : u1[4]*u1[4] + u2[4];
 
     return [ x, y, z, n ];
 
@@ -79,7 +82,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
         if ( v6[3] < level ) index += 64;
         if ( v7[3] < level ) index += 128;
 
-        if ( edgeTable[index] === 0 ) continue;
+        if ( edgeTable[index] === 0 || edgeTable[index] === 255 ) continue;
 
         if ( edgeTable[index] & 1 )    v[0]  = lerp( v0, v1 );
         if ( edgeTable[index] & 2 )    v[1]  = lerp( v1, v2 );
@@ -96,30 +99,24 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
 
         for ( var m = 0 ; triangleTable[index][m] != -1 ; m += 3 ) {
 
-          scratch = v[ triangleTable[index][m] ];
-          unique = scratch[3];
-          a = inVertices.indexOf( unique );
-          if ( a < 0 ) {
-            vertices.push( scratch.slice(0,3) );
-            inVertices.push( unique );
+          a = v[ triangleTable[index][m] ];
+          if ( !Number.isInteger(a) ) {
+            vertices.push( a.slice(0,3) );
+            inVertices.push( a[3] );
             a = vertices.length - 1;
           }
 
-          scratch = v[ triangleTable[index][m+1] ];
-          unique = scratch[3];
-          b = inVertices.indexOf( unique );
-          if ( b < 0 ) {
-            vertices.push( scratch.slice(0,3) );
-            inVertices.push( unique );
+          b = v[ triangleTable[index][m+1] ];
+          if ( !Number.isInteger(b) ) {
+            vertices.push( b.slice(0,3) );
+            inVertices.push( b[3] );
             b = vertices.length - 1;
           }
 
-          scratch = v[ triangleTable[index][m+2] ];
-          unique = scratch[3];
-          c = inVertices.indexOf( unique );
-          if ( c < 0 ) {
-            vertices.push( scratch.slice(0,3) );
-            inVertices.push( unique );
+          c = v[ triangleTable[index][m+2] ];
+          if ( !Number.isInteger(c) ) {
+            vertices.push( c.slice(0,3) );
+            inVertices.push( c[3] );
             c = vertices.length - 1;
           }
 

@@ -2429,13 +2429,15 @@ function x3dPlot( id, data, config ) {
            orientation="${cr[1].join(' ')} ${cr[0]}"
            centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
 
-  if ( frame ) boxHelper.forEach( a =>
-    x3d += `
+  if ( frame ) x3d += `
 <Shape>
-<LineSet>
-<Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"></Coordinate>
+<Appearance>
+<Material emissiveColor="0 0 0"></Material>
+</Appearance>
+<LineSet vertexCount="2 2 2 2 2 2 2 2 2 2 2 2">
+<Coordinate point="${boxHelper.map(a => a[0].concat(a[1]).join(' ')).join(', ')}"></Coordinate>
 </LineSet>
-</Shape>` );
+</Shape>`;
 
   for ( var i = 0 ; i < surfaces.length ; i++ ) {
 
@@ -2477,7 +2479,7 @@ function x3dPlot( id, data, config ) {
 <Appearance>
 <TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
 </Appearance>
-<IndexedFaceSet creaseAngle="1.57" coordIndex="${indices}">
+<IndexedFaceSet creaseAngle="1.57" solid="false" coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>`;
 
     if ( 'colors' in s.options ) {
@@ -2524,7 +2526,14 @@ ${x3d}`;
   var script = config.viewer === 'x3dom' ?
 `<script src="https://www.x3dom.org/download/x3dom.js"></script>` :
 `<script src="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.min.js"></script>
-<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>`;
+<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>
+<script>
+  //disable straighten horizon
+  X3D( function ready() {
+    var browser = X3D.getBrowser( 'X3DCanvas' );
+    browser.setBrowserOption( 'StraightenHorizon', false );
+  } );
+</script>`;
 
   var html = `
 <html>

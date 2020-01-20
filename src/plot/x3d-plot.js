@@ -27,6 +27,7 @@ function x3dPlot( id, data, config ) {
   }
 
   var frame = 'frame' in config ? config.frame : true;
+  var viewer = 'viewer' in config ? config.viewer : 'x3dom';
 
   var n = 'output' in config ? config.output : '';
   var output = document.getElementById( id + 'output' + n );

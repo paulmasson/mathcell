@@ -34,10 +34,10 @@
 </td></tr><tr><td>
   <code>includeVerticals</code></td><td><code>false</code>
 </td></tr><tr><td>
-  <code>ticks</code></td><td><code>auto</code>
+  <code>ticks</code></td><td>automatic
 </td></tr></table>
 
-<p><code>ticks</code> can be set to an array with two numbers determining distances between ticks, a value of <code>'auto'</code> for either axis in this array or simply the string <code>'auto'</code>, as well as <code>'none'</code> or <code>false</code> to disable ticks.</p>
+<p><code>axesLabels</code> is an array of two strings. <code>ticks</code> can be set to an array with two numbers determining distances between ticks, a value of <code>'auto'</code> for either axis in this array or simply the string <code>'auto'</code>, as well as <code>'none'</code> or <code>false</code> to disable ticks.</p>
 
 <br/><p>A <code>threejs</code> output displays a three-dimensional plot of the input data with the options and default values</p>
 
@@ -64,11 +64,11 @@
 </td></tr><tr><td>
   <code>decimals</code></td><td>2
 </td></tr><tr><td>
-  <code>equalAspect</code></td><td>false
+  <code>equalAspect</code></td><td><code>false</code>
 </td></tr><tr><td>
   <code>frame</code></td><td><code>true</code>
 </td></tr><tr><td>
-  <code>viewpoint</code></td><td><code>auto</code>
+  <code>viewpoint</code></td><td>automatic
 </td></tr><tr><td>
   <code>ambientLight</code></td><td>rgb(127,127,127)
 </td></tr><tr><td>
@@ -77,7 +77,7 @@
   <code>animate</code></td><td><code>false</code>
 </td></tr></table>
 
-<p><code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates. It is automatically preserved between renderings upon manipulation of inputs. <code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin.</p>
+<p><code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin. <code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates, that is automatically preserved between renderings upon manipulation of inputs.</p>
 
 <p><code>animate</code> can be used in conjuction with an option <code>rotationAxisAngle</code> on surfaces, where the latter option is an array with a three-dimensional normal vector and an angle. More animations will be coming.</p>
 
@@ -108,7 +108,7 @@
 </td></tr><tr><td>
   <code>saveAsXML</code></td><td><code>false</code>
 </td></tr><tr><td>
-  <code>viewer</code></td><td><code>'x3dom'</code>
+  <code>viewer</code></td><td>'x3dom'
 </td></tr></table>
 
 <p>Setting <code>saveAsXML</code> to <code>true</code> triggers a download to file. Available viewers are <a href="https://github.com/x3dom/x3dom">x3dom</a> and <a href="https://github.com/create3000/x_ite">x_ite</a>, but <code>threejs</code> is a superior choice at this time: this option looks forward to future three-dimensional rendering standards.</p>

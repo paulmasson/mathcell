@@ -16,6 +16,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   var zStep = ( zRange[1] - zRange[0] ) / ( zRange[2] - 1 );
 
   var d = []; // value data
+  var n = 0;  // unique data index
 
   for ( var i = 0 ; i < xRange[2] ; i++ ) {
     d[i] = [];
@@ -25,7 +26,8 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
       d[i][j] = [];
       for ( var k = 0 ; k < zRange[2] ; k++ ) {
         var z = zRange[0] + k * zStep;
-        d[i][j][k] = [ x, y, z, f(x,y,z) ];
+        d[i][j][k] = [ x, y, z, f(x,y,z), n ];
+        n++;
       }
     }
   }
@@ -38,17 +40,23 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
     var y = u1[1] + m * ( u2[1] - u1[1] );
     var z = u1[2] + m * ( u2[2] - u1[2] );
 
-    return [ x, y, z ];
+    // Szudzik pairing ignoring ordering
+    var n = u1[4] < u2[4] ? u1[4] + u2[4]*u2[4] : u1[4]*u1[4] + u2[4];
+
+    return [ x, y, z, n ];
 
   }
 
   var vertices = [], faces = [];
 
-  // adapted from http://paulbourke.net/geometry/polygonise/
+  // for filtering vertices
+  var inVertices = [], scratch, unique, a, b, c;
 
-  for ( var i = 0 ; i < d.length - 1 ; i++ ) {
-    for ( var j = 0 ; j < d[i].length - 1 ; j++ ) {
-      for ( var k = 0 ; k < d[i][j].length - 1 ; k++ ) {
+  // adapted from paulbourke.net/geometry/polygonise/
+
+  for ( var i = 0 ; i < xRange[2] - 1 ; i++ ) {
+    for ( var j = 0 ; j < yRange[2] - 1 ; j++ ) {
+      for ( var k = 0 ; k < zRange[2] - 1 ; k++ ) {
 
         var v0 = d[i][j][k];
         var v1 = d[i][j+1][k];
@@ -87,11 +95,36 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
         if ( edgeTable[index] & 2048 ) v[11] = lerp( v3, v7 );
 
         for ( var m = 0 ; triangleTable[index][m] != -1 ; m += 3 ) {
-          vertices.push( v[ triangleTable[index][m]   ],
-                         v[ triangleTable[index][m+1] ],
-                         v[ triangleTable[index][m+2] ] );
-          var l = vertices.length;
-          faces.push( [ l-3, l-2, l-1 ] );
+
+          scratch = v[ triangleTable[index][m] ];
+          unique = scratch[3];
+          a = inVertices.indexOf( unique );
+          if ( a < 0 ) {
+            vertices.push( scratch.slice(0,3) );
+            inVertices.push( unique );
+            a = vertices.length - 1;
+          }
+
+          scratch = v[ triangleTable[index][m+1] ];
+          unique = scratch[3];
+          b = inVertices.indexOf( unique );
+          if ( b < 0 ) {
+            vertices.push( scratch.slice(0,3) );
+            inVertices.push( unique );
+            b = vertices.length - 1;
+          }
+
+          scratch = v[ triangleTable[index][m+2] ];
+          unique = scratch[3];
+          c = inVertices.indexOf( unique );
+          if ( c < 0 ) {
+            vertices.push( scratch.slice(0,3) );
+            inVertices.push( unique );
+            c = vertices.length - 1;
+          }
+
+          faces.push( [ a, b, c ] );
+
         }
 
       }

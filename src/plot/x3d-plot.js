@@ -203,8 +203,14 @@ ${x3d}`;
   var script = config.viewer === 'x3dom' ?
 `<script src="https://www.x3dom.org/download/x3dom.js"></script>` :
 `<script src="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.min.js"></script>
-<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>`;
-
+<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>
+<script>
+//disable straighten horizon
+X3D ( function ready () {
+  var browser = X3D .getBrowser ("X3DCanvas");
+  browser .setBrowserOption('StraightenHorizon', false);
+});
+</script>`;
   var html = `
 <html>
 <head>

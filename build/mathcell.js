@@ -2617,7 +2617,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   var vertices = [], faces = [];
 
   // for filtering vertices
-  var inVertices = [], scratch, unique, a, b, c;
+  var inVertices = [], a, b, c;
 
   // adapted from paulbourke.net/geometry/polygonise/
 
@@ -2634,7 +2634,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
         var v6 = d[i+1][j+1][k+1];
         var v7 = d[i+1][j][k+1];
 
-        var v = []; // temp list of vertices
+        var v = []; // temp list of vertices or indices
         var index = 0;
 
         if ( v0[3] < level ) index += 1;

@@ -108,13 +108,13 @@ function x3dPlot( id, data, config ) {
            orientation="${cr[1].join(' ')} ${cr[0]}"
            centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
 
-  if ( frame ) boxHelper.forEach( a =>
-    x3d += `
+  if ( frame ) x3d += `
 <Shape>
-<LineSet>
-<Coordinate point="${a[0].join(' ')} ${a[1].join(' ')}"></Coordinate>
+<Appearance><Material emissiveColor='0 0 0'></Material></Appearance>
+<LineSet vertexCount='2 2 2 2 2 2 2 2 2 2 2 2'>
+<Coordinate point="${boxHelper.map(a => a[0].concat(a[1]).join(' ')).join(',')}"></Coordinate>
 </LineSet>
-</Shape>` );
+</Shape>`;
 
   for ( var i = 0 ; i < surfaces.length ; i++ ) {
 
@@ -156,7 +156,7 @@ function x3dPlot( id, data, config ) {
 <Appearance>
 <TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
 </Appearance>
-<IndexedFaceSet creaseAngle="1.57" coordIndex="${indices}">
+<IndexedFaceSet creaseAngle="1.57" solid='false' coordIndex="${indices}">
 <Coordinate point="${points}"></Coordinate>`;
 
     if ( 'colors' in s.options ) {

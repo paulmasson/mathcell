@@ -2665,23 +2665,20 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
 
           a = v[ triangleTable[index][m] ];
           if ( !Number.isInteger(a) ) {
-            vertices.push( a.slice(0,3) );
             inVertices.push( a[3] );
-            a = vertices.length - 1;
+            a = vertices.push( a.slice(0,3) ) - 1;
           }
 
           b = v[ triangleTable[index][m+1] ];
           if ( !Number.isInteger(b) ) {
-            vertices.push( b.slice(0,3) );
             inVertices.push( b[3] );
-            b = vertices.length - 1;
+            b = vertices.push( b.slice(0,3) ) - 1;
           }
 
           c = v[ triangleTable[index][m+2] ];
           if ( !Number.isInteger(c) ) {
-            vertices.push( c.slice(0,3) );
             inVertices.push( c[3] );
-            c = vertices.length - 1;
+            c = vertices.push( c.slice(0,3) ) - 1;
           }
 
           faces.push( [ a, b, c ] );

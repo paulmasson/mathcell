@@ -635,6 +635,19 @@ var mathcellStyle = document.createElement( 'style' );
 mathcellStyle.type = 'text/css';
 mathcellStyle.innerHTML = `
 
+.mathcell {
+
+  width: 5in;
+  margin: .25in auto .25in auto;
+  border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  padding: .25in .5in .5in .5in;
+  line-height: 2.5;
+
+}
+
 input[type=number] {
 
   -webkit-appearance: none;
@@ -682,19 +695,6 @@ input[type=radio]:checked + label {
 
   border-width: 2px;
   background-color: #fafafa
-
-}
-
-.mathcell {
-
-  width: 5in;
-  margin: .25in auto .25in auto;
-  border: 2px solid black;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-  padding: .25in .5in .5in .5in;
-  line-height: 2.5;
 
 }
 

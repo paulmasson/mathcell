@@ -97,21 +97,21 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
         if ( edgeTable[index] & 1024 ) v[10] = lerp( v2, v6 );
         if ( edgeTable[index] & 2048 ) v[11] = lerp( v3, v7 );
 
-        for ( var m = 0 ; triangleTable[index][m] != -1 ; m += 3 ) {
+        for ( var l = 0 ; triangleTable[index][l] != -1 ; l += 3 ) {
 
-          a = v[ triangleTable[index][m] ];
+          a = v[ triangleTable[index][l] ];
           if ( !Number.isInteger(a) ) {
             inVertices.push( a[3] );
             a = vertices.push( a.slice(0,3) ) - 1;
           }
 
-          b = v[ triangleTable[index][m+1] ];
+          b = v[ triangleTable[index][l+1] ];
           if ( !Number.isInteger(b) ) {
             inVertices.push( b[3] );
             b = vertices.push( b.slice(0,3) ) - 1;
           }
 
-          c = v[ triangleTable[index][m+2] ];
+          c = v[ triangleTable[index][l+2] ];
           if ( !Number.isInteger(c) ) {
             inVertices.push( c[3] );
             c = vertices.push( c.slice(0,3) ) - 1;

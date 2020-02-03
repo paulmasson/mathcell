@@ -2601,8 +2601,8 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
     // Szudzik pairing ignoring ordering
     var n = u1[4] < u2[4] ? u1[4] + u2[4]*u2[4] : u1[4]*u1[4] + u2[4];
 
-    var p = inVertices.indexOf( n );
-    if ( p >= 0 ) return p;
+    var p = inVertices[n];
+    if ( p ) return p;
 
     var m = ( level - u1[3] ) / ( u2[3] - u1[3] );
 
@@ -2617,7 +2617,7 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
   var vertices = [], faces = [];
 
   // for filtering vertices
-  var inVertices = [], a, b, c;
+  var inVertices = {}, n, a, b, c;
 
   // adapted from paulbourke.net/geometry/polygonise/
 
@@ -2665,20 +2665,23 @@ function isosurface( f, xRange, yRange, zRange, options={} ) {
 
           a = v[ triangleTable[index][l] ];
           if ( !Number.isInteger(a) ) {
-            inVertices.push( a[3] );
+            n = a[3];
             a = vertices.push( a.slice(0,3) ) - 1;
+            inVertices[n] = a;
           }
 
           b = v[ triangleTable[index][l+1] ];
           if ( !Number.isInteger(b) ) {
-            inVertices.push( b[3] );
+            n = b[3];
             b = vertices.push( b.slice(0,3) ) - 1;
+            inVertices[n] = b;
           }
 
           c = v[ triangleTable[index][l+2] ];
           if ( !Number.isInteger(c) ) {
-            inVertices.push( c[3] );
+            n = c[3];
             c = vertices.push( c.slice(0,3) ) - 1;
+            inVertices[n] = c;
           }
 
           faces.push( [ a, b, c ] );

@@ -38,11 +38,17 @@ xhr.onload = function() {
   var files = JSON.parse( xhr.response );
   var xhrs = [];
 
-  for ( var i = 0 ; i < files.length ; i++ ) { 
+  for ( var i = 0 ; i < files.length ; i++ ) {
+
+    var div = document.createElement( 'div' );
+    div.id = 'example' + i;
+    div.style.display = 'inline-block';
+    document.body.appendChild( div );
 
     xhrs[i] = new XMLHttpRequest();
     xhrs[i].fileName = 'examples/' + files[i].name;
     xhrs[i].responseType = 'text';
+    xhrs[i].id = div.id;
 
     xhrs[i].open( 'GET', xhrs[i].fileName, true );
 
@@ -77,7 +83,7 @@ ${cell.outerHTML}
       iframe.scrolling = 'no';
       a.appendChild( iframe );
 
-      document.body.appendChild( a );
+      document.getElementById( this.id ).appendChild( a );
 
       observer.observe( iframe );
 

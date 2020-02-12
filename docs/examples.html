@@ -50,18 +50,20 @@ xhr.onload = function() {
 
       var parser = new DOMParser();
       var dom = parser.parseFromString( this.response, 'text/html' );
+      var title = dom.getElementsByTagName( 'title' )[0];
       var cell = dom.getElementsByClassName( 'mathcell' )[0];
 
       var a = document.createElement( 'a' );
       a.href = this.fileName;
+      a.title = title.innerHTML;
 
       var div = document.createElement( 'div' );
       a.appendChild( div );
 
-      var math = this.response.search( 'math/' ) > -1 ? `
+      var math = this.response.indexOf( 'math/' ) > -1 ? `
 <script src="../../math/build/math.js"><\/script>` : '';
 
-      var mathjax = this.response.search( 'mathjax' ) > -1 ? `
+      var mathjax = this.response.indexOf( 'mathjax' ) > -1 ? `
 <script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
 
       var iframe = document.createElement( 'iframe' );

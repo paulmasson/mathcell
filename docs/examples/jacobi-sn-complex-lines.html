@@ -43,7 +43,7 @@ parent.update = function( id ) {
                                  sn( mul( complex(a,b), x ), m ).im, rate*x ], [0,100,5000] );
 
   curve[0].points.forEach( p => {
-    if ( Math.sqrt( p[0]*p[0] + p[1]*p[1] ) > 50 ) console.log(
+    if ( Math.hypot( p[0], p[1] ) > 50 ) console.log(
 `JacobiSN[${roundTo(p[2]/rate,2,false)}*(${a}+${b}I),${m}] = ${p[0]} ${ p[1] > 0 ? '+' : ''}${p[1]}i` )
   } );
 

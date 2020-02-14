@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>Binet Ellipsoid</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The Binet ellipsoid occurs in the description of the free rotation of an asymetrical rigid body. The curves trace the path of the angular momentum vector as seen from a frame of reference fixed in the body:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 10, default: 3,
+                                  name: 'LSq', label: '<i>L</i><sup>2</sup>' } ] );
+
+parent.update = function( id ) {
+
+  var I1 = 1, I2 = 2, I3 = 3, T = 1;
+
+  setLimit( id, 'LSq', 'min', 2*T*I1 );
+  setLimit( id, 'LSq', 'max', 2*T*I3 );
+
+  var LSq = getVariable( id, 'LSq' );
+
+  function f( t, sign ) {
+
+    var L1, L2, L3;
+
+    if ( LSq < 2*T*I2 ) {
+
+      L3 = Math.sqrt( ( 2*T - LSq/I1 ) / ( 1/I3 - 1/I1 ) ) * Math.cos(t);
+      L2 = Math.sqrt( ( 2*T - LSq/I1 ) / ( 1/I2 - 1/I1 ) ) * Math.sin(t);
+      L1 = sign * Math.sqrt( LSq - L2**2 - L3**2 );
+
+    } else {
+
+      L1 = Math.sqrt( ( 2*T - LSq/I3 ) / ( 1/I1 - 1/I3 ) ) * Math.cos(t);
+      L2 = Math.sqrt( ( 2*T - LSq/I3 ) / ( 1/I2 - 1/I3 ) ) * Math.sin(t);
+      L3 = sign * Math.sqrt( LSq - L1**2 - L2**2 );
+
+    }
+
+    return [ L3, L2, L1 ];
+
+  }
+
+  var data = [ parametric( t => f( t,  1 ), [0,2*Math.PI,300], { color: 'black' } ),
+               parametric( t => f( t, -1 ), [0,2*Math.PI,300], { color: 'black' } ),
+               ellipsoid( Math.sqrt(2*T*I3), Math.sqrt(2*T*I2), Math.sqrt(2*T*I1),
+                          { opacity: .1, singleSide: true } ) ];
+
+  var config = { type: 'threejs', frame: false, axes: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The curves are given by the intersection of the two surfaces</p>
+
+\[ \frac{L_1^2}{2I_1} + \frac{L_2^2}{2I_2} + \frac{L_3^2}{2I_3} = T
+   \hspace{5em} L_1^2 + L_2^2 + L_3^2 = L^2 \]
+
+<p>with the conventions and restrictions</p>
+
+\[ I_1 < I_2 < I_3 \hspace{5em} 2TI_1 < L^2 < 2TI_3 \]
+
+<p>The curves are thus the intersection of an angular momentum sphere with an energy ellipsoid. The equation for the sphere is used to eliminate either <i>L</i><sub>1</sub> (the vertical blue axis) or <i>L</i><sub>3</sub> (the left red axis) from the equation of the ellipsoid. The resulting ellipse is then parametrized by modifying a circle with appropiate scalings.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

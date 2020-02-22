@@ -461,9 +461,7 @@ function floorTo( x, n, significant=true ) {
 
 function normalize( vector ) {
 
-  var len = 0;
-  for ( var i = 0 ; i < vector.length ; i++ ) len += vector[i]**2;
-  len = Math.sqrt( len );
+  var len = Math.hypot.apply( null, vector );
   for ( var i = 0 ; i < vector.length ; i++ ) vector[i] /= len;
   return vector;
 

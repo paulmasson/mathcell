@@ -500,15 +500,14 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
     case 3:
 
-      var n = vector;
-      var norm = Math.sqrt( n[0]*n[0] + n[1]*n[1] + n[2]*n[2] );
+      var norm = Math.hypot.apply( null, vector );
       if ( norm === 0 ) break;
       if ( norm !== 1 )
-        for ( var i = 0 ; i < 3 ; i++ ) n[i] /= norm;
+        for ( var i = 0 ; i < 3 ; i++ ) vector[i] /= norm;
 
-      var n1 = n[0];
-      var n2 = n[1];
-      var n3 = n[2];
+      var n1 = vector[0];
+      var n2 = vector[1];
+      var n3 = vector[2];
       var c = Math.cos(angle);
       var s = Math.sin(angle);
 
@@ -544,10 +543,9 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
 function rotateFromZAxis( points, vector ) {
 
-  var v = vector;
-  var angle = Math.acos( v[2] / Math.sqrt( v[0]*v[0] + v[1]*v[1] + v[2]*v[2] ) );
+  var angle = Math.acos( vector[2] / Math.hypot.apply( null, vector ) );
 
-  rotate( points, angle, [ -v[1], v[0], 0 ] );
+  rotate( points, angle, [ -vector[1], vector[0], 0 ] );
 
 }
 

@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Cabello's Curve</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A simple yet beautiful curve used by Ricard Cabello, aka Mr.doob:</p>
+ 
+<div class="mathcell" style="width: 6in; height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  data = [ parametric( t => [ Math.sin(.7*t), Math.cos(.3*t), Math.sin(.2*t) ],
+                       [ 0, 20*Math.PI, 200 ],
+                       { radius: .01, color: 'limegreen',
+                         group: 'main', rotationAxisAngle: [ [0,0,1], .01 ] } ) ] 
+
+  var config = { type: 'threejs', frame: false, animate: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The parametrization of the curve is</p>
+
+\[ \mathbf{r} = [ \hspace{.3em} \sin(.7t), \hspace{.3em} \cos(.3t), \hspace{.3em} \sin(.2t) \hspace{.3em} ] \]
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

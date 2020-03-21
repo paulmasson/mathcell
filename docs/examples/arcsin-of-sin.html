@@ -36,7 +36,7 @@ parent.update = function( id ) {
   else
     data.push( plot( theta => Math.asin( n * Math.sin(theta) ), [ 0, Math.asin(1/n) ] ) );
 
-  var config = { type: 'svg', axesLabels:[ '&theta;', '' ] };
+  var config = { type: 'svg', axesLabels: [ '&theta;', '' ] };
 
   evaluate( id, data, config );
 

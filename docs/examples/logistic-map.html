@@ -1,0 +1,85 @@
+<html>
+<head>
+<title>Logistic Map</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The logistic map is one of the simplest examples of the emergence of chaos. This double display allows one to evaluate the returned values as a function of the free parameter <i>r</i> as well as plot them collectively.</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ [ { type: 'number', max: 4, default: 2,
+                                    name: 'r', label: 'r' },
+                  { type: 'number', max: 1, default: .5,
+                                    name: 'x', label: '<i>x</i><sub>0</sub>' },
+                  { type: 'number', min: 100, max: 1e6, step: 1, default: 1000,
+                                    name: 'nMax', label: '<i>n</i><sub>max</sub>' } ] ],
+              { multipleOutputs: [[0],[0]] } );
+
+var points = [ point( [4,1], { size: .01 } ) ];
+
+parent.update = function( id ) {
+
+  var r = getVariable( id, 'r' );
+  var x = getVariable( id, 'x' );
+  var nMax = getVariable( id, 'nMax' );
+
+  var values = [], unique = [];
+
+  for ( var i = 0 ; i < nMax ; i++ ) {
+    x = r * x * (1-x);
+    values.push( x.toFixed(5) );
+  }
+
+  var retrievingData = true;
+
+  while ( retrievingData ) {
+    var v = values.pop();
+    if ( !unique.includes(v) ) unique.push(v);
+    else retrievingData = false;
+  }
+
+  unique.forEach( v => points.push( point( [r,v], { size: .5 } ) ) );
+
+  var data = [ 'Unique values: ' + unique, points ];
+
+  var config = [ { type: 'text' }, { type: 'svg', yMin: 0, yMax: 1 } ];
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The logistic map is determined by the iteration</p>
+
+\[ x_{n+1} = r x_n ( 1 - x_n ) \]
+
+<p>from some initial value \( 0 < x_0 < 1 \). The map returns a single value for \( r \le 3 \), after which its oscillates between two value, then four, then eight, <i>etc.</i> At \( r \approx 3.56995 \) the behavior becomes chaotic.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

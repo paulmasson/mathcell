@@ -118,7 +118,7 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
   var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture } ) );
   sprite.position.set( x, y, z );
-  sprite.scale.set( 1, .25 ); // ratio of width to height
+  sprite.scale.set( 1, .25, 1 ); // ratio of width to height
   scene.add( sprite );
 
 }
@@ -427,7 +427,7 @@ function render() {
     if ( child.type === 'Sprite' ) {
       var adjust = scratch.addVectors( child.position, scene.position )
                           .sub( camera.position ).length() / 5;
-      child.scale.set( adjust, .25*adjust ); // ratio of canvas width to height
+      child.scale.set( adjust, .25*adjust, 1 ); // ratio of canvas width to height
     }
 
     if ( child.userData.rotateOnAxis && animate )

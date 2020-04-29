@@ -1,0 +1,71 @@
+<html>
+<head>
+<title>Umbilic Torus</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Umbilic_torus">umbilic torus</a> appears in catastrophe theory in the context of classifying singularities. A clipping plan is included to demonstrate that the cross section is a <a href="https://en.wikipedia.org/wiki/Deltoid_curve">deltoid curve</a>.</p>
+
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'checkbox', name: 'clip', label: 'Show cross section:' } ] );
+
+parent.update = function( id ) {
+
+  var clip = getVariable( id, 'clip' );
+
+  var s = parametric( (u,v) => [ ( 7 + Math.cos( u/3 - 2*v ) + 2*Math.cos( u/3 + v ) ) * Math.sin(u),
+                                 ( 7 + Math.cos( u/3 - 2*v ) + 2*Math.cos( u/3 + v ) ) * Math.cos(u), 
+                                 Math.sin( u/3 - 2*v ) + 2*Math.sin( u/3 + v ) ],
+                      [-Math.PI,Math.PI], [-Math.PI,Math.PI], { colormap: 'cool' } );
+
+  var data = [ s ];
+
+  var config = { type: 'threejs', frame: false };
+
+  if ( clip ) config.clippingPlane = [ [-1,-1,0], 0 ];
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>This umbilic torus is defined parametrically by</p>
+
+\[ \begin{align}
+x &= \left[ 7 + \cos \left( \frac{u}{3} - 2v \right)
+              + 2 \cos \left( \frac{u}{3} + v \right) \right] \sin u \\
+y &= \left[ 7 + \cos \left( \frac{u}{3} - 2v \right)
+              + 2 \cos \left( \frac{u}{3} + v \right) \right] \cos u \\
+z &= \sin \left( \frac{u}{3} - 2v \right) + 2 \sin \left( \frac{u}{3} + v \right)
+\end{align} \]
+
+<p>with \( -\pi \le u \le \pi \) and \( -\pi \le v \le \pi \).</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

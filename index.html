@@ -38,13 +38,24 @@ xhr.onload = function() {
   xhr.onload = function() {
 
     var parser = new DOMParser();
-    var dom = parser.parseFromString( xhr.response, 'text/html' );
+    var dom = parser.parseFromString( this.response, 'text/html' );
     var cell = dom.getElementsByClassName( 'mathcell' )[0];
 
+    var math = this.response.includes( 'math.js' ) ? `
+<script src="../math/build/math.js"><\/script>` : '';
+
+    var mathjax = this.response.includes( 'mathjax' ) ? `
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
+
     var view = document.getElementById( 'view' );
-    view.srcdoc = '<html><body>'
-                  + '<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script>'
-                  + cell.outerHTML + '</body></html>';
+    view.srcdoc = `
+<html>
+<body>
+<script src="https://paulmasson.github.io/mathcell/build/mathcell.js"><\/script> ${math} ${mathjax}
+${cell.outerHTML}
+</body>
+</html>
+`;
  
   }
 

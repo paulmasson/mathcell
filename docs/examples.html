@@ -66,10 +66,10 @@ xhr.onload = function() {
       var div = document.createElement( 'div' );
       a.appendChild( div );
 
-      var math = this.response.indexOf( 'math/' ) > -1 ? `
+      var math = this.response.includes( 'math.js' ) ? `
 <script src="../../math/build/math.js"><\/script>` : '';
 
-      var mathjax = this.response.indexOf( 'mathjax' ) > -1 ? `
+      var mathjax = this.response.includes( 'mathjax' ) ? `
 <script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
 
       var iframe = document.createElement( 'iframe' );

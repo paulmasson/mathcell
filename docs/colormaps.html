@@ -3,32 +3,71 @@
 <title>MathCell - Colormaps</title>
 <link rel="stylesheet" type="text/css" href="style.css">
 <style>
-  .right { text-align: right }
+
+button { width: 2in }
+
+.right { text-align: right }
+
 </style>
 </head>
 
 <body>
 
-<table id="maps"></table>
+<p style="text-align: center">
+<button onclick="update()">Natural Order</button>
+<button onclick="update(true)">Alphabetical</button>
+</p><br/>
+
+<table id="bars"></table>
 
 <script src="../build/mathcell.js"></script>
 
 <script>
 
-// document not fully ready if use one loop...
+update();
 
-Object.keys( colormaps ).forEach ( cm => {
+function update( sorted=false ) {
 
-  maps.innerHTML += `
-<tr><td class="right">${cm}</td><td><canvas id="${cm}"></canvas></td></tr>
-<tr><td>&nbsp;</td></tr>
-  `;
+  bars.innerHTML = '';
 
-});
+  // document not fully ready if use one loop...
 
-Object.keys( colormaps ).forEach ( cm => {
+  if ( sorted ) {
 
-  var canvas = document.getElementById( cm );
+    var alpha = {};
+
+    Object.keys( colormaps ).sort().forEach( k => alpha[k] = colormaps[k] );
+
+    Object.keys( alpha ).forEach( cm => addRow(cm) );
+
+    Object.keys( alpha ).forEach( cm => addCanvas(cm) );
+
+  } else {
+
+    Object.keys( matplotlib ).forEach( cm => addRow(cm) );
+
+    bars.innerHTML += `
+<tr><td>&nbsp;</td></tr>`
+
+    Object.keys( mathematica ).forEach( cm => addRow(cm) );
+
+    Object.keys( colormaps ).forEach( cm => addCanvas(cm) );
+
+  }
+
+}
+
+function addRow( cm ) {
+
+  bars.innerHTML += `
+<tr><td class="right">${cm}</td><td id="${cm}"></td></tr>
+<tr><td>&nbsp;</td></tr>`;
+
+}
+
+function addCanvas( cm ) {
+
+  var canvas = document.createElement( 'canvas' );
   canvas.width = 500;
   canvas.height = 20;
 
@@ -45,7 +84,9 @@ Object.keys( colormaps ).forEach ( cm => {
   context.fillStyle = gradient;
   context.fillRect( 0, 0, 500, 20 );
 
-} );
+  document.getElementById( cm ).appendChild( canvas );
+
+}
 
 </script>
 

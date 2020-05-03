@@ -22,7 +22,7 @@ parent.id = id;
 var maps = Object.keys( colormaps );
 
 MathCell( id, [ { type: 'slider', max: maps.length - 1, default: 1, step: 1,
-                                  name: 'n', label: 'n' } ] );
+                                  name: 'n', label: 'Index:' } ] );
 
 parent.update = function( id ) {
 
@@ -34,7 +34,7 @@ parent.update = function( id ) {
                plot( x => f(x).g, [0,1], { color: 'green' } ),
                plot( x => f(x).b, [0,1], { color: 'blue' } ) ];
 
-  var config = { type: 'svg', axesLabels: [ '', maps[n] ] };
+  var config = { type: 'svg', axesLabels: [ '', maps[n] ], includeOrigin: true };
 
   evaluate( id, data, config );
 

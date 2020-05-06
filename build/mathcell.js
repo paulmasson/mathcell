@@ -844,6 +844,7 @@ document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
 
 
 // data from lib/matplotlib/_cm.py with clipping to [0,1] as for CSS
+// details in lib/matplotlib/colors.py LinearSegmentedColormap
 
 var matplotlib = {
 
@@ -880,6 +881,10 @@ var matplotlib = {
             g: [ [ x => .7812*x, [0,1] ] ],
             b: [ [ x => .4975*x, [0,1] ] ] },
 
+  bwr: { r: [ [ x => 2*x, [0,.5] ], [ x => 1, [.5,1] ] ],
+         g: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
+         b: [ [ x => 1, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ] },
+
   hsv: { r: [ [ x => hueToColor(x).r, [0,1] ] ],
          g: [ [ x => hueToColor(x).g, [0,1] ] ],
          b: [ [ x => hueToColor(x).b, [0,1] ] ] },
@@ -887,6 +892,10 @@ var matplotlib = {
   ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
            g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],
            b: [ [ x => x, [0,1] ] ] },
+
+  brg: { r: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
+         g: [ [ x => 0, [0,.5] ], [ x => 2*x - 1, [.5,1] ] ],
+         b: [ [ x => 1 - 2*x, [0,.5] ], [ x => 0, [.5,1] ] ] },
 
   rainbow: { r: [ [ x => Math.abs( 2*x - 1/2 ), [0,.75] ], [ x => 1, [.75,1] ] ],
              g: [ [ x => Math.sin( Math.PI*x ), [0,1] ] ],
@@ -919,6 +928,10 @@ var mathematica = {
             b: [ [ x => 3.025*x, [0,.17] ], [ x => .73 - 1.365*x, [.17,.5] ],
                  [ x => -.19 + .482*x, [.5,.67] ], [ x => -1.316 + 2.168*x, [.67,.82] ],
                  [ x => -2.032 + 3.031*x, [.82,1] ] ] },
+
+  thermometer: { r: [ [ x => .11 + 1.829*x - 1.445*x**3, [0,1] ] ],
+                 g: [ [ x => .035 + 3.79*x - 4.689*x**2 + .877*x**3, [0,1] ] ],
+                 b: [ [ x => .777 + 1.558*x - 3.767*x**2 + 1.587*x**3, [0,1] ] ] },
 
   watermelon: { r: [ [ x => .1 + 1.301*x, [0,.15] ], [ x => .137 + 1.029*x, [.15,.7] ],
                      [ x => .458 + .575*x, [.7,.85] ], [ x => 1.336 - .452*x, [.85,1] ] ],

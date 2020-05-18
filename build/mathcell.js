@@ -192,15 +192,15 @@ function graphic( id, data, config ) {
 
     case 'svg':
 
-      return svgPlot( id, data, config );
+      return svg( id, data, config );
 
     case 'threejs':
 
-      return threejsPlot( id, data, config );
+      return threejs( id, data, config );
 
     case 'x3d':
 
-      return x3dPlot( id, data, config );
+      return x3d( id, data, config );
 
     case 'text':
 
@@ -841,1794 +841,6 @@ input[type=range]::-moz-focus-outer {
 `;
 
 document.getElementsByTagName( 'head' )[0].appendChild( mathcellStyle );
-
-
-// data from lib/matplotlib/_cm.py with clipping to [0,1] as for CSS
-// details in lib/matplotlib/colors.py LinearSegmentedColormap
-
-var matplotlib = {
-
-  gray: { r: [ [ x => x, [0,1] ] ],
-          g: [ [ x => x, [0,1] ] ],
-          b: [ [ x => x, [0,1] ] ] },
-
-  spring: { r: [ [ x => 1, [0,1] ] ],
-            g: [ [ x => x, [0,1] ] ],
-            b: [ [ x => 1 - x, [0,1] ] ] },
-
-  summer: { r: [ [ x => x, [0,1] ] ],
-            g: [ [ x => (x+1)/2, [0,1] ] ],
-            b: [ [ x => .4, [0,1] ] ] },
-
-  autumn: { r: [ [ x => 1, [0,1] ] ],
-            g: [ [ x => x, [0,1] ] ],
-            b: [ [ x => 0, [0,1] ] ] },
-
-  winter: { r: [ [ x => 0, [0,1] ] ],
-            g: [ [ x => x, [0,1] ] ],
-            b: [ [ x => 1 - x/2, [0,1] ] ] },
-
-  cool: { r: [ [ x => x, [0,1] ] ],
-          g: [ [ x => 1 - x, [0,1] ] ],
-          b: [ [ x => 1, [0,1] ] ] },
-
-  hot: { r: [ [ lerp( [0,.0416], [.365079,1] ), [0,.365079] ], [ x => 1, [.365079,1] ] ],
-         g: [ [ x => 0, [0,.365079] ], [ lerp( [.365079,0], [.746032,1] ), [.365079,.746032] ],
-              [ x => 1, [.746032,1] ] ],
-         b: [ [ x => 0, [0,.746032] ], [ lerp( [.746032,0], [1,1] ), [.746032,1] ] ] },
-
-  copper: { r: [ [ lerp( [0,0], [.809524,1] ), [0,.809524] ], [ x => 1, [.809524,1] ] ],
-            g: [ [ x => .7812*x, [0,1] ] ],
-            b: [ [ x => .4975*x, [0,1] ] ] },
-
-  bwr: { r: [ [ x => 2*x, [0,.5] ], [ x => 1, [.5,1] ] ],
-         g: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
-         b: [ [ x => 1, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ] },
-
-  hsv: { r: [ [ x => hueToColor(x).r, [0,1] ] ],
-         g: [ [ x => hueToColor(x).g, [0,1] ] ],
-         b: [ [ x => hueToColor(x).b, [0,1] ] ] },
-
-  ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
-           g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],
-           b: [ [ x => x, [0,1] ] ] },
-
-  brg: { r: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
-         g: [ [ x => 0, [0,.5] ], [ x => 2*x - 1, [.5,1] ] ],
-         b: [ [ x => 1 - 2*x, [0,.5] ], [ x => 0, [.5,1] ] ] },
-
-  rainbow: { r: [ [ x => Math.abs( 2*x - 1/2 ), [0,.75] ], [ x => 1, [.75,1] ] ],
-             g: [ [ x => Math.sin( Math.PI*x ), [0,1] ] ],
-             b: [ [ x => Math.cos( Math.PI/2*x ), [0,1] ] ] },
-
-  jet: { r: [ [ x => 0, [0,.35] ], [ lerp( [.35,0], [.66,1] ), [.35,.66] ],
-              [ x => 1, [.66,.89] ], [ lerp( [.89,1], [1,.5] ), [.89,1] ] ],
-         g: [ [ x => 0, [0,.125] ], [ lerp( [.125,0], [.375,1] ), [.125,.375] ],
-              [ x => 1, [.375,.64] ], [ lerp( [.64,1], [.91,0] ), [.64,.91] ],
-              [ x => 0, [.91,1] ] ],
-         b: [ [ lerp( [0,.5], [.11,1] ), [0,.11] ], [ x => 1, [.11,.34] ],
-              [ lerp( [.34,1], [.65,0] ), [.34,.65] ], [ x => 0, [.65,1] ] ] },
-
-}
-
-// analyticphysics.com/Coding Methods/Reverse Engineering Mathematica Colormaps.htm
-
-var mathematica = {
-
-  density: { r: [ [ x => .129 + 1.532*x, [0,.5] ], [ x => .775 + .25*x, [.5,.9] ],
-                  [ x => 1, [.9,1] ] ],
-             g: [ [ x => .331 + .597*x, [0,1] ] ],
-             b: [ [ x => .54 + 1.18*x, [0,.1] ], [ x => .75 - .92*x, [.1,.5] ],
-                  [ x => -.0975 + .775*x, [.5,.9] ], [ x => -.75 + 1.5*x, [.9,1] ] ] },
-
-  sunset: { r: [ [ x => 2.313*x, [0,.32] ], [ x => .391 + 1.181*x, [.32,.5] ],
-                 [ x => .972 + .033*x, [.5,1] ] ],
-            g: [ [ x => .792*x, [0,.35] ], [ x => -.179 + 1.281*x, [.35,.82] ],
-                 [ x => .281 + .719*x, [.82,1] ] ],
-            b: [ [ x => 3.025*x, [0,.17] ], [ x => .73 - 1.365*x, [.17,.5] ],
-                 [ x => -.19 + .482*x, [.5,.67] ], [ x => -1.316 + 2.168*x, [.67,.82] ],
-                 [ x => -2.032 + 3.031*x, [.82,1] ] ] },
-
-  thermometer: { r: [ [ x => .11 + 1.829*x - 1.445*x**3, [0,1] ] ],
-                 g: [ [ x => .035 + 3.79*x - 4.689*x**2 + .877*x**3, [0,1] ] ],
-                 b: [ [ x => .777 + 1.558*x - 3.767*x**2 + 1.587*x**3, [0,1] ] ] },
-
-  watermelon: { r: [ [ x => .1 + 1.301*x, [0,.15] ], [ x => .137 + 1.029*x, [.15,.7] ],
-                     [ x => .458 + .575*x, [.7,.85] ], [ x => 1.336 - .452*x, [.85,1] ] ],
-                g: [ [ x => .097 + 2.078*x - 1.327*x**2, [0,.55] ], [ x => .794 + .1*x, [.55,.72] ],
-                     [ x => 1.56 - .973*x, [.72,.85] ], [ x => 2.897 - 2.536*x, [.85,1] ] ],
-                b: [ [ x => .0975 + .836*x, [0,.3] ], [ x => .012 + 1.13*x, [.3,.55] ],
-                     [ x => .197 + .808*x, [.55,.72] ], [ x => 1.019 - .343*x, [.72,.85] ],
-                     [ x => 2.886 - 2.525*x, [.85,1] ] ] },
-
-  cherry: { r: [ [ x => .216 + 2.437*x, [0,.14] ], [ x => .383 + 1.267*x, [.14,.3] ],
-                 [ x => .57 + .621*x, [.3,.42] ], [ x => .721 + .272*x, [.42,1] ] ],
-            g: [ [ x => .215 - .409*x, [0,.15] ], [ x => .13 + .176*x, [.15,.3] ],
-                 [ x => .089 + .0576*x + .86*x**2, [.3,1] ] ],
-            b: [ [ x => .215 - .405*x, [0,.15] ], [ x => .133 + .166*x, [.15,.28] ],
-                 [ x => .075 + .12*x + .813*x**2, [.28,1] ] ] },
-
-  rust: { r: [ [ x => 1.556*x, [0,.5] ], [ x => .556 + .444*x, [.5,1] ] ],
-          g: [ [ x => .742*x, [0,.5] ], [ x => .265 + .208*x, [.5,1] ] ],
-          b: [ [ x => .191 - .242*x, [0,.5] ], [ x => .105 - .069*x, [.5,1] ] ] },
-
-  rainbow2: { r: [ [ x => .471 - 2.566*x, [0,.05] ],
-                   [ x =>.423 - 2.045*x + 6.551*x**2 - 4.092*x**3 , [.05,1] ] ],
-              g: [ [ x => .107 + .24*x, [0,.07] ],
-                   [ x => -.062 + 2.669*x - 2.012*x**2 - .476*x**4, [.07,1] ] ],
-              b: [ [ x => .523 + 2.692*x - 6.33*x**2, [0,.4] ],
-                   [ x => 1.212 - 1.534*x, [.4,.55] ], [ x => .919 - .994*x, [.55,.62] ],
-                   [ x => .556 - .421*x, [.62,1] ] ] },
-
-  temperature: { r: [ [ x => .176 + 1.633*x, [0,.15] ], [ x => .098 + 2.162*x, [.15,.35] ],
-                      [ x => .092 + 3.098*x - 2.643*x**2, [.35,.67] ],
-                      [ x => 1.362 - .547*x, [.67,1] ] ],
-                 g: [ [ x => .305 + 1.627*x, [0,.4] ], [ x => .739 + .501*x, [.4,.5] ],
-                      [ x => 1 - .018*x, [.5,.67] ], [ x => .185 + 3.688*x - 3.731*x**2, [.67,1] ] ],
-                 b: [ [ x => .928 + .154*x, [0,.42] ], [ x => 1.404 - .985*x, [.42,.5] ],
-                      [ x => 2.014 - 2.205*x, [.5,.58] ], [ x => 2.807 - 3.569*x, [.58,.67] ],
-                      [ x => 1.561 - 1.703*x, [.67,.75] ], [ x => .637 - .473*x, [.75,1] ] ] },
-
-}
-
-
-var colormaps = Object.assign( {}, matplotlib, mathematica );
-
-
-// return arrays of objects for all plots
-
-
-function plot( f, xRange, options={} ) {
-
-  if ( xRange.length < 3 ) xRange[2] = 200;
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  var points = [];
-  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
-    x => points.push( [ x, f(x) ] )
-  );
-
-  return [ { points: points, options: options, type: 'line' } ];
-
-}
-
-
-function listPlot( points, options={} ) {
-
-  if ( Array.isArray( arguments[1] ) ) {
-
-    // working copy of points
-    points = JSON.parse( JSON.stringify( points ) );
-
-    // assume arrays of same lengths and depths
-    var dim = arguments[0][0].length - 1;
-
-    for ( var i = 1 ; i < arguments.length ; i++ )
-      if ( Array.isArray( arguments[i] ) )
-        for ( var j = 0 ; j < arguments[0].length ; j++ )
-          // only add last coordinates together
-          points[j][dim] += arguments[i][j][dim];
-
-    if ( !Array.isArray( arguments[ arguments.length - 1 ] ) )
-      options = arguments[ arguments.length - 1 ];
-    else options = {};
-
-  }
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  return [ { points: points, options: options, type: 'line' } ];
-
-}
-
-function polarPlot( f, aRange, options={} ) {
-
-  if ( aRange.length < 3 ) aRange[2] = 200;
-
-  return parametric( a => [ f(a)*Math.cos(a), f(a)*Math.sin(a) ], aRange, options );
-
-}
-
-
-function parametric( vector, xRange, yRange, options={} ) {
-
-  var slices = xRange.length < 3 ? 50 : xRange[2];
-  var xStep = ( xRange[1] - xRange[0] ) / slices;
-
-  if ( !Array.isArray( yRange ) ) {
-
-    var points = [];
-    for ( var i = 0 ; i <= slices ; i++ ) {
-      var x = xRange[0] + i * xStep;
-      points.push( vector(x) );
-    }
-
-    return line( points, yRange );
-
-  }
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-  if ( !( 'material' in options ) ) options.material = 'phong';
-
-  var stacks = yRange.length < 3 ? 50 : yRange[2];
-  var yStep = ( yRange[1] - yRange[0] ) / stacks;
-
-  var vertices = [];
-  if ( 'colormap' in options ) options.colors = [];
-
-  for ( var i = 0 ; i <= stacks ; i++ ) {
-    var y = yRange[0] + i * yStep;
-    for ( var j = 0 ; j <= slices ; j++ ) {
-      var x = xRange[0] + j * xStep;
-      var v = vector(x,y);
-
-      if ( 'complexFunction' in options )
-        switch( options.complexFunction ) {
-          case 're':
-            vertices.push( [ v[0], v[1], v[2].re ] );
-            break;
-          case 'im':
-            vertices.push( [ v[0], v[1], v[2].im ] );
-            break;
-          case 'abs':
-            vertices.push( [ v[0], v[1], Math.hypot( v[2].re, v[2].im ) ] );
-            break;
-          default:
-            throw Error( 'Unsupported complex function case' );
-        }
-      else vertices.push( v );
-
-      if ( 'colormap' in options ) {
-        if ( options.colormap === 'complexArgument' ) {
-          var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
-          options.colors.push( colorToHexString( hueToColor(p) ) );
-        }
-        if ( typeof( options.colormap ) === 'function' )
-          options.colors.push( colorToHexString( options.colormap(x,y) ) );
-      }
-    }
-  }
-
-  var faces = [];
-  var count = slices + 1;
-  for ( var i = 0 ; i < stacks ; i++ ) {
-    for ( var j = 0 ; j < slices ; j++ ) {
-      faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
-    }
-  }
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-
-function wireframe( vector, xRange, yRange, options={} ) {
-
-  if ( !options.openEnded ) options.openEnded = true;
-
-  var slices = xRange.length < 3 ? 50 : xRange[2];
-  var xStep = ( xRange[1] - xRange[0] ) / slices;
-
-  var stacks = yRange.length < 3 ? 50 : yRange[2];
-  var yStep = ( yRange[1] - yRange[0] ) / stacks;
-
-  var lines = [];
-
-  for ( var i = 0 ; i <= slices ; i++ ) {
-    var x = xRange[0] + i * xStep;
-    var points = [];
-    for ( var j = 0 ; j <= stacks ; j++ ) {
-      var y = yRange[0] + j * yStep;
-      points.push( vector(x,y) );
-    }
-    line( points, options ).forEach( l => lines.push( l ) );
-  }
-
-  for ( var i = 0 ; i <= stacks ; i++ ) {
-    var y = yRange[0] + i * yStep;
-    var points = [];
-    for ( var j = 0 ; j <= slices ; j++ ) {
-      var x = xRange[0] + j * xStep;
-      points.push( vector(x,y) );
-    }
-    line( points, options ).forEach( l => lines.push( l ) );
-  }
-
-  return lines;
-
-}
-
-
-function surfaceFromLines( lines, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-  if ( !( 'material' in options ) ) options.material = 'phong';
-
-  var vertices = [], faces = [];
-
-  vertices = vertices.concat( lines[0] );
-  var l = vertices.length;
-
-  for ( var i = 1 ; i < lines.length ; i++ ) {
-
-    vertices = vertices.concat( lines[i] );
-
-    for ( var j = 0 ; j < l - 1 ; j++ )
-      faces.push( [ (i-1)*l + j, (i-1)*l + j + 1, i*l + j + 1, i*l + j ] ); 
-
-  }
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-
-function slopeField( f, xRange, yRange, zRange, options={} ) {
-
-  if ( xRange.length < 3 ) xRange[2] = 20;
-  if ( yRange.length < 3 ) yRange[2] = 20;
-
-  var xStep = ( xRange[1] - xRange[0] ) / xRange[2];
-  var yStep = ( yRange[1] - yRange[0] ) / yRange[2];
-
-  var field = [];
-
-  function scale( v, s ) {
-    for ( var i = 0 ; i < v.length ; i++ ) v[i] *= s;
-    return v;
-  }
-
-  if ( !Array.isArray( zRange ) ) {
-
-    var size = .25 * Math.min( xStep, yStep );
-
-    for ( var i = 0 ; i <= xRange[2] ; i++ ) {
-      var x = xRange[0] + i * xStep;
-      for ( var j = 0 ; j <= yRange[2] ; j++ ) {
-        var y = yRange[0] + j * yStep;
-        var v = scale( normalize( [ 1, f(x,y) ] ), size );
-        field.push( line( translate( [ [-v[0],-v[1]], [v[0],v[1]] ], [x,y] ), zRange )[0] );
-      }
-    }
-
-    return field;
-
-  }
-
-  if ( zRange.length < 3 ) zRange[2] = 20;
-
-  var zStep = ( zRange[1] - zRange[0] ) / zRange[2];
-
-  var size = .25 * Math.min( xStep, yStep, zStep );
-
-  for ( var i = 0 ; i <= xRange[2] ; i++ ) {
-    var x = xRange[0] + i * xStep;
-    for ( var j = 0 ; j <= yRange[2] ; j++ ) {
-      var y = yRange[0] + j * yStep;
-      for ( var k = 0 ; k <= zRange[2] ; k++ ) {
-        var z = zRange[0] + k * zStep;
-        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), size );
-        // individual lines sluggish to render - need LineSegements geometry
-        field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
-      }
-    }
-  }
-
-  return field;
-
-}
-
-
-// return arrays of objects for all graphics
-// face indices always counter-clockwise for consistency
-
-
-function arrow( begin, end, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  if ( begin.length === 2 ) {
-
-    options.fill = true;
-
-    var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
-    var n = [ t[1], -t[0] ];
-    var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
-
-    var size = .05 * ( options.size ? options.size : 1 );
-    var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
-    var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
-
-    return [ { points: [ begin, end, p1, p2, end ], options: options, type: 'line' } ];
-
-  } else {
-
-    var h = Math.sqrt( (end[0]-begin[0])**2 + (end[1]-begin[1])**2 + (end[2]-begin[2])**2 ) / 2;
-    var size = .1 * ( options.size ? options.size : 1 );
-
-    var center = [ (end[0]+begin[0])/2, (end[1]+begin[1])/2, (end[2]+begin[2])/2 ];
-    var axis = normalize( [ end[0]-begin[0], end[1]-begin[1], end[2]-begin[2] ] );
-
-    options.center = center;
-    options.axis = axis;
-    var body = cylinder( size/3, 2*h, options )[0];
-
-    var center2 = [ center[0] + h*axis[0], center[1] + h*axis[1], center[2] + h*axis[2] ];
-
-    options.center = center2;
-    var head = cone( size, size, options )[0];
-
-    return [ body, head ];
-
-  }
-
-}
-
-
-function text( string, point, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = 'black';
-  if ( !( 'fontSize' in options ) ) options.fontSize = 14;
-
-  return [ { text: string, point: point, options: options, type: 'text' } ];
-
-}
-
-
-function point( point, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-  if ( !( 'size' in options ) ) options.size = 1;
-
-  return [ { point: point, options: options, type: 'point' } ];
-
-}
-
-
-function line( points, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  if ( 'radius' in options ) {
-
-    var segments = [];
-
-    if ( options.endcaps ) {
-      options.center = points[0];
-      segments.push( sphere( options.radius, options )[0] );
-    }
-
-    for ( var i = 1 ; i < points.length ; i++ ) {
-
-      var a = points[i-1];
-      var b = points[i];
-
-      var height = Math.sqrt( (b[0]-a[0])**2 + (b[1]-a[1])**2 + (b[2]-a[2])**2 );
-
-      options.axis = [ b[0]-a[0], b[1]-a[1], b[2]-a[2] ];
-      options.center = [ (a[0]+b[0])/2, (a[1]+b[1])/2, (a[2]+b[2])/2 ];
-
-      segments.push( cylinder( options.radius, height, options )[0] );
-
-      if ( options.endcaps ) {
-        options.center = b;
-        segments.push( sphere( options.radius, options )[0] );
-      }
-
-    }
-
-    return segments;
-
-  }
-
-  else {
-
-    if ( !( 'linewidth' in options ) ) options.linewidth = 1;
-
-    return [ { points: points, options: options, type: 'line' } ];
-
-  }
-
-}
-
-
-// simple 3D objects
-
-function box( width, depth, height, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  var x = width / 2;
-  var y = depth / 2;
-  var z = height / 2;
-
-  var vertices = [ [x,y,z], [-x,y,z], [-x,-y,z], [x,-y,z],
-                   [x,y,-z], [-x,y,-z], [-x,-y,-z], [x,-y,-z] ];
-
-  var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
-                [0,3,7,4], [1,5,6,2] ];
-
-  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
-
-  if ( 'center' in options ) translate( vertices, options.center );
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-function sphere( radius, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  var steps = 'steps' in options ? options.steps : 20;
-  var r = radius;
-
-  var vertices = [ [ 0, 0, r ], [ 0, 0, -r ] ];
-  var faces = [];
-
-  for ( var i = 1 ; i < steps ; i++ ) {
-
-    var a = Math.PI * i / steps;
-
-    for ( var j = 0 ; j < steps ; j++ ) {
-
-      var b = 2 * Math.PI * j / steps;
-
-      vertices.push( [ r * Math.sin(a) * Math.cos(b),
-                       r * Math.sin(a) * Math.sin(b),
-                       r * Math.cos(a) ] );
-
-    }
-
-  }
-
-  for ( var i = 2 ; i < steps + 1 ; i++ )
-    faces.push( [ 0, i, i+1 ] ); // top
-
-  faces.push( [ 0, steps + 1, 2 ] ); // avoid seam
-
-  for ( var i = 1 ; i < steps - 1 ; i++ ) {
-
-    var k = ( i - 1 ) * steps + 2;
-
-    for ( var j = 0 ; j < steps - 1 ; j++ )
-
-      faces.push( [ k+j, k+j + steps, k+j+1 + steps, k+j+1 ] );
-
-    faces.push( [ k + steps - 1, k + 2*steps - 1, k + steps, k ] ); // avoid seam
-
-  }
-
-  for ( var i = vertices.length - steps ; i < vertices.length - 1 ; i++ )
-    faces.push( [ 1, i+1, i ] ); // bottom
-
-  faces.push( [ 1, vertices.length - steps, vertices.length - 1 ] ); // avoid seam
-
-  if ( 'center' in options ) translate( vertices, options.center );
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-function ellipsoid( a, b, c, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  var e = sphere( 1, { steps: options.steps ? options.steps : 20 } )[0];
-
-  e.vertices.forEach( v => { v[0] *= a; v[1] *= b; v[2] *= c; } );
-
-  if ( 'axis' in options ) rotateFromZAxis( e.vertices, options.axis );
-
-  if ( 'center' in options ) translate( e.vertices, options.center );
-
-  return [ { vertices: e.vertices, faces: e.faces, options: options, type: 'surface' } ];
-
-}
-
-function cylinder( radius, height, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  if ( options.endcaps ) options.openEnded = true;
-
-  var steps = 'steps' in options ? options.steps : 20;
-  var r = radius;
-  var h = height / 2;
-
-  var vertices = [ [ 0, 0, h ], [ 0, 0, -h ] ];
-  var faces = [];
-
-  for ( var i = 0 ; i < steps ; i++ ) {
-
-    var a = 2 * Math.PI * i / steps;
-
-    vertices.push( [ r * Math.cos(a), r * Math.sin(a), h ],
-                   [ r * Math.cos(a), r * Math.sin(a), -h ] );
-
-  }
-
-  if ( !options.openEnded ) {
-
-   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
-     faces.push( [ 0, i, i+2 ] );
-
-   faces.push( [ 0, vertices.length - 2, 2 ] ); // avoid seam
-
-  }
-
-  for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
-    faces.push( [ i, i+1, i+3, i+2 ] );
-
-  faces.push( [ vertices.length - 2, vertices.length - 1, 3, 2 ] ); // avoid seam
-
-  if ( !options.openEnded ) {
-
-   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
-     faces.push( [ 1, i+3, i+1 ] );
-
-   faces.push( [ 1, 3, vertices.length - 1 ] ); // avoid seam
-
-  }
-
-  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
-
-  if ( 'center' in options ) translate( vertices, options.center );
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-function cone( radius, height, options={} ) {
-
-  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
-  if ( !( 'opacity' in options ) ) options.opacity = 1;
-
-  var steps = 'steps' in options ? options.steps : 20;
-  var r = radius;
-  var h = height / 2;
-
-  var vertices = [ [ 0, 0, -h ], [ 0, 0, h ] ];
-  var faces = [];
-
-  for ( var i = 0 ; i < steps ; i++ ) {
-
-    var a = 2 * Math.PI * i / steps;
-
-    vertices.push( [ r * Math.cos(a), r * Math.sin(a), -h ] );
-
-  }
-
-  for ( var i = 2 ; i < vertices.length - 1 ; i++ )
-    faces.push( [ 0, i, i+1 ], [ 1, i, i+1 ] );
-
-  faces.push( [ 0, vertices.length - 1, 2 ], [ 1, vertices.length - 1, 2 ] ); // avoid seam
-
-  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
-
-  if ( 'center' in options ) translate( vertices, options.center );
-
-  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
-
-}
-
-
-function svgPlot( id, data, config ) {
-
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
-
-  function parsedLength( input ) {
-
-    var frag = new DOMParser().parseFromString( input, 'text/html' );
-    return frag.documentElement.textContent.length;
-
-  }
-
-  function decimalsInNumber( x ) {
-
-    for ( var i = 0 ; i < 100 ; i++ ) {
-      if ( roundTo( x, i, false ) === x ) break;
-    }
-    return i;
-
-  }
-
-  function chop( x, tolerance=1e-10 ) {
-
-    if ( Math.abs(x) < tolerance ) x = 0;
-    return x;
-
-  }
-
-  var n = 'output' in config ? config.output : '';
-  var output = document.getElementById( id + 'output' + n );
-
-  var width = output.offsetWidth;
-  var height = output.offsetHeight;
-  var ext = 20; // axis extension
-
-  if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );
-
-  var texts = [], points = [], lines = [];
-
-  for ( var i = 0 ; i < data.length ; i++ )
-    for ( var j = 0 ; j < data[i].length ; j++ ) {
-      var d = data[i][j];
-      if ( d.type === 'text' ) texts.push( d );
-      if ( d.type === 'point' ) points.push( d );
-      if ( d.type === 'line' ) lines.push( d );
-    }
-
-  var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
-  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
-
-  var xMinMax = minMax( all, 0 );
-  var yMinMax = minMax( all, 1 );
-
-  // rounding currently to remove excessive decimals
-  // add option when needed for rounding to significant digits
-
-  var xMin = 'xMin' in config ? config.xMin : floorTo( xMinMax.min, 4, false );
-  var xMax = 'xMax' in config ? config.xMax : ceilTo( xMinMax.max, 4, false );
-  var yMin = 'yMin' in config ? config.yMin : floorTo( yMinMax.min, 4, false );
-  var yMax = 'yMax' in config ? config.yMax : ceilTo( yMinMax.max, 4, false );
-
-  if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
-  if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
-
-  if ( config.equalLimits ) {
-
-    if ( xMin < yMin ) yMin = xMin;
-    else xMin = yMin;
-
-    if ( xMax > yMax ) yMax = xMax;
-    else xMax = yMax;
-
-  }
-
-  var xRange = xMax - xMin;
-  var yRange = yMax - yMin;
-
-  var xScale = width / xRange;
-  var yScale = height / yRange;
-  if ( config.equalAspect ) yScale = xScale;
-
-  var axes = 'axes' in config ? config.axes : true;
-  if ( !axes ) config.ticks = false;
-
-  var ticks = 'ticks' in config ? config.ticks : [ 'auto', 'auto' ];
-  if ( ticks === 'auto' ) ticks = [ 'auto', 'auto' ];
-  if ( ticks === 'none' ) ticks = false;
-  var tickSize = 5;
-
-  if ( ticks[0] === 'auto' ) {
-    ticks[0] = Math.pow( 10, Math.floor( Math.log10(xRange) ) );
-    if ( 3*ticks[0] > xRange ) ticks[0] /= 2;
-    if ( 4*ticks[0] > xRange ) ticks[0] /= 2;
-  }
-  if ( ticks[1] === 'auto' ) {
-    ticks[1] = Math.pow( 10, Math.floor( Math.log10(yRange) ) );
-    if ( 3*ticks[1] > yRange ) ticks[1] /= 2;
-    if ( 4*ticks[1] > yRange ) ticks[1] /= 2;
-  }
-
-  var xTickDecimals = decimalsInNumber( ticks[0] );
-  var yTickDecimals = decimalsInNumber( ticks[1] );
-
-  // size of largest y-axis tick label
-  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, false ).toString().length,
-                                roundTo( yMax, yTickDecimals, false ).toString().length,
-                                roundTo( 3*ticks[1], yTickDecimals, false ).toString().length  );
-
-  // offsets of numbers from axes, inverted when on right/top
-  var xOffset = 10;
-  var yOffset = 16;
-
-  var xAxisLabel = 'axesLabels' in config ? config.axesLabels[0] : '';
-  var xLabel = xAxisLabel.length > 0 ? Math.max( 20, 15 * parsedLength( xAxisLabel ) ) : 0;
-  var yAxisLabel = 'axesLabels' in config ? config.axesLabels[1] : '';
-  var yLabelSize = 4.5 * parsedLength( yAxisLabel );
-  var yLabel = yAxisLabel.length > 0 ? 20 : 0;
-
-  // mathematical origin vs. location of axis
-  var xOrigin = Math.round( -xMin * xScale );
-  var xAxis = xOrigin;
-  var gutter = ticks ? Math.max( ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin ) : ext;
-  var xTotal = width + gutter + ext + xLabel;
-  var xShift = gutter;
-
-  if ( xOrigin < 0 ) {
-    xAxis = -1.5*ext;
-    gutter = ticks ? Math.max( ext, yNumSize + xOffset, yLabelSize ) : ext;
-    xTotal = width + gutter + 2.5*ext + xLabel;
-    xShift = gutter + 1.5*ext;
-  }
-  if ( xOrigin > width ) {
-    xAxis = width + 1.5*ext;
-    gutter = ticks ? Math.max( yNumSize, yLabelSize, xLabel ) : xLabel;
-    xTotal = width + gutter + 2.5*ext;
-    xOffset = ticks ? -yNumSize : ext;
-  }
-
-  // mathematical origin vs. location of axis
-  var yOrigin = Math.round( yMax * yScale );
-  var yAxis = yOrigin;
-  var yTotal = height + 2*ext + yLabel;
-  var yShift = ext + yLabel;
-
-  if ( yOrigin < 0 ) {
-    yAxis = -1.5*ext;
-    yTotal += .5*ext + yOffset;
-    yShift = 1.5*ext + yOffset;
-    yOffset = -6;
-    if ( yLabel > 0 ) yLabel += 12;
-  }
-  if ( yOrigin > height ) {
-    yAxis = height + 1.5*ext;
-    yTotal += .5*ext + 1.5*yOffset;
-  }
-
-  var svg = `
-<svg width="${width}" height="${height}" preserveAspectRatio="none"
-     viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
-     xmlns="http://www.w3.org/2000/svg">`;
-
-  if ( axes ) {
-
-    svg += `<path d="M ${-ext} ${yAxis} L ${width + ext} ${yAxis}" stroke="black"/>`;
-    svg += `<path d="M ${xAxis} ${-ext} L ${xAxis} ${height + ext}" stroke="black"/>`;
-
-    if ( ticks ) {
-
-      var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
-      for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
-        if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
-          var x = Math.round( xOrigin + xScale*i );
-          svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
-                        stroke="black" />`;
-          svg += `<text x="${x}" y="${yAxis + yOffset}"
-                        font-family="monospace" text-anchor="middle">
-                  ${+i.toFixed(xTickDecimals)}</text>`;
-        }
-      }
-
-      var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
-      for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
-        if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
-          var y = Math.round( yOrigin - yScale*i );
-          svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
-                        stroke="black" />`;
-          svg += `<text x="${xAxis - xOffset}" y="${y}"
-                        font-family="monospace" text-anchor="end" dominant-baseline="central">
-                  ${+i.toFixed(yTickDecimals)}</text>`;
-        }
-      }
-
-    }
-
-    svg += `<text x="${width + ext + Math.abs(xOffset)}" y="${yAxis}"
-            font-family="monospace" font-size="110%" font-weight="bold"
-            dominant-baseline="central">${xAxisLabel}</text>`;
-    svg += `<text x="${xAxis}" y="${-ext - yLabel/2}"
-            font-family="monospace" font-size="110%" font-weight="bold"
-            text-anchor="middle">${yAxisLabel}</text>`;
-
-  }
-
-
-  function xPos( x ) { return roundTo( xOrigin + xScale*x, 2, false ); }
-
-  function yPos( y ) { return roundTo( yOrigin - yScale*y, 2, false ); }
-
-
-  for ( var i = 0 ; i < lines.length ; i++ ) {
-
-    // working copy of line
-    var l = JSON.parse( JSON.stringify( lines[i] ) );
-
-    l.points.forEach( p => {
-      // set possibly huge values to just beyond limits
-      if ( p[1] < yMin ) p[1] = yMin - 1;
-      if ( p[1] > yMax ) p[1] = yMax + 1;
-    } );
-
-    var x = l.points[0][0];
-    var y = l.points[0][1];
-
-    svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
-    var lastX = x;
-    var lastY = y;
-
-    for ( var k = 1 ; k < l.points.length ; k++ ) {
-
-      x = l.points[k][0];
-      y = l.points[k][1];
-
-      function intercept( u ) {
-        return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
-      }
-
-      // both points inside bounds
-      if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-
-      // both points outside bounds
-      if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      if ( lastY < yMin && y > yMax ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y < yMin ) {
-        if ( config.includeVerticals ) {
-          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-        }
-        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-
-      // line between points crosses bounds
-      if ( lastY < yMin && y >= yMin && y < yMax ) {
-        svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY >= yMin && lastY < yMax && y < yMin ) {
-        svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY <= yMax && lastY > yMin && y > yMax ) {
-        svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
-      }
-      if ( lastY > yMax && y <= yMax && y > yMin ) {
-        svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
-      }
-
-      var lastX = x;
-      var lastY = y;
-
-    }
-
-    svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
-
-  }
-
-  // draw points on top of lines for now
-
-  for ( var i = 0 ; i < points.length ; i++ ) {
-
-    var c = points[i];
-    svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
-                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
-
-  }
-
-  for ( var i = 0 ; i < texts.length ; i++ ) {
-
-    var t = texts[i];
-    svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
-                  fill="${ t.options.color }" font-size="${ t.options.fontSize }"
-                  text-anchor="middle" dominant-baseline="central">
-            ${t.text}</text>`;
-
-  }
-
-  return svg + '</svg>';
-
-}
-
-
-function threejsPlot( id, data, config ) {
-
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
-
-  if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
-  if ( !( 'animate' in config ) ) config.animate = false;
-  if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
-  if ( !( 'axes' in config ) ) config.axes = false;
-  if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];
-  if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
-  if ( !( 'decimals' in config ) ) config.decimals = 2;
-  if ( !( 'equalAspect' in config ) ) config.equalAspect = false;
-  if ( !( 'frame' in config ) ) config.frame = true;
-  if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
-
-  if ( !config.frame ) config.axesLabels = false;
-
-  var n = 'output' in config ? config.output : '';
-  var output = document.getElementById( id + 'output' + n );
-
-  if ( output.children.length > 0 && output.children[0].contentWindow ) {
-
-    var cw = output.children[0].contentWindow;
-    var v = cw.camera.position;
-
-    // only direction of viewpoint meaningful, not normalization
-    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
-
-  }
-
-  var texts = [], points = [], lines = [], surfaces = [];
-
-  for ( var i = 0 ; i < data.length ; i++ )
-    for ( var j = 0 ; j < data[i].length ; j++ ) {
-      var d = data[i][j];
-      if ( d.type === 'text' ) texts.push( d );
-      if ( d.type === 'point' ) points.push( d );
-      if ( d.type === 'line' ) lines.push( d );
-      if ( d.type === 'surface' ) {
-        d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
-        surfaces.push( d );
-      }
-    }
-
-  var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
-  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
-  for ( var i = 0 ; i < surfaces.length ; i++ ) surfaces[i].vertices.forEach( p => all.push( p ) );
-
-  var xMinMax = minMax( all, 0 );
-  var yMinMax = minMax( all, 1 );
-  var zMinMax = minMax( all, 2 );
-
-  if ( !( 'xMin' in config ) ) config.xMin = xMinMax.min;
-  if ( !( 'yMin' in config ) ) config.yMin = yMinMax.min;
-  if ( !( 'zMin' in config ) ) config.zMin = zMinMax.min;
-
-  if ( !( 'xMax' in config ) ) config.xMax = xMinMax.max;
-  if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
-  if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
-
-  surfaces.forEach( s => {
-    // process predefined colormaps
-    if ( 'colormap' in s.options &&
-          ( !( 'colors' in s.options ) || s.options.colors.length === 0 ) ) {
-      s.options.colors = [];
-      var f = colormap( s.options.colormap, s.options.reverseColormap );
-      var zMinMax = minMax( s.vertices, 2 );
-      var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
-      var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
-      for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-        var z = s.vertices[i][2];
-        if ( z < zMin ) z = zMin;
-        if ( z > zMax ) z = zMax;
-        var w = ( z - zMin ) / ( zMax - zMin );
-        s.options.colors.push( colorToHexString( f(w) ) );
-      }
-    }
-  } );
-
-  var border = config.no3DBorder ? 'none' : '1px solid black';
-
-  config = JSON.stringify( config );
-
-  var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
-
-  texts = JSON.stringify( texts );
-  points = JSON.stringify( points );
-  lines = JSON.stringify( lines );
-  surfaces = JSON.stringify( surfaces );
-
-  var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
-
-  return `<iframe style="width: 100%; height: 100%; border: ${border};"
-                  srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
-
-}
-
-
-function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
-
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-<title></title>
-<meta charset="utf-8">
-<meta name=viewport content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-<style>
-
-     body { margin: 0px; overflow: hidden; }
-
-</style>
-</head>
-
-<body>
-
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/examples/js/controls/OrbitControls.js"></script>
-
-<script>
-
-var config = ${config};
-var scene = new THREE.Scene();
-
-var renderer = new THREE.WebGLRenderer( { antialias: true } );
-renderer.setPixelRatio( window.devicePixelRatio );
-renderer.setSize( window.innerWidth, window.innerHeight );
-renderer.setClearColor( config.clearColor, 1 );
-document.body.appendChild( renderer.domElement );
-
-var a = config.aspectRatio; // aspect multipliers
-var animate = config.animate;
-
-var xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
-var xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
-
-if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
-if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
-if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
-
-// apply aspect multipliers for convenience
-xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
-xMax *= a[0]; yMax *= a[1]; zMax *= a[2];
-
-var xRange = xMax - xMin;
-var yRange = yMax - yMin;
-var zRange = zMax - zMin;
-var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
-
-if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
-  a[2] = rRange / zRange;
-  zMin *= a[2];
-  zMax *= a[2];
-  zRange *= a[2];
-}
-
-var xMid = ( xMin + xMax ) / 2;
-var yMid = ( yMin + yMax ) / 2;
-var zMid = ( zMin + zMax ) / 2;
-
-var box = new THREE.Geometry();
-box.vertices.push( new THREE.Vector3( xMin, yMin, zMin ) );
-box.vertices.push( new THREE.Vector3( xMax, yMax, zMax ) );
-var boxMesh = new THREE.Line( box );
-if ( config.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
-
-if ( config.axesLabels ) {
-
-  var d = config.decimals; // decimals
-  var offsetRatio = 0.1;
-  var al = config.axesLabels;
-
-  var offset = offsetRatio * ( yMax - yMin );
-  var xm = ( xMid/a[0] ).toFixed(d);
-  if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
-  addLabel( al[0] + '=' + xm, xMid, yMax+offset, zMin );
-  addLabel( ( xMin/a[0] ).toFixed(d), xMin, yMax+offset, zMin );
-  addLabel( ( xMax/a[0] ).toFixed(d), xMax, yMax+offset, zMin );
-
-  var offset = offsetRatio * ( xMax - xMin );
-  var ym = ( yMid/a[1] ).toFixed(d);
-  if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
-  addLabel( al[1] + '=' + ym, xMax+offset, yMid, zMin );
-  addLabel( ( yMin/a[1] ).toFixed(d), xMax+offset, yMin, zMin );
-  addLabel( ( yMax/a[1] ).toFixed(d), xMax+offset, yMax, zMin );
-
-  var offset = offsetRatio * ( yMax - yMin );
-  var zm = ( zMid/a[2] ).toFixed(d);
-  if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
-  addLabel( al[2] + '=' + zm, xMax, yMin-offset, zMid );
-  addLabel( ( zMin/a[2] ).toFixed(d), xMax, yMin-offset, zMin );
-  addLabel( ( zMax/a[2] ).toFixed(d), xMax, yMin-offset, zMax );
-
-}
-
-function addLabel( text, x, y, z, color='black', fontsize=14 ) {
-
-  var canvas = document.createElement( 'canvas' );
-  var pixelRatio = Math.round( window.devicePixelRatio );
-  canvas.width = 128 * pixelRatio;
-  canvas.height = 32 * pixelRatio; // powers of two
-  canvas.style.width = '128px';
-  canvas.style.height = '32px';
-
-  var context = canvas.getContext( '2d' );
-  context.scale( pixelRatio, pixelRatio );
-  context.fillStyle = color;
-  context.font = fontsize + 'px monospace';
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.fillText( text, canvas.width/2/pixelRatio, canvas.height/2/pixelRatio );
-
-  var texture = new THREE.Texture( canvas );
-  texture.needsUpdate = true;
-
-  var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture } ) );
-  sprite.position.set( x, y, z );
-  sprite.scale.set( 1, .25, 1 ); // ratio of width to height
-  scene.add( sprite );
-
-}
-
-if ( config.axes ) scene.add( new THREE.AxesHelper( Math.min( xMax, yMax, zMax ) ) );
-
-var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.up.set( 0, 0, 1 );
-
-// default auto position, followed by rotation to viewpoint direction
-camera.position.set( xMid, yMid, zMid );
-var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
-
-if ( config.viewpoint !== 'auto' ) {
-  var v = config.viewpoint;
-  var t = new THREE.Vector3( v[0], v[1], v[2] );
-  var phi = defaultOffset.angleTo( t );
-  var n = t.cross( defaultOffset ).normalize();
-  defaultOffset.applyAxisAngle( n, -phi );
-}
-
-camera.position.add( defaultOffset );
-
-var lights = ${lights};
-
-for ( var i = 0 ; i < lights.length ; i++ ) {
-  var light = new THREE.DirectionalLight( lights[i].color, 1 );
-  var v = lights[i].position;
-  light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
-  if ( lights[i].parent === 'camera' ) {
-    light.target.position.set( xMid, yMid, zMid );
-    scene.add( light.target );
-    camera.add( light );
-  } else scene.add( light );
-}
-scene.add( camera );
-
-scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
-
-var controls = new THREE.OrbitControls( camera, renderer.domElement );
-controls.target.set( xMid, yMid, zMid );
-controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
-
-window.addEventListener( 'resize', function() {
-
-  renderer.setSize( window.innerWidth, window.innerHeight );
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  if ( !animate ) render();
-
-} );
-
-window.addEventListener( 'mousedown', suspendAnimation );
-window.addEventListener( 'mousemove', suspendAnimation );
-window.addEventListener( 'mousewheel', suspendAnimation );
-
-window.addEventListener( 'touchstart', suspendAnimation );
-window.addEventListener( 'touchmove', suspendAnimation );
-window.addEventListener( 'touchend', suspendAnimation );
-
-var suspendTimer;
-
-function suspendAnimation() {
-  clearInterval( suspendTimer );
-  animate = false;
-  suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
-}
-
-var texts = ${texts};
-
-for ( var i = 0 ; i < texts.length ; i++ ) {
-  var t = texts[i];
-  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
-}
-
-var points = ${points};
-
-for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
-
-function addPoint( p ) {
-
-  var geometry = new THREE.Geometry();
-  var v = p.point;
-  geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
-
-  var canvas = document.createElement( 'canvas' );
-  canvas.width = 128;
-  canvas.height = 128;
-
-  var context = canvas.getContext( '2d' );
-  context.arc( 64, 64, 64, 0, 2 * Math.PI );
-  context.fillStyle = p.options.color;
-  context.fill();
-
-  var texture = new THREE.Texture( canvas );
-  texture.needsUpdate = true;
-
-  var transparent = p.options.opacity < 1 ? true : false;
-  var material = new THREE.PointsMaterial( { size: p.options.size/20, map: texture,
-                                             transparent: transparent, opacity: p.options.opacity,
-                                             alphaTest: .1 } );
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = new THREE.Points( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  scene.add( mesh );
-
-}
-
-var lines = ${lines};
-
-var newLines = [];
-
-for ( var i = 0 ; i < lines.length ; i++ ) {
-
-  lines[i].points.forEach( v => {
-    // apply aspect multipliers for convenience
-    //   and set points outside bounds to empty array
-    v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
-    if ( v[0] < xMin || v[0] > xMax || v[1] < yMin || v[1] > yMax
-           || v[2] < zMin || v[2] > zMax )
-      v.splice(0);
-  } );
-
-  // split lines at empty points
-  var tempPoints = [];
-  for ( var j = 0 ; j < lines[i].points.length ; j++ )
-    if ( lines[i].points[j].length === 0 ) tempPoints = lines[i].points.splice( j );
-
-  var l = [];
-  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
-    var p = tempPoints[j];
-    if ( p.length > 0 ) l.push( p );
-    else if ( l.length > 0 ) {
-      newLines.push( { points: l, options: lines[i].options } );
-      l = [];
-    }
-  }
-
-}
-
-newLines.forEach( l => lines.push( l ) );
-newLines = [];
-
-for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
-
-function addLine( l ) {
-
-  var geometry = new THREE.Geometry();
-  for ( var i = 0 ; i < l.points.length ; i++ ) {
-    var v = l.points[i];
-    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
-  }
-
-  var transparent = l.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
-                                                transparent: transparent, opacity: l.options.opacity } );
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = new THREE.Line( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  scene.add( mesh );
-
-}
-
-var surfaces = ${surfaces};
-
-for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
-
-function addSurface( s ) {
-
-  // apply aspect multipliers for convenience
-  s.vertices.forEach( v => { v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2]; } );
-
-  // remove faces completely outside vertical range
-  for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
-    var f = s.faces[i];
-    var check = true;
-    f.forEach( index => check = check && s.vertices[index][2] < zMin );
-    if ( check ) s.faces.splice( i, 1 );
-    var check = true;
-    f.forEach( index => check = check && s.vertices[index][2] > zMax );
-    if ( check ) s.faces.splice( i, 1 );
-  }
-
-  // constrain vertices to vertical range
-  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-    if ( s.vertices[i][2] < zMin ) s.vertices[i][2] = zMin;
-    if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
-  }
-
-  // no appreciable speedup with BufferGeometry
-  var geometry = new THREE.Geometry();
-  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-    var v = s.vertices[i];
-    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
-  }
-  for ( var i = 0 ; i < s.faces.length ; i++ ) {
-    var f = s.faces[i];
-    for ( var j = 0 ; j < f.length - 2 ; j++ )
-      geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
-  }
-  geometry.computeVertexNormals();
-
-  var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
-  var transparent = s.options.opacity < 1 ? true : false;
-  var material;
-
-  switch ( s.options.material ) {
-
-    case 'normal':
-
-      material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
-      break;
-
-    case 'standard':
-
-      material = new THREE.MeshStandardMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity } );
-      break;
-
-    case 'phong':
-    default:
-
-      material = new THREE.MeshPhongMaterial( {
-                               color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity,
-                               shininess: 20 } );
-
-  }
-
-  if ( 'colors' in s.options ) {
-    for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color( s.options.colors[i] ) );
-    for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
-      var f = geometry.faces[i];
-      f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
-    }
-    material.vertexColors = THREE.VertexColors;
-    material.color.set( 'white' ); // crucial!
-  }
-
-  var c = new THREE.Vector3();
-  geometry.computeBoundingBox();
-  geometry.boundingBox.getCenter( c );
-  geometry.translate( -c.x, -c.y, -c.z );
-
-  var mesh = new THREE.Mesh( geometry, material );
-  mesh.position.set( c.x, c.y, c.z );
-  if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
-  if ( s.options.rotationAxisAngle ) {
-    mesh.userData.rotateOnAxis = true;
-    var v = s.options.rotationAxisAngle[0];
-    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
-    mesh.userData.angle = s.options.rotationAxisAngle[1];
-  }
-
-  if ( 'group' in s.options ) {
-
-    var group = scene.getObjectByName( s.options.group );
-    if ( !group ) {
-      group = new THREE.Group();
-      group.name = s.options.group;
-      scene.add( group );
-    }
-    group.add( mesh );
-
-    if ( mesh.userData.rotateOnAxis ) {
-      mesh.userData.rotateOnAxis = false;
-      group.userData.rotateOnAxis = true;
-      group.userData.axis = mesh.userData.axis;
-      group.userData.angle = mesh.userData.angle;
-    }
-
-  } else scene.add( mesh );
-
-}
-
-if ( config.clippingPlane ) {
-
-  var v = config.clippingPlane[0];
-  var d = config.clippingPlane[1];
-  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
-  renderer.clippingPlanes = [ plane ];
-
-}
-
-var scratch = new THREE.Vector3();
-
-function render() {
-
-  if ( animate ) requestAnimationFrame( render );
-  renderer.render( scene, camera );
-
-  scene.children.forEach( child => {
-
-    if ( child.type === 'Sprite' ) {
-      var adjust = scratch.addVectors( child.position, scene.position )
-                          .sub( camera.position ).length() / 5;
-      child.scale.set( adjust, .25*adjust, 1 ); // ratio of canvas width to height
-    }
-
-    if ( child.userData.rotateOnAxis && animate )
-      child.rotateOnAxis( child.userData.axis, child.userData.angle );
-
-  } );
-
-}
-
-render();
-controls.update();
-if ( !animate ) render();
-
-</script>
-
-</body>
-</html>`;
-
-}
-
-
-function x3dPlot( id, data, config ) {
-
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
-
-  function compositeRotation( first, second ) {
-
-    var a = first[0], na = first[1];
-    var b = second[0], nb = second[1];
-
-    var dot = na[0]*nb[0] + na[1]*nb[1] + na[2]*nb[2];
-    var cross = [ na[1]*nb[2] - na[2]*nb[1],
-                  na[2]*nb[0] - na[0]*nb[2],
-                  na[0]*nb[1] - na[1]*nb[0]  ];
-
-    var c = 2 * Math.acos( Math.cos(a/2) * Math.cos(b/2)
-                           - dot * Math.sin(a/2) * Math.sin(b/2) );
-
-    var nc = [];
-    for ( var i = 0 ; i < 3 ; i++ )
-      nc[i] = na[i] * Math.sin(a/2) * Math.cos(b/2) / Math.sin(c/2)
-              + nb[i] * Math.cos(a/2) * Math.sin(b/2) / Math.sin(c/2)
-              - cross[i] * Math.sin(a/2) * Math.sin(b/2) / Math.sin(c/2);
-
-    return [ c, nc ];
-
-  }
-
-  var frame = 'frame' in config ? config.frame : true;
-  var viewer = 'viewer' in config ? config.viewer : 'x3dom';
-
-  var n = 'output' in config ? config.output : '';
-  var output = document.getElementById( id + 'output' + n );
-
-  var width = output.offsetWidth;
-  var height = output.offsetHeight;
-
-  var texts = [], points = [], lines = [], surfaces = [];
-
-  for ( var i = 0 ; i < data.length ; i++ )
-    for ( var j = 0 ; j < data[i].length ; j++ ) {
-      var d = data[i][j];
-      if ( d.type === 'text' ) texts.push( d );
-      if ( d.type === 'point' ) points.push( d );
-      if ( d.type === 'line' ) lines.push( d );
-      if ( d.type === 'surface' ) {
-        d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
-        surfaces.push( d );
-      }
-    }
-
-  var all = [];
-  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
-  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
-  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
-  for ( var i = 0 ; i < surfaces.length ; i++ ) surfaces[i].vertices.forEach( p => all.push( p ) );
-
-  var xMinMax = minMax( all, 0 );
-  var yMinMax = minMax( all, 1 );
-  var zMinMax = minMax( all, 2 );
-
-  var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
-  var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
-  var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
-
-  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
-  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
-  var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
-
-  var xRange = xMax - xMin;
-  var yRange = yMax - yMin;
-  var zRange = zMax - zMin;
-
-  var xMid = ( xMax + xMin ) / 2;
-  var yMid = ( yMax + yMin ) / 2;
-  var zMid = ( zMax + zMin ) / 2;
-
-  var boxHelper = [ [ [xMin,yMin,zMin],[xMax,yMin,zMin] ],
-                    [ [xMin,yMin,zMin],[xMin,yMax,zMin] ],
-                    [ [xMin,yMin,zMin],[xMin,yMin,zMax] ],
-                    [ [xMax,yMin,zMin],[xMax,yMax,zMin] ],
-                    [ [xMax,yMin,zMin],[xMax,yMin,zMax] ],
-                    [ [xMin,yMax,zMin],[xMax,yMax,zMin] ],
-                    [ [xMin,yMax,zMin],[xMin,yMax,zMax] ],
-                    [ [xMin,yMin,zMax],[xMax,yMin,zMax] ],
-                    [ [xMin,yMin,zMax],[xMin,yMax,zMax] ],
-                    [ [xMax,yMax,zMin],[xMax,yMax,zMax] ],
-                    [ [xMax,yMin,zMax],[xMax,yMax,zMax] ],
-                    [ [xMin,yMax,zMax],[xMax,yMax,zMax] ] ];
-
-  // default orientation is looking down z-axis, even after displacement
-  // need to rotate viewpoint back to origin with composite orientation
-
-  var zRotation = [ Math.PI/2 + Math.atan(yRange/xRange), [ 0, 0, 1 ] ];
-
-  var norm1 = Math.sqrt( xRange**2 + yRange**2 + zRange**2 );
-  var norm2 = Math.sqrt( xRange**2 + yRange**2 );
-
-  var xyRotation = [ Math.acos( zRange/norm1 ),
-                               [ -yRange/norm2, xRange/norm2, 0 ] ];
-
-  var cr = compositeRotation( zRotation, xyRotation );
-
-  var x3d = `
-<X3D width="${width}" height="${height}">
-<Scene>
-<Background skyColor="1 1 1"></Background>
-<Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
-           orientation="${cr[1].join(' ')} ${cr[0]}"
-           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
-
-  if ( frame ) x3d += `
-<Shape>
-<Appearance>
-<Material emissiveColor="0 0 0"></Material>
-</Appearance>
-<LineSet vertexCount="2 2 2 2 2 2 2 2 2 2 2 2">
-<Coordinate point="${boxHelper.map(a => a[0].concat(a[1]).join(' ')).join(', ')}"></Coordinate>
-</LineSet>
-</Shape>`;
-
-  for ( var i = 0 ; i < surfaces.length ; i++ ) {
-
-    var s = surfaces[i];
-
-    // remove faces completely outside vertical range
-    for ( var j = s.faces.length - 1 ; j >= 0 ; j-- ) {
-      var f = s.faces[j];
-      var check = true;
-      f.forEach( index => check = check && s.vertices[index][2] < zMin );
-      if ( check ) s.faces.splice( j, 1 );
-      var check = true;
-      f.forEach( index => check = check && s.vertices[index][2] > zMax );
-      if ( check ) s.faces.splice( j, 1 );
-    }
-
-    // constrain vertices to vertical range
-    for ( var j = 0 ; j < s.vertices.length ; j++ ) {
-      if ( s.vertices[j][2] < zMin ) s.vertices[j][2] = zMin;
-      if ( s.vertices[j][2] > zMax ) s.vertices[j][2] = zMax;
-    }
-
-    var indices = '';
-    for ( var j = 0 ; j < s.faces.length ; j++ )
-      indices += s.faces[j].join(' ') + ' -1 ';
-
-    var points = '';
-    for ( var j = 0 ; j < s.vertices.length ; j++ )
-      points += s.vertices[j].join(' ') + ' ';
-
-    var p = document.createElement( 'p' );
-    p.style.color = s.options.color;
-    var rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
-    rgb.forEach( (e,i,a) => a[i] /= 255 );
-    var color = rgb.join(' '); 
-
-    x3d += `
-<Shape>
-<Appearance>
-<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
-</Appearance>
-<IndexedFaceSet creaseAngle="1.57" solid="false" coordIndex="${indices}">
-<Coordinate point="${points}"></Coordinate>`;
-
-    if ( 'colors' in s.options ) {
-      var colors = '';
-      for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
-        p.style.color = s.options.colors[j];
-        rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
-        rgb.forEach( (e,i,a) => a[i] /= 255 );
-        rgb = roundTo( rgb, 3 );
-        colors +=  rgb.join(' ') + ' ';
-      }
-      x3d += `
-<Color color="${colors}"></Color>`;
-    }
-
-    x3d += `
-</IndexedFaceSet>
-</Shape>`;
-
-  }
-
-  x3d += `
-</Scene>
-</X3D>`;
-
-  if ( config.saveAsXML ) {
-
-    var xml = `<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
-${x3d}`;
-
-    var blob = new Blob( [ xml ] );
-    var a = document.body.appendChild( document.createElement( 'a' ) );
-    a.href = window.URL.createObjectURL( blob );
-    a.download = 'scene.xml';
-    a.click();
-
-  }
-
-  var stylesheet = config.viewer === 'x3dom' ?
-`<link rel="stylesheet" type="text/css" href="https://www.x3dom.org/download/x3dom.css">` :
-`<link rel="stylesheet" type="text/css" href="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.css"/>`;
-
-  var script = config.viewer === 'x3dom' ?
-`<script src="https://www.x3dom.org/download/x3dom.js"></script>` :
-`<script src="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.min.js"></script>
-<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>
-<script>
-  //disable straighten horizon
-  X3D( function ready() {
-    var browser = X3D.getBrowser( 'X3DCanvas' );
-    browser.setBrowserOption( 'StraightenHorizon', false );
-  } );
-</script>`;
-
-  var html = `
-<html>
-<head>
-<title></title>
-<meta charset="utf-8">
-${stylesheet}
-</head>
-
-<body style="margin: 0px">
-
-${script}
-
-<X3DCanvas style="width: ${width}px; height: ${height}px">
-${x3d}
-</X3DCanvas>
-
-</body>
-</html>`;
-
-  var border = config.no3DBorder ? 'none' : '1px solid black';
-
-  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: ${border}"
-                  srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
-
-}
 
 
 function isosurface( f, xRange, yRange, zRange, options={} ) {
@@ -3363,6 +1575,1794 @@ function isoband( f, xRange, yRange, options={} ) {
   }
 
   return segments;
+
+}
+
+
+// data from lib/matplotlib/_cm.py with clipping to [0,1] as for CSS
+// details in lib/matplotlib/colors.py LinearSegmentedColormap
+
+var matplotlib = {
+
+  gray: { r: [ [ x => x, [0,1] ] ],
+          g: [ [ x => x, [0,1] ] ],
+          b: [ [ x => x, [0,1] ] ] },
+
+  spring: { r: [ [ x => 1, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 1 - x, [0,1] ] ] },
+
+  summer: { r: [ [ x => x, [0,1] ] ],
+            g: [ [ x => (x+1)/2, [0,1] ] ],
+            b: [ [ x => .4, [0,1] ] ] },
+
+  autumn: { r: [ [ x => 1, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 0, [0,1] ] ] },
+
+  winter: { r: [ [ x => 0, [0,1] ] ],
+            g: [ [ x => x, [0,1] ] ],
+            b: [ [ x => 1 - x/2, [0,1] ] ] },
+
+  cool: { r: [ [ x => x, [0,1] ] ],
+          g: [ [ x => 1 - x, [0,1] ] ],
+          b: [ [ x => 1, [0,1] ] ] },
+
+  hot: { r: [ [ lerp( [0,.0416], [.365079,1] ), [0,.365079] ], [ x => 1, [.365079,1] ] ],
+         g: [ [ x => 0, [0,.365079] ], [ lerp( [.365079,0], [.746032,1] ), [.365079,.746032] ],
+              [ x => 1, [.746032,1] ] ],
+         b: [ [ x => 0, [0,.746032] ], [ lerp( [.746032,0], [1,1] ), [.746032,1] ] ] },
+
+  copper: { r: [ [ lerp( [0,0], [.809524,1] ), [0,.809524] ], [ x => 1, [.809524,1] ] ],
+            g: [ [ x => .7812*x, [0,1] ] ],
+            b: [ [ x => .4975*x, [0,1] ] ] },
+
+  bwr: { r: [ [ x => 2*x, [0,.5] ], [ x => 1, [.5,1] ] ],
+         g: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
+         b: [ [ x => 1, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ] },
+
+  hsv: { r: [ [ x => hueToColor(x).r, [0,1] ] ],
+         g: [ [ x => hueToColor(x).g, [0,1] ] ],
+         b: [ [ x => hueToColor(x).b, [0,1] ] ] },
+
+  ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
+           g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],
+           b: [ [ x => x, [0,1] ] ] },
+
+  brg: { r: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
+         g: [ [ x => 0, [0,.5] ], [ x => 2*x - 1, [.5,1] ] ],
+         b: [ [ x => 1 - 2*x, [0,.5] ], [ x => 0, [.5,1] ] ] },
+
+  rainbow: { r: [ [ x => Math.abs( 2*x - 1/2 ), [0,.75] ], [ x => 1, [.75,1] ] ],
+             g: [ [ x => Math.sin( Math.PI*x ), [0,1] ] ],
+             b: [ [ x => Math.cos( Math.PI/2*x ), [0,1] ] ] },
+
+  jet: { r: [ [ x => 0, [0,.35] ], [ lerp( [.35,0], [.66,1] ), [.35,.66] ],
+              [ x => 1, [.66,.89] ], [ lerp( [.89,1], [1,.5] ), [.89,1] ] ],
+         g: [ [ x => 0, [0,.125] ], [ lerp( [.125,0], [.375,1] ), [.125,.375] ],
+              [ x => 1, [.375,.64] ], [ lerp( [.64,1], [.91,0] ), [.64,.91] ],
+              [ x => 0, [.91,1] ] ],
+         b: [ [ lerp( [0,.5], [.11,1] ), [0,.11] ], [ x => 1, [.11,.34] ],
+              [ lerp( [.34,1], [.65,0] ), [.34,.65] ], [ x => 0, [.65,1] ] ] },
+
+}
+
+// analyticphysics.com/Coding Methods/Reverse Engineering Mathematica Colormaps.htm
+
+var mathematica = {
+
+  density: { r: [ [ x => .129 + 1.532*x, [0,.5] ], [ x => .775 + .25*x, [.5,.9] ],
+                  [ x => 1, [.9,1] ] ],
+             g: [ [ x => .331 + .597*x, [0,1] ] ],
+             b: [ [ x => .54 + 1.18*x, [0,.1] ], [ x => .75 - .92*x, [.1,.5] ],
+                  [ x => -.0975 + .775*x, [.5,.9] ], [ x => -.75 + 1.5*x, [.9,1] ] ] },
+
+  sunset: { r: [ [ x => 2.313*x, [0,.32] ], [ x => .391 + 1.181*x, [.32,.5] ],
+                 [ x => .972 + .033*x, [.5,1] ] ],
+            g: [ [ x => .792*x, [0,.35] ], [ x => -.179 + 1.281*x, [.35,.82] ],
+                 [ x => .281 + .719*x, [.82,1] ] ],
+            b: [ [ x => 3.025*x, [0,.17] ], [ x => .73 - 1.365*x, [.17,.5] ],
+                 [ x => -.19 + .482*x, [.5,.67] ], [ x => -1.316 + 2.168*x, [.67,.82] ],
+                 [ x => -2.032 + 3.031*x, [.82,1] ] ] },
+
+  thermometer: { r: [ [ x => .11 + 1.829*x - 1.445*x**3, [0,1] ] ],
+                 g: [ [ x => .035 + 3.79*x - 4.689*x**2 + .877*x**3, [0,1] ] ],
+                 b: [ [ x => .777 + 1.558*x - 3.767*x**2 + 1.587*x**3, [0,1] ] ] },
+
+  watermelon: { r: [ [ x => .1 + 1.301*x, [0,.15] ], [ x => .137 + 1.029*x, [.15,.7] ],
+                     [ x => .458 + .575*x, [.7,.85] ], [ x => 1.336 - .452*x, [.85,1] ] ],
+                g: [ [ x => .097 + 2.078*x - 1.327*x**2, [0,.55] ], [ x => .794 + .1*x, [.55,.72] ],
+                     [ x => 1.56 - .973*x, [.72,.85] ], [ x => 2.897 - 2.536*x, [.85,1] ] ],
+                b: [ [ x => .0975 + .836*x, [0,.3] ], [ x => .012 + 1.13*x, [.3,.55] ],
+                     [ x => .197 + .808*x, [.55,.72] ], [ x => 1.019 - .343*x, [.72,.85] ],
+                     [ x => 2.886 - 2.525*x, [.85,1] ] ] },
+
+  cherry: { r: [ [ x => .216 + 2.437*x, [0,.14] ], [ x => .383 + 1.267*x, [.14,.3] ],
+                 [ x => .57 + .621*x, [.3,.42] ], [ x => .721 + .272*x, [.42,1] ] ],
+            g: [ [ x => .215 - .409*x, [0,.15] ], [ x => .13 + .176*x, [.15,.3] ],
+                 [ x => .089 + .0576*x + .86*x**2, [.3,1] ] ],
+            b: [ [ x => .215 - .405*x, [0,.15] ], [ x => .133 + .166*x, [.15,.28] ],
+                 [ x => .075 + .12*x + .813*x**2, [.28,1] ] ] },
+
+  rust: { r: [ [ x => 1.556*x, [0,.5] ], [ x => .556 + .444*x, [.5,1] ] ],
+          g: [ [ x => .742*x, [0,.5] ], [ x => .265 + .208*x, [.5,1] ] ],
+          b: [ [ x => .191 - .242*x, [0,.5] ], [ x => .105 - .069*x, [.5,1] ] ] },
+
+  rainbow2: { r: [ [ x => .471 - 2.566*x, [0,.05] ],
+                   [ x =>.423 - 2.045*x + 6.551*x**2 - 4.092*x**3 , [.05,1] ] ],
+              g: [ [ x => .107 + .24*x, [0,.07] ],
+                   [ x => -.062 + 2.669*x - 2.012*x**2 - .476*x**4, [.07,1] ] ],
+              b: [ [ x => .523 + 2.692*x - 6.33*x**2, [0,.4] ],
+                   [ x => 1.212 - 1.534*x, [.4,.55] ], [ x => .919 - .994*x, [.55,.62] ],
+                   [ x => .556 - .421*x, [.62,1] ] ] },
+
+  temperature: { r: [ [ x => .176 + 1.633*x, [0,.15] ], [ x => .098 + 2.162*x, [.15,.35] ],
+                      [ x => .092 + 3.098*x - 2.643*x**2, [.35,.67] ],
+                      [ x => 1.362 - .547*x, [.67,1] ] ],
+                 g: [ [ x => .305 + 1.627*x, [0,.4] ], [ x => .739 + .501*x, [.4,.5] ],
+                      [ x => 1 - .018*x, [.5,.67] ], [ x => .185 + 3.688*x - 3.731*x**2, [.67,1] ] ],
+                 b: [ [ x => .928 + .154*x, [0,.42] ], [ x => 1.404 - .985*x, [.42,.5] ],
+                      [ x => 2.014 - 2.205*x, [.5,.58] ], [ x => 2.807 - 3.569*x, [.58,.67] ],
+                      [ x => 1.561 - 1.703*x, [.67,.75] ], [ x => .637 - .473*x, [.75,1] ] ] },
+
+}
+
+
+var colormaps = Object.assign( {}, matplotlib, mathematica );
+
+
+// return arrays of objects for all plots
+
+
+function plot( f, xRange, options={} ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 200;
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var points = [];
+  linspace( xRange[0], xRange[1], xRange[2] ).forEach(
+    x => points.push( [ x, f(x) ] )
+  );
+
+  return [ { points: points, options: options, type: 'line' } ];
+
+}
+
+
+function listPlot( points, options={} ) {
+
+  if ( Array.isArray( arguments[1] ) ) {
+
+    // working copy of points
+    points = JSON.parse( JSON.stringify( points ) );
+
+    // assume arrays of same lengths and depths
+    var dim = arguments[0][0].length - 1;
+
+    for ( var i = 1 ; i < arguments.length ; i++ )
+      if ( Array.isArray( arguments[i] ) )
+        for ( var j = 0 ; j < arguments[0].length ; j++ )
+          // only add last coordinates together
+          points[j][dim] += arguments[i][j][dim];
+
+    if ( !Array.isArray( arguments[ arguments.length - 1 ] ) )
+      options = arguments[ arguments.length - 1 ];
+    else options = {};
+
+  }
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  return [ { points: points, options: options, type: 'line' } ];
+
+}
+
+function polarPlot( f, aRange, options={} ) {
+
+  if ( aRange.length < 3 ) aRange[2] = 200;
+
+  return parametric( a => [ f(a)*Math.cos(a), f(a)*Math.sin(a) ], aRange, options );
+
+}
+
+
+function parametric( vector, xRange, yRange, options={} ) {
+
+  var slices = xRange.length < 3 ? 50 : xRange[2];
+  var xStep = ( xRange[1] - xRange[0] ) / slices;
+
+  if ( !Array.isArray( yRange ) ) {
+
+    var points = [];
+    for ( var i = 0 ; i <= slices ; i++ ) {
+      var x = xRange[0] + i * xStep;
+      points.push( vector(x) );
+    }
+
+    return line( points, yRange );
+
+  }
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
+
+  var stacks = yRange.length < 3 ? 50 : yRange[2];
+  var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  var vertices = [];
+  if ( 'colormap' in options ) options.colors = [];
+
+  for ( var i = 0 ; i <= stacks ; i++ ) {
+    var y = yRange[0] + i * yStep;
+    for ( var j = 0 ; j <= slices ; j++ ) {
+      var x = xRange[0] + j * xStep;
+      var v = vector(x,y);
+
+      if ( 'complexFunction' in options )
+        switch( options.complexFunction ) {
+          case 're':
+            vertices.push( [ v[0], v[1], v[2].re ] );
+            break;
+          case 'im':
+            vertices.push( [ v[0], v[1], v[2].im ] );
+            break;
+          case 'abs':
+            vertices.push( [ v[0], v[1], Math.hypot( v[2].re, v[2].im ) ] );
+            break;
+          default:
+            throw Error( 'Unsupported complex function case' );
+        }
+      else vertices.push( v );
+
+      if ( 'colormap' in options ) {
+        if ( options.colormap === 'complexArgument' ) {
+          var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
+          options.colors.push( colorToHexString( hueToColor(p) ) );
+        }
+        if ( typeof( options.colormap ) === 'function' )
+          options.colors.push( colorToHexString( options.colormap(x,y) ) );
+      }
+    }
+  }
+
+  var faces = [];
+  var count = slices + 1;
+  for ( var i = 0 ; i < stacks ; i++ ) {
+    for ( var j = 0 ; j < slices ; j++ ) {
+      faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
+    }
+  }
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+
+function wireframe( vector, xRange, yRange, options={} ) {
+
+  if ( !options.openEnded ) options.openEnded = true;
+
+  var slices = xRange.length < 3 ? 50 : xRange[2];
+  var xStep = ( xRange[1] - xRange[0] ) / slices;
+
+  var stacks = yRange.length < 3 ? 50 : yRange[2];
+  var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  var lines = [];
+
+  for ( var i = 0 ; i <= slices ; i++ ) {
+    var x = xRange[0] + i * xStep;
+    var points = [];
+    for ( var j = 0 ; j <= stacks ; j++ ) {
+      var y = yRange[0] + j * yStep;
+      points.push( vector(x,y) );
+    }
+    line( points, options ).forEach( l => lines.push( l ) );
+  }
+
+  for ( var i = 0 ; i <= stacks ; i++ ) {
+    var y = yRange[0] + i * yStep;
+    var points = [];
+    for ( var j = 0 ; j <= slices ; j++ ) {
+      var x = xRange[0] + j * xStep;
+      points.push( vector(x,y) );
+    }
+    line( points, options ).forEach( l => lines.push( l ) );
+  }
+
+  return lines;
+
+}
+
+
+function surfaceFromLines( lines, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
+
+  var vertices = [], faces = [];
+
+  vertices = vertices.concat( lines[0] );
+  var l = vertices.length;
+
+  for ( var i = 1 ; i < lines.length ; i++ ) {
+
+    vertices = vertices.concat( lines[i] );
+
+    for ( var j = 0 ; j < l - 1 ; j++ )
+      faces.push( [ (i-1)*l + j, (i-1)*l + j + 1, i*l + j + 1, i*l + j ] ); 
+
+  }
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+
+function slopeField( f, xRange, yRange, zRange, options={} ) {
+
+  if ( xRange.length < 3 ) xRange[2] = 20;
+  if ( yRange.length < 3 ) yRange[2] = 20;
+
+  var xStep = ( xRange[1] - xRange[0] ) / xRange[2];
+  var yStep = ( yRange[1] - yRange[0] ) / yRange[2];
+
+  var field = [];
+
+  function scale( v, s ) {
+    for ( var i = 0 ; i < v.length ; i++ ) v[i] *= s;
+    return v;
+  }
+
+  if ( !Array.isArray( zRange ) ) {
+
+    var size = .25 * Math.min( xStep, yStep );
+
+    for ( var i = 0 ; i <= xRange[2] ; i++ ) {
+      var x = xRange[0] + i * xStep;
+      for ( var j = 0 ; j <= yRange[2] ; j++ ) {
+        var y = yRange[0] + j * yStep;
+        var v = scale( normalize( [ 1, f(x,y) ] ), size );
+        field.push( line( translate( [ [-v[0],-v[1]], [v[0],v[1]] ], [x,y] ), zRange )[0] );
+      }
+    }
+
+    return field;
+
+  }
+
+  if ( zRange.length < 3 ) zRange[2] = 20;
+
+  var zStep = ( zRange[1] - zRange[0] ) / zRange[2];
+
+  var size = .25 * Math.min( xStep, yStep, zStep );
+
+  for ( var i = 0 ; i <= xRange[2] ; i++ ) {
+    var x = xRange[0] + i * xStep;
+    for ( var j = 0 ; j <= yRange[2] ; j++ ) {
+      var y = yRange[0] + j * yStep;
+      for ( var k = 0 ; k <= zRange[2] ; k++ ) {
+        var z = zRange[0] + k * zStep;
+        var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), size );
+        // individual lines sluggish to render - need LineSegements geometry
+        field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
+      }
+    }
+  }
+
+  return field;
+
+}
+
+
+// return arrays of objects for all graphics
+// face indices always counter-clockwise for consistency
+
+
+function arrow( begin, end, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  if ( begin.length === 2 ) {
+
+    options.fill = true;
+
+    var t = normalize( [ end[0]-begin[0], end[1]-begin[1] ] );
+    var n = [ t[1], -t[0] ];
+    var d = normalize( [ n[0]-t[0], n[1]-t[1] ] );
+
+    var size = .05 * ( options.size ? options.size : 1 );
+    var p1 = [ end[0]+size*d[0], end[1]+size*d[1] ];
+    var p2 = [ p1[0]-Math.sqrt(2)*size*n[0], p1[1]-Math.sqrt(2)*size*n[1] ];
+
+    return [ { points: [ begin, end, p1, p2, end ], options: options, type: 'line' } ];
+
+  } else {
+
+    var h = Math.sqrt( (end[0]-begin[0])**2 + (end[1]-begin[1])**2 + (end[2]-begin[2])**2 ) / 2;
+    var size = .1 * ( options.size ? options.size : 1 );
+
+    var center = [ (end[0]+begin[0])/2, (end[1]+begin[1])/2, (end[2]+begin[2])/2 ];
+    var axis = normalize( [ end[0]-begin[0], end[1]-begin[1], end[2]-begin[2] ] );
+
+    options.center = center;
+    options.axis = axis;
+    var body = cylinder( size/3, 2*h, options )[0];
+
+    var center2 = [ center[0] + h*axis[0], center[1] + h*axis[1], center[2] + h*axis[2] ];
+
+    options.center = center2;
+    var head = cone( size, size, options )[0];
+
+    return [ body, head ];
+
+  }
+
+}
+
+
+function text( string, point, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = 'black';
+  if ( !( 'fontSize' in options ) ) options.fontSize = 14;
+
+  return [ { text: string, point: point, options: options, type: 'text' } ];
+
+}
+
+
+function point( point, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'size' in options ) ) options.size = 1;
+
+  return [ { point: point, options: options, type: 'point' } ];
+
+}
+
+
+function line( points, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  if ( 'radius' in options ) {
+
+    var segments = [];
+
+    if ( options.endcaps ) {
+      options.center = points[0];
+      segments.push( sphere( options.radius, options )[0] );
+    }
+
+    for ( var i = 1 ; i < points.length ; i++ ) {
+
+      var a = points[i-1];
+      var b = points[i];
+
+      var height = Math.sqrt( (b[0]-a[0])**2 + (b[1]-a[1])**2 + (b[2]-a[2])**2 );
+
+      options.axis = [ b[0]-a[0], b[1]-a[1], b[2]-a[2] ];
+      options.center = [ (a[0]+b[0])/2, (a[1]+b[1])/2, (a[2]+b[2])/2 ];
+
+      segments.push( cylinder( options.radius, height, options )[0] );
+
+      if ( options.endcaps ) {
+        options.center = b;
+        segments.push( sphere( options.radius, options )[0] );
+      }
+
+    }
+
+    return segments;
+
+  }
+
+  else {
+
+    if ( !( 'linewidth' in options ) ) options.linewidth = 1;
+
+    return [ { points: points, options: options, type: 'line' } ];
+
+  }
+
+}
+
+
+// simple 3D objects
+
+function box( width, depth, height, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var x = width / 2;
+  var y = depth / 2;
+  var z = height / 2;
+
+  var vertices = [ [x,y,z], [-x,y,z], [-x,-y,z], [x,-y,z],
+                   [x,y,-z], [-x,y,-z], [-x,-y,-z], [x,-y,-z] ];
+
+  var faces = [ [0,1,2,3], [4,7,6,5], [0,4,5,1], [2,6,7,3],
+                [0,3,7,4], [1,5,6,2] ];
+
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+function sphere( radius, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
+
+  var vertices = [ [ 0, 0, r ], [ 0, 0, -r ] ];
+  var faces = [];
+
+  for ( var i = 1 ; i < steps ; i++ ) {
+
+    var a = Math.PI * i / steps;
+
+    for ( var j = 0 ; j < steps ; j++ ) {
+
+      var b = 2 * Math.PI * j / steps;
+
+      vertices.push( [ r * Math.sin(a) * Math.cos(b),
+                       r * Math.sin(a) * Math.sin(b),
+                       r * Math.cos(a) ] );
+
+    }
+
+  }
+
+  for ( var i = 2 ; i < steps + 1 ; i++ )
+    faces.push( [ 0, i, i+1 ] ); // top
+
+  faces.push( [ 0, steps + 1, 2 ] ); // avoid seam
+
+  for ( var i = 1 ; i < steps - 1 ; i++ ) {
+
+    var k = ( i - 1 ) * steps + 2;
+
+    for ( var j = 0 ; j < steps - 1 ; j++ )
+
+      faces.push( [ k+j, k+j + steps, k+j+1 + steps, k+j+1 ] );
+
+    faces.push( [ k + steps - 1, k + 2*steps - 1, k + steps, k ] ); // avoid seam
+
+  }
+
+  for ( var i = vertices.length - steps ; i < vertices.length - 1 ; i++ )
+    faces.push( [ 1, i+1, i ] ); // bottom
+
+  faces.push( [ 1, vertices.length - steps, vertices.length - 1 ] ); // avoid seam
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+function ellipsoid( a, b, c, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var e = sphere( 1, { steps: options.steps ? options.steps : 20 } )[0];
+
+  e.vertices.forEach( v => { v[0] *= a; v[1] *= b; v[2] *= c; } );
+
+  if ( 'axis' in options ) rotateFromZAxis( e.vertices, options.axis );
+
+  if ( 'center' in options ) translate( e.vertices, options.center );
+
+  return [ { vertices: e.vertices, faces: e.faces, options: options, type: 'surface' } ];
+
+}
+
+function cylinder( radius, height, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  if ( options.endcaps ) options.openEnded = true;
+
+  var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
+  var h = height / 2;
+
+  var vertices = [ [ 0, 0, h ], [ 0, 0, -h ] ];
+  var faces = [];
+
+  for ( var i = 0 ; i < steps ; i++ ) {
+
+    var a = 2 * Math.PI * i / steps;
+
+    vertices.push( [ r * Math.cos(a), r * Math.sin(a), h ],
+                   [ r * Math.cos(a), r * Math.sin(a), -h ] );
+
+  }
+
+  if ( !options.openEnded ) {
+
+   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
+     faces.push( [ 0, i, i+2 ] );
+
+   faces.push( [ 0, vertices.length - 2, 2 ] ); // avoid seam
+
+  }
+
+  for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
+    faces.push( [ i, i+1, i+3, i+2 ] );
+
+  faces.push( [ vertices.length - 2, vertices.length - 1, 3, 2 ] ); // avoid seam
+
+  if ( !options.openEnded ) {
+
+   for ( var i = 2 ; i < vertices.length - 3 ; i += 2 )
+     faces.push( [ 1, i+3, i+1 ] );
+
+   faces.push( [ 1, 3, vertices.length - 1 ] ); // avoid seam
+
+  }
+
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+function cone( radius, height, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var steps = 'steps' in options ? options.steps : 20;
+  var r = radius;
+  var h = height / 2;
+
+  var vertices = [ [ 0, 0, -h ], [ 0, 0, h ] ];
+  var faces = [];
+
+  for ( var i = 0 ; i < steps ; i++ ) {
+
+    var a = 2 * Math.PI * i / steps;
+
+    vertices.push( [ r * Math.cos(a), r * Math.sin(a), -h ] );
+
+  }
+
+  for ( var i = 2 ; i < vertices.length - 1 ; i++ )
+    faces.push( [ 0, i, i+1 ], [ 1, i, i+1 ] );
+
+  faces.push( [ 0, vertices.length - 1, 2 ], [ 1, vertices.length - 1, 2 ] ); // avoid seam
+
+  if ( 'axis' in options ) rotateFromZAxis( vertices, options.axis );
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
+
+function svg( id, data, config ) {
+
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+
+  function parsedLength( input ) {
+
+    var frag = new DOMParser().parseFromString( input, 'text/html' );
+    return frag.documentElement.textContent.length;
+
+  }
+
+  function decimalsInNumber( x ) {
+
+    for ( var i = 0 ; i < 100 ; i++ ) {
+      if ( roundTo( x, i, false ) === x ) break;
+    }
+    return i;
+
+  }
+
+  function chop( x, tolerance=1e-10 ) {
+
+    if ( Math.abs(x) < tolerance ) x = 0;
+    return x;
+
+  }
+
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
+
+  var width = output.offsetWidth;
+  var height = output.offsetHeight;
+  var ext = 20; // axis extension
+
+  if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );
+
+  var texts = [], points = [], lines = [];
+
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+    }
+
+  var all = [];
+  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
+  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
+
+  var xMinMax = minMax( all, 0 );
+  var yMinMax = minMax( all, 1 );
+
+  // rounding currently to remove excessive decimals
+  // add option when needed for rounding to significant digits
+
+  var xMin = 'xMin' in config ? config.xMin : floorTo( xMinMax.min, 4, false );
+  var xMax = 'xMax' in config ? config.xMax : ceilTo( xMinMax.max, 4, false );
+  var yMin = 'yMin' in config ? config.yMin : floorTo( yMinMax.min, 4, false );
+  var yMax = 'yMax' in config ? config.yMax : ceilTo( yMinMax.max, 4, false );
+
+  if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
+  if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
+
+  if ( config.equalLimits ) {
+
+    if ( xMin < yMin ) yMin = xMin;
+    else xMin = yMin;
+
+    if ( xMax > yMax ) yMax = xMax;
+    else xMax = yMax;
+
+  }
+
+  var xRange = xMax - xMin;
+  var yRange = yMax - yMin;
+
+  var xScale = width / xRange;
+  var yScale = height / yRange;
+  if ( config.equalAspect ) yScale = xScale;
+
+  var axes = 'axes' in config ? config.axes : true;
+  if ( !axes ) config.ticks = false;
+
+  var ticks = 'ticks' in config ? config.ticks : [ 'auto', 'auto' ];
+  if ( ticks === 'auto' ) ticks = [ 'auto', 'auto' ];
+  if ( ticks === 'none' ) ticks = false;
+  var tickSize = 5;
+
+  if ( ticks[0] === 'auto' ) {
+    ticks[0] = Math.pow( 10, Math.floor( Math.log10(xRange) ) );
+    if ( 3*ticks[0] > xRange ) ticks[0] /= 2;
+    if ( 4*ticks[0] > xRange ) ticks[0] /= 2;
+  }
+  if ( ticks[1] === 'auto' ) {
+    ticks[1] = Math.pow( 10, Math.floor( Math.log10(yRange) ) );
+    if ( 3*ticks[1] > yRange ) ticks[1] /= 2;
+    if ( 4*ticks[1] > yRange ) ticks[1] /= 2;
+  }
+
+  var xTickDecimals = decimalsInNumber( ticks[0] );
+  var yTickDecimals = decimalsInNumber( ticks[1] );
+
+  // size of largest y-axis tick label
+  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, false ).toString().length,
+                                roundTo( yMax, yTickDecimals, false ).toString().length,
+                                roundTo( 3*ticks[1], yTickDecimals, false ).toString().length  );
+
+  // offsets of numbers from axes, inverted when on right/top
+  var xOffset = 10;
+  var yOffset = 16;
+
+  var xAxisLabel = 'axesLabels' in config ? config.axesLabels[0] : '';
+  var xLabel = xAxisLabel.length > 0 ? Math.max( 20, 15 * parsedLength( xAxisLabel ) ) : 0;
+  var yAxisLabel = 'axesLabels' in config ? config.axesLabels[1] : '';
+  var yLabelSize = 4.5 * parsedLength( yAxisLabel );
+  var yLabel = yAxisLabel.length > 0 ? 20 : 0;
+
+  // mathematical origin vs. location of axis
+  var xOrigin = Math.round( -xMin * xScale );
+  var xAxis = xOrigin;
+  var gutter = ticks ? Math.max( ext, yNumSize + xOffset - xOrigin, yLabelSize - xOrigin ) : ext;
+  var xTotal = width + gutter + ext + xLabel;
+  var xShift = gutter;
+
+  if ( xOrigin < 0 ) {
+    xAxis = -1.5*ext;
+    gutter = ticks ? Math.max( ext, yNumSize + xOffset, yLabelSize ) : ext;
+    xTotal = width + gutter + 2.5*ext + xLabel;
+    xShift = gutter + 1.5*ext;
+  }
+  if ( xOrigin > width ) {
+    xAxis = width + 1.5*ext;
+    gutter = ticks ? Math.max( yNumSize, yLabelSize, xLabel ) : xLabel;
+    xTotal = width + gutter + 2.5*ext;
+    xOffset = ticks ? -yNumSize : ext;
+  }
+
+  // mathematical origin vs. location of axis
+  var yOrigin = Math.round( yMax * yScale );
+  var yAxis = yOrigin;
+  var yTotal = height + 2*ext + yLabel;
+  var yShift = ext + yLabel;
+
+  if ( yOrigin < 0 ) {
+    yAxis = -1.5*ext;
+    yTotal += .5*ext + yOffset;
+    yShift = 1.5*ext + yOffset;
+    yOffset = -6;
+    if ( yLabel > 0 ) yLabel += 12;
+  }
+  if ( yOrigin > height ) {
+    yAxis = height + 1.5*ext;
+    yTotal += .5*ext + 1.5*yOffset;
+  }
+
+  var svg = `
+<svg width="${width}" height="${height}" preserveAspectRatio="none"
+     viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
+     xmlns="http://www.w3.org/2000/svg">`;
+
+  if ( axes ) {
+
+    svg += `<path d="M ${-ext} ${yAxis} L ${width + ext} ${yAxis}" stroke="black"/>`;
+    svg += `<path d="M ${xAxis} ${-ext} L ${xAxis} ${height + ext}" stroke="black"/>`;
+
+    if ( ticks ) {
+
+      var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
+      for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
+        if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
+          var x = Math.round( xOrigin + xScale*i );
+          svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
+                        stroke="black" />`;
+          svg += `<text x="${x}" y="${yAxis + yOffset}"
+                        font-family="monospace" text-anchor="middle">
+                  ${+i.toFixed(xTickDecimals)}</text>`;
+        }
+      }
+
+      var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
+      for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
+        if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
+          var y = Math.round( yOrigin - yScale*i );
+          svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
+                        stroke="black" />`;
+          svg += `<text x="${xAxis - xOffset}" y="${y}"
+                        font-family="monospace" text-anchor="end" dominant-baseline="central">
+                  ${+i.toFixed(yTickDecimals)}</text>`;
+        }
+      }
+
+    }
+
+    svg += `<text x="${width + ext + Math.abs(xOffset)}" y="${yAxis}"
+            font-family="monospace" font-size="110%" font-weight="bold"
+            dominant-baseline="central">${xAxisLabel}</text>`;
+    svg += `<text x="${xAxis}" y="${-ext - yLabel/2}"
+            font-family="monospace" font-size="110%" font-weight="bold"
+            text-anchor="middle">${yAxisLabel}</text>`;
+
+  }
+
+
+  function xPos( x ) { return roundTo( xOrigin + xScale*x, 2, false ); }
+
+  function yPos( y ) { return roundTo( yOrigin - yScale*y, 2, false ); }
+
+
+  for ( var i = 0 ; i < lines.length ; i++ ) {
+
+    // working copy of line
+    var l = JSON.parse( JSON.stringify( lines[i] ) );
+
+    l.points.forEach( p => {
+      // set possibly huge values to just beyond limits
+      if ( p[1] < yMin ) p[1] = yMin - 1;
+      if ( p[1] > yMax ) p[1] = yMax + 1;
+    } );
+
+    var x = l.points[0][0];
+    var y = l.points[0][1];
+
+    svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
+    var lastX = x;
+    var lastY = y;
+
+    for ( var k = 1 ; k < l.points.length ; k++ ) {
+
+      x = l.points[k][0];
+      y = l.points[k][1];
+
+      function intercept( u ) {
+        return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
+      }
+
+      // both points inside bounds
+      if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+
+      // both points outside bounds
+      if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      if ( lastY < yMin && y > yMax ) {
+        if ( config.includeVerticals ) {
+          svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY > yMax && y < yMin ) {
+        if ( config.includeVerticals ) {
+          svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+          svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        }
+        else svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+
+      // line between points crosses bounds
+      if ( lastY < yMin && y >= yMin && y < yMax ) {
+        svg += ` M ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY >= yMin && lastY < yMax && y < yMin ) {
+        svg += ` L ${ xPos( intercept(yMin) ) } ${ yPos(yMin) }`;
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY <= yMax && lastY > yMin && y > yMax ) {
+        svg += ` L ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+        svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+      }
+      if ( lastY > yMax && y <= yMax && y > yMin ) {
+        svg += ` M ${ xPos( intercept(yMax) ) } ${ yPos(yMax) }`;
+        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+      }
+
+      var lastX = x;
+      var lastY = y;
+
+    }
+
+    svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
+
+  }
+
+  // draw points on top of lines for now
+
+  for ( var i = 0 ; i < points.length ; i++ ) {
+
+    var c = points[i];
+    svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
+                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
+
+  }
+
+  for ( var i = 0 ; i < texts.length ; i++ ) {
+
+    var t = texts[i];
+    svg += `<text x="${ xPos(t.point[0]) }" y="${ yPos(t.point[1]) }"
+                  fill="${ t.options.color }" font-size="${ t.options.fontSize }"
+                  text-anchor="middle" dominant-baseline="central">
+            ${t.text}</text>`;
+
+  }
+
+  return svg + '</svg>';
+
+}
+
+
+function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
+
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+<meta name=viewport content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style>
+
+     body { margin: 0px; overflow: hidden; }
+
+</style>
+</head>
+
+<body>
+
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/examples/js/controls/OrbitControls.js"></script>
+
+<script>
+
+var config = ${config};
+var scene = new THREE.Scene();
+
+var renderer = new THREE.WebGLRenderer( { antialias: true } );
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize( window.innerWidth, window.innerHeight );
+renderer.setClearColor( config.clearColor, 1 );
+document.body.appendChild( renderer.domElement );
+
+var a = config.aspectRatio; // aspect multipliers
+var animate = config.animate;
+
+var xMin = config.xMin, yMin = config.yMin, zMin = config.zMin;
+var xMax = config.xMax, yMax = config.yMax, zMax = config.zMax;
+
+if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
+if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
+if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
+
+// apply aspect multipliers for convenience
+xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
+xMax *= a[0]; yMax *= a[1]; zMax *= a[2];
+
+var xRange = xMax - xMin;
+var yRange = yMax - yMin;
+var zRange = zMax - zMin;
+var rRange = Math.sqrt( xRange*xRange + yRange*yRange );
+
+if ( zRange > rRange && a[2] === 1 && !config.equalAspect ) {
+  a[2] = rRange / zRange;
+  zMin *= a[2];
+  zMax *= a[2];
+  zRange *= a[2];
+}
+
+var xMid = ( xMin + xMax ) / 2;
+var yMid = ( yMin + yMax ) / 2;
+var zMid = ( zMin + zMax ) / 2;
+
+var box = new THREE.Geometry();
+box.vertices.push( new THREE.Vector3( xMin, yMin, zMin ) );
+box.vertices.push( new THREE.Vector3( xMax, yMax, zMax ) );
+var boxMesh = new THREE.Line( box );
+if ( config.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
+
+if ( config.axesLabels ) {
+
+  var d = config.decimals; // decimals
+  var offsetRatio = 0.1;
+  var al = config.axesLabels;
+
+  var offset = offsetRatio * ( yMax - yMin );
+  var xm = ( xMid/a[0] ).toFixed(d);
+  if ( /^-0.?0*$/.test(xm) ) xm = xm.substr(1);
+  addLabel( al[0] + '=' + xm, xMid, yMax+offset, zMin );
+  addLabel( ( xMin/a[0] ).toFixed(d), xMin, yMax+offset, zMin );
+  addLabel( ( xMax/a[0] ).toFixed(d), xMax, yMax+offset, zMin );
+
+  var offset = offsetRatio * ( xMax - xMin );
+  var ym = ( yMid/a[1] ).toFixed(d);
+  if ( /^-0.?0*$/.test(ym) ) ym = ym.substr(1);
+  addLabel( al[1] + '=' + ym, xMax+offset, yMid, zMin );
+  addLabel( ( yMin/a[1] ).toFixed(d), xMax+offset, yMin, zMin );
+  addLabel( ( yMax/a[1] ).toFixed(d), xMax+offset, yMax, zMin );
+
+  var offset = offsetRatio * ( yMax - yMin );
+  var zm = ( zMid/a[2] ).toFixed(d);
+  if ( /^-0.?0*$/.test(zm) ) zm = zm.substr(1);
+  addLabel( al[2] + '=' + zm, xMax, yMin-offset, zMid );
+  addLabel( ( zMin/a[2] ).toFixed(d), xMax, yMin-offset, zMin );
+  addLabel( ( zMax/a[2] ).toFixed(d), xMax, yMin-offset, zMax );
+
+}
+
+function addLabel( text, x, y, z, color='black', fontsize=14 ) {
+
+  var canvas = document.createElement( 'canvas' );
+  var pixelRatio = Math.round( window.devicePixelRatio );
+  canvas.width = 128 * pixelRatio;
+  canvas.height = 32 * pixelRatio; // powers of two
+  canvas.style.width = '128px';
+  canvas.style.height = '32px';
+
+  var context = canvas.getContext( '2d' );
+  context.scale( pixelRatio, pixelRatio );
+  context.fillStyle = color;
+  context.font = fontsize + 'px monospace';
+  context.textAlign = 'center';
+  context.textBaseline = 'middle';
+  context.fillText( text, canvas.width/2/pixelRatio, canvas.height/2/pixelRatio );
+
+  var texture = new THREE.Texture( canvas );
+  texture.needsUpdate = true;
+
+  var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture } ) );
+  sprite.position.set( x, y, z );
+  sprite.scale.set( 1, .25, 1 ); // ratio of width to height
+  scene.add( sprite );
+
+}
+
+if ( config.axes ) scene.add( new THREE.AxesHelper( Math.min( xMax, yMax, zMax ) ) );
+
+var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+camera.up.set( 0, 0, 1 );
+
+// default auto position, followed by rotation to viewpoint direction
+camera.position.set( xMid, yMid, zMid );
+var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
+
+if ( config.viewpoint !== 'auto' ) {
+  var v = config.viewpoint;
+  var t = new THREE.Vector3( v[0], v[1], v[2] );
+  var phi = defaultOffset.angleTo( t );
+  var n = t.cross( defaultOffset ).normalize();
+  defaultOffset.applyAxisAngle( n, -phi );
+}
+
+camera.position.add( defaultOffset );
+
+var lights = ${lights};
+
+for ( var i = 0 ; i < lights.length ; i++ ) {
+  var light = new THREE.DirectionalLight( lights[i].color, 1 );
+  var v = lights[i].position;
+  light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
+  if ( lights[i].parent === 'camera' ) {
+    light.target.position.set( xMid, yMid, zMid );
+    scene.add( light.target );
+    camera.add( light );
+  } else scene.add( light );
+}
+scene.add( camera );
+
+scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
+
+var controls = new THREE.OrbitControls( camera, renderer.domElement );
+controls.target.set( xMid, yMid, zMid );
+controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
+
+window.addEventListener( 'resize', function() {
+
+  renderer.setSize( window.innerWidth, window.innerHeight );
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  if ( !animate ) render();
+
+} );
+
+window.addEventListener( 'mousedown', suspendAnimation );
+window.addEventListener( 'mousemove', suspendAnimation );
+window.addEventListener( 'mousewheel', suspendAnimation );
+
+window.addEventListener( 'touchstart', suspendAnimation );
+window.addEventListener( 'touchmove', suspendAnimation );
+window.addEventListener( 'touchend', suspendAnimation );
+
+var suspendTimer;
+
+function suspendAnimation() {
+  clearInterval( suspendTimer );
+  animate = false;
+  suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
+}
+
+var texts = ${texts};
+
+for ( var i = 0 ; i < texts.length ; i++ ) {
+  var t = texts[i];
+  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
+}
+
+var points = ${points};
+
+for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
+
+function addPoint( p ) {
+
+  var geometry = new THREE.Geometry();
+  var v = p.point;
+  geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+
+  var canvas = document.createElement( 'canvas' );
+  canvas.width = 128;
+  canvas.height = 128;
+
+  var context = canvas.getContext( '2d' );
+  context.arc( 64, 64, 64, 0, 2 * Math.PI );
+  context.fillStyle = p.options.color;
+  context.fill();
+
+  var texture = new THREE.Texture( canvas );
+  texture.needsUpdate = true;
+
+  var transparent = p.options.opacity < 1 ? true : false;
+  var material = new THREE.PointsMaterial( { size: p.options.size/20, map: texture,
+                                             transparent: transparent, opacity: p.options.opacity,
+                                             alphaTest: .1 } );
+
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
+  var mesh = new THREE.Points( geometry, material );
+  mesh.position.set( c.x, c.y, c.z );
+  scene.add( mesh );
+
+}
+
+var lines = ${lines};
+
+var newLines = [];
+
+for ( var i = 0 ; i < lines.length ; i++ ) {
+
+  lines[i].points.forEach( v => {
+    // apply aspect multipliers for convenience
+    //   and set points outside bounds to empty array
+    v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
+    if ( v[0] < xMin || v[0] > xMax || v[1] < yMin || v[1] > yMax
+           || v[2] < zMin || v[2] > zMax )
+      v.splice(0);
+  } );
+
+  // split lines at empty points
+  var tempPoints = [];
+  for ( var j = 0 ; j < lines[i].points.length ; j++ )
+    if ( lines[i].points[j].length === 0 ) tempPoints = lines[i].points.splice( j );
+
+  var l = [];
+  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
+    var p = tempPoints[j];
+    if ( p.length > 0 ) l.push( p );
+    else if ( l.length > 0 ) {
+      newLines.push( { points: l, options: lines[i].options } );
+      l = [];
+    }
+  }
+
+}
+
+newLines.forEach( l => lines.push( l ) );
+newLines = [];
+
+for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
+
+function addLine( l ) {
+
+  var geometry = new THREE.Geometry();
+  for ( var i = 0 ; i < l.points.length ; i++ ) {
+    var v = l.points[i];
+    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
+  }
+
+  var transparent = l.options.opacity < 1 ? true : false;
+  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
+                                                transparent: transparent, opacity: l.options.opacity } );
+
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
+  var mesh = new THREE.Line( geometry, material );
+  mesh.position.set( c.x, c.y, c.z );
+  scene.add( mesh );
+
+}
+
+var surfaces = ${surfaces};
+
+for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
+
+function addSurface( s ) {
+
+  // apply aspect multipliers for convenience
+  s.vertices.forEach( v => { v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2]; } );
+
+  // remove faces completely outside vertical range
+  for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
+    var f = s.faces[i];
+    var check = true;
+    f.forEach( index => check = check && s.vertices[index][2] < zMin );
+    if ( check ) s.faces.splice( i, 1 );
+    var check = true;
+    f.forEach( index => check = check && s.vertices[index][2] > zMax );
+    if ( check ) s.faces.splice( i, 1 );
+  }
+
+  // constrain vertices to vertical range
+  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+    if ( s.vertices[i][2] < zMin ) s.vertices[i][2] = zMin;
+    if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
+  }
+
+  // no appreciable speedup with BufferGeometry
+  var geometry = new THREE.Geometry();
+  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+    var v = s.vertices[i];
+    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
+  }
+  for ( var i = 0 ; i < s.faces.length ; i++ ) {
+    var f = s.faces[i];
+    for ( var j = 0 ; j < f.length - 2 ; j++ )
+      geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
+  }
+  geometry.computeVertexNormals();
+
+  var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
+  var transparent = s.options.opacity < 1 ? true : false;
+  var material;
+
+  switch ( s.options.material ) {
+
+    case 'normal':
+
+      material = new THREE.MeshNormalMaterial( { side: THREE.DoubleSide } );
+      break;
+
+    case 'standard':
+
+      material = new THREE.MeshStandardMaterial( {
+                               color: s.options.color, side: side,
+                               transparent: transparent, opacity: s.options.opacity } );
+      break;
+
+    case 'phong':
+    default:
+
+      material = new THREE.MeshPhongMaterial( {
+                               color: s.options.color, side: side,
+                               transparent: transparent, opacity: s.options.opacity,
+                               shininess: 20 } );
+
+  }
+
+  if ( 'colors' in s.options ) {
+    for ( var i = 0 ; i < geometry.vertices.length ; i++ )
+      geometry.colors.push( new THREE.Color( s.options.colors[i] ) );
+    for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
+      var f = geometry.faces[i];
+      f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
+    }
+    material.vertexColors = THREE.VertexColors;
+    material.color.set( 'white' ); // crucial!
+  }
+
+  var c = new THREE.Vector3();
+  geometry.computeBoundingBox();
+  geometry.boundingBox.getCenter( c );
+  geometry.translate( -c.x, -c.y, -c.z );
+
+  var mesh = new THREE.Mesh( geometry, material );
+  mesh.position.set( c.x, c.y, c.z );
+  if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
+  if ( s.options.rotationAxisAngle ) {
+    mesh.userData.rotateOnAxis = true;
+    var v = s.options.rotationAxisAngle[0];
+    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
+    mesh.userData.angle = s.options.rotationAxisAngle[1];
+  }
+
+  if ( 'group' in s.options ) {
+
+    var group = scene.getObjectByName( s.options.group );
+    if ( !group ) {
+      group = new THREE.Group();
+      group.name = s.options.group;
+      scene.add( group );
+    }
+    group.add( mesh );
+
+    if ( mesh.userData.rotateOnAxis ) {
+      mesh.userData.rotateOnAxis = false;
+      group.userData.rotateOnAxis = true;
+      group.userData.axis = mesh.userData.axis;
+      group.userData.angle = mesh.userData.angle;
+    }
+
+  } else scene.add( mesh );
+
+}
+
+if ( config.clippingPlane ) {
+
+  var v = config.clippingPlane[0];
+  var d = config.clippingPlane[1];
+  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
+  renderer.clippingPlanes = [ plane ];
+
+}
+
+var scratch = new THREE.Vector3();
+
+function render() {
+
+  if ( animate ) requestAnimationFrame( render );
+  renderer.render( scene, camera );
+
+  scene.children.forEach( child => {
+
+    if ( child.type === 'Sprite' ) {
+      var adjust = scratch.addVectors( child.position, scene.position )
+                          .sub( camera.position ).length() / 5;
+      child.scale.set( adjust, .25*adjust, 1 ); // ratio of canvas width to height
+    }
+
+    if ( child.userData.rotateOnAxis && animate )
+      child.rotateOnAxis( child.userData.axis, child.userData.angle );
+
+  } );
+
+}
+
+render();
+controls.update();
+if ( !animate ) render();
+
+</script>
+
+</body>
+</html>`;
+
+}
+
+
+function threejs( id, data, config ) {
+
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+
+  if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
+  if ( !( 'animate' in config ) ) config.animate = false;
+  if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
+  if ( !( 'axes' in config ) ) config.axes = false;
+  if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];
+  if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
+  if ( !( 'decimals' in config ) ) config.decimals = 2;
+  if ( !( 'equalAspect' in config ) ) config.equalAspect = false;
+  if ( !( 'frame' in config ) ) config.frame = true;
+  if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
+
+  if ( !config.frame ) config.axesLabels = false;
+
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
+
+  if ( output.children.length > 0 && output.children[0].contentWindow ) {
+
+    var cw = output.children[0].contentWindow;
+    var v = cw.camera.position;
+
+    // only direction of viewpoint meaningful, not normalization
+    config.viewpoint = [ v.x - cw.xMid, v.y - cw.yMid, v.z - cw.zMid ];
+
+  }
+
+  var texts = [], points = [], lines = [], surfaces = [];
+
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+      if ( d.type === 'surface' ) {
+        d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
+        surfaces.push( d );
+      }
+    }
+
+  var all = [];
+  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
+  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
+  for ( var i = 0 ; i < surfaces.length ; i++ ) surfaces[i].vertices.forEach( p => all.push( p ) );
+
+  var xMinMax = minMax( all, 0 );
+  var yMinMax = minMax( all, 1 );
+  var zMinMax = minMax( all, 2 );
+
+  if ( !( 'xMin' in config ) ) config.xMin = xMinMax.min;
+  if ( !( 'yMin' in config ) ) config.yMin = yMinMax.min;
+  if ( !( 'zMin' in config ) ) config.zMin = zMinMax.min;
+
+  if ( !( 'xMax' in config ) ) config.xMax = xMinMax.max;
+  if ( !( 'yMax' in config ) ) config.yMax = yMinMax.max;
+  if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
+
+  surfaces.forEach( s => {
+    // process predefined colormaps
+    if ( 'colormap' in s.options &&
+          ( !( 'colors' in s.options ) || s.options.colors.length === 0 ) ) {
+      s.options.colors = [];
+      var f = colormap( s.options.colormap, s.options.reverseColormap );
+      var zMinMax = minMax( s.vertices, 2 );
+      var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
+      var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
+      for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+        var z = s.vertices[i][2];
+        if ( z < zMin ) z = zMin;
+        if ( z > zMax ) z = zMax;
+        var w = ( z - zMin ) / ( zMax - zMin );
+        s.options.colors.push( colorToHexString( f(w) ) );
+      }
+    }
+  } );
+
+  var border = config.no3DBorder ? 'none' : '1px solid black';
+
+  config = JSON.stringify( config );
+
+  var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
+
+  texts = JSON.stringify( texts );
+  points = JSON.stringify( points );
+  lines = JSON.stringify( lines );
+  surfaces = JSON.stringify( surfaces );
+
+  var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
+
+  return `<iframe style="width: 100%; height: 100%; border: ${border};"
+                  srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
+
+}
+
+
+function x3d( id, data, config ) {
+
+  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+
+  function compositeRotation( first, second ) {
+
+    var a = first[0], na = first[1];
+    var b = second[0], nb = second[1];
+
+    var dot = na[0]*nb[0] + na[1]*nb[1] + na[2]*nb[2];
+    var cross = [ na[1]*nb[2] - na[2]*nb[1],
+                  na[2]*nb[0] - na[0]*nb[2],
+                  na[0]*nb[1] - na[1]*nb[0]  ];
+
+    var c = 2 * Math.acos( Math.cos(a/2) * Math.cos(b/2)
+                           - dot * Math.sin(a/2) * Math.sin(b/2) );
+
+    var nc = [];
+    for ( var i = 0 ; i < 3 ; i++ )
+      nc[i] = na[i] * Math.sin(a/2) * Math.cos(b/2) / Math.sin(c/2)
+              + nb[i] * Math.cos(a/2) * Math.sin(b/2) / Math.sin(c/2)
+              - cross[i] * Math.sin(a/2) * Math.sin(b/2) / Math.sin(c/2);
+
+    return [ c, nc ];
+
+  }
+
+  var frame = 'frame' in config ? config.frame : true;
+  var viewer = 'viewer' in config ? config.viewer : 'x3dom';
+
+  var n = 'output' in config ? config.output : '';
+  var output = document.getElementById( id + 'output' + n );
+
+  var width = output.offsetWidth;
+  var height = output.offsetHeight;
+
+  var texts = [], points = [], lines = [], surfaces = [];
+
+  for ( var i = 0 ; i < data.length ; i++ )
+    for ( var j = 0 ; j < data[i].length ; j++ ) {
+      var d = data[i][j];
+      if ( d.type === 'text' ) texts.push( d );
+      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'line' ) lines.push( d );
+      if ( d.type === 'surface' ) {
+        d.vertices = roundTo( d.vertices, 3, false ); // reduce raw data size
+        surfaces.push( d );
+      }
+    }
+
+  var all = [];
+  for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
+  for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
+  for ( var i = 0 ; i < lines.length ; i++ ) lines[i].points.forEach( p => all.push( p ) );
+  for ( var i = 0 ; i < surfaces.length ; i++ ) surfaces[i].vertices.forEach( p => all.push( p ) );
+
+  var xMinMax = minMax( all, 0 );
+  var yMinMax = minMax( all, 1 );
+  var zMinMax = minMax( all, 2 );
+
+  var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
+  var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
+  var zMin = 'zMin' in config ? config.zMin : zMinMax.min;
+
+  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
+  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
+  var zMax = 'zMax' in config ? config.zMax : zMinMax.max;
+
+  var xRange = xMax - xMin;
+  var yRange = yMax - yMin;
+  var zRange = zMax - zMin;
+
+  var xMid = ( xMax + xMin ) / 2;
+  var yMid = ( yMax + yMin ) / 2;
+  var zMid = ( zMax + zMin ) / 2;
+
+  var boxHelper = [ [ [xMin,yMin,zMin],[xMax,yMin,zMin] ],
+                    [ [xMin,yMin,zMin],[xMin,yMax,zMin] ],
+                    [ [xMin,yMin,zMin],[xMin,yMin,zMax] ],
+                    [ [xMax,yMin,zMin],[xMax,yMax,zMin] ],
+                    [ [xMax,yMin,zMin],[xMax,yMin,zMax] ],
+                    [ [xMin,yMax,zMin],[xMax,yMax,zMin] ],
+                    [ [xMin,yMax,zMin],[xMin,yMax,zMax] ],
+                    [ [xMin,yMin,zMax],[xMax,yMin,zMax] ],
+                    [ [xMin,yMin,zMax],[xMin,yMax,zMax] ],
+                    [ [xMax,yMax,zMin],[xMax,yMax,zMax] ],
+                    [ [xMax,yMin,zMax],[xMax,yMax,zMax] ],
+                    [ [xMin,yMax,zMax],[xMax,yMax,zMax] ] ];
+
+  // default orientation is looking down z-axis, even after displacement
+  // need to rotate viewpoint back to origin with composite orientation
+
+  var zRotation = [ Math.PI/2 + Math.atan(yRange/xRange), [ 0, 0, 1 ] ];
+
+  var norm1 = Math.sqrt( xRange**2 + yRange**2 + zRange**2 );
+  var norm2 = Math.sqrt( xRange**2 + yRange**2 );
+
+  var xyRotation = [ Math.acos( zRange/norm1 ),
+                               [ -yRange/norm2, xRange/norm2, 0 ] ];
+
+  var cr = compositeRotation( zRotation, xyRotation );
+
+  var x3d = `
+<X3D width="${width}" height="${height}">
+<Scene>
+<Background skyColor="1 1 1"></Background>
+<Viewpoint position="${xRange+xMid} ${yRange+yMid} ${zRange+zMid}"
+           orientation="${cr[1].join(' ')} ${cr[0]}"
+           centerOfRotation="${xMid} ${yMid} ${zMid}"></Viewpoint>`;
+
+  if ( frame ) x3d += `
+<Shape>
+<Appearance>
+<Material emissiveColor="0 0 0"></Material>
+</Appearance>
+<LineSet vertexCount="2 2 2 2 2 2 2 2 2 2 2 2">
+<Coordinate point="${boxHelper.map(a => a[0].concat(a[1]).join(' ')).join(', ')}"></Coordinate>
+</LineSet>
+</Shape>`;
+
+  for ( var i = 0 ; i < surfaces.length ; i++ ) {
+
+    var s = surfaces[i];
+
+    // remove faces completely outside vertical range
+    for ( var j = s.faces.length - 1 ; j >= 0 ; j-- ) {
+      var f = s.faces[j];
+      var check = true;
+      f.forEach( index => check = check && s.vertices[index][2] < zMin );
+      if ( check ) s.faces.splice( j, 1 );
+      var check = true;
+      f.forEach( index => check = check && s.vertices[index][2] > zMax );
+      if ( check ) s.faces.splice( j, 1 );
+    }
+
+    // constrain vertices to vertical range
+    for ( var j = 0 ; j < s.vertices.length ; j++ ) {
+      if ( s.vertices[j][2] < zMin ) s.vertices[j][2] = zMin;
+      if ( s.vertices[j][2] > zMax ) s.vertices[j][2] = zMax;
+    }
+
+    var indices = '';
+    for ( var j = 0 ; j < s.faces.length ; j++ )
+      indices += s.faces[j].join(' ') + ' -1 ';
+
+    var points = '';
+    for ( var j = 0 ; j < s.vertices.length ; j++ )
+      points += s.vertices[j].join(' ') + ' ';
+
+    var p = document.createElement( 'p' );
+    p.style.color = s.options.color;
+    var rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
+    rgb.forEach( (e,i,a) => a[i] /= 255 );
+    var color = rgb.join(' '); 
+
+    x3d += `
+<Shape>
+<Appearance>
+<TwoSidedMaterial diffuseColor="${color}" transparency="${1-s.options.opacity}"></TwoSidedMaterial>
+</Appearance>
+<IndexedFaceSet creaseAngle="1.57" solid="false" coordIndex="${indices}">
+<Coordinate point="${points}"></Coordinate>`;
+
+    if ( 'colors' in s.options ) {
+      var colors = '';
+      for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
+        p.style.color = s.options.colors[j];
+        rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
+        rgb.forEach( (e,i,a) => a[i] /= 255 );
+        rgb = roundTo( rgb, 3 );
+        colors +=  rgb.join(' ') + ' ';
+      }
+      x3d += `
+<Color color="${colors}"></Color>`;
+    }
+
+    x3d += `
+</IndexedFaceSet>
+</Shape>`;
+
+  }
+
+  x3d += `
+</Scene>
+</X3D>`;
+
+  if ( config.saveAsXML ) {
+
+    var xml = `<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN" "http://www.web3d.org/specifications/x3d-3.3.dtd">
+${x3d}`;
+
+    var blob = new Blob( [ xml ] );
+    var a = document.body.appendChild( document.createElement( 'a' ) );
+    a.href = window.URL.createObjectURL( blob );
+    a.download = 'scene.xml';
+    a.click();
+
+  }
+
+  var stylesheet = config.viewer === 'x3dom' ?
+`<link rel="stylesheet" type="text/css" href="https://www.x3dom.org/download/x3dom.css">` :
+`<link rel="stylesheet" type="text/css" href="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.css"/>`;
+
+  var script = config.viewer === 'x3dom' ?
+`<script src="https://www.x3dom.org/download/x3dom.js"></script>` :
+`<script src="https://code.create3000.de/x_ite/4.6.9/dist/x_ite.min.js"></script>
+<script src="https://raw.githack.com/andreasplesch/x_ite_dom/master/release/x_ite_dom.1.3.js"></script>
+<script>
+  //disable straighten horizon
+  X3D( function ready() {
+    var browser = X3D.getBrowser( 'X3DCanvas' );
+    browser.setBrowserOption( 'StraightenHorizon', false );
+  } );
+</script>`;
+
+  var html = `
+<html>
+<head>
+<title></title>
+<meta charset="utf-8">
+${stylesheet}
+</head>
+
+<body style="margin: 0px">
+
+${script}
+
+<X3DCanvas style="width: ${width}px; height: ${height}px">
+${x3d}
+</X3DCanvas>
+
+</body>
+</html>`;
+
+  var border = config.no3DBorder ? 'none' : '1px solid black';
+
+  return `<iframe style="width: ${output.offsetWidth}px; height: ${output.offsetHeight}px; border: ${border}"
+                  srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;
 
 }
 

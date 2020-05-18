@@ -1,5 +1,5 @@
 
-function x3dPlot( id, data, config ) {
+function x3d( id, data, config ) {
 
   if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 

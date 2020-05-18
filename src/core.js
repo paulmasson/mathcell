@@ -192,15 +192,15 @@ function graphic( id, data, config ) {
 
     case 'svg':
 
-      return svgPlot( id, data, config );
+      return svg( id, data, config );
 
     case 'threejs':
 
-      return threejsPlot( id, data, config );
+      return threejs( id, data, config );
 
     case 'x3d':
 
-      return x3dPlot( id, data, config );
+      return x3d( id, data, config );
 
     case 'text':
 

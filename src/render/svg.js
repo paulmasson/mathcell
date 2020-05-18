@@ -1,5 +1,5 @@
 
-function svgPlot( id, data, config ) {
+function svg( id, data, config ) {
 
   if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 

@@ -119,11 +119,9 @@ function parametric( vector, xRange, yRange, options={} ) {
 
   var faces = [];
   var count = slices + 1;
-  for ( var i = 0 ; i < stacks ; i++ ) {
-    for ( var j = 0 ; j < slices ; j++ ) {
+  for ( var i = 0 ; i < stacks ; i++ )
+    for ( var j = 0 ; j < slices ; j++ )
       faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
-    }
-  }
 
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 

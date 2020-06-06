@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Unwrapping a Circle</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Unwrapping a circle dynamically using its <a href="https://en.wikipedia.org/wiki/Involute#Involutes_of_a_circle">involutes</a>:</p>
+
+<div class="mathcell" style="height: 3.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'checkbox', name: 'showInvolutes', label: 'Show involutes:' } ] );
+
+var lerp = 0, direction = 1;
+
+parent.update = function( id ) {
+
+  var showInvolutes = getVariable( id, 'showInvolutes' );
+
+  var pi = Math.PI, sin = Math.sin, cos = Math.cos;
+
+  var data = [ parametric( t => [cos(t),sin(t)], [0,2*pi], { color: 'red' } ) ];
+
+  function x( t, a ) { return sin(t) - ( t - a ) * cos(t); }
+
+  function y( t, a ) { return cos(t) + ( t - a ) * sin(t); }
+
+  if ( showInvolutes )
+    for ( var a = 0 ; a < pi ; a += .3 )
+      data.push( parametric( t => [ x(t,a), y(t,a) ], [a,pi] ),
+                 parametric( t => [ -x(t,a), y(t,a) ], [a,pi] ) );
+
+  function t( a ) { return ( Math.PI - a ) * lerp + a; }
+
+  data.push( parametric( a => [ x(t(a),a), y(t(a),a) ], [0,pi], { color: 'purple' } ),
+             parametric( a => [ -x(t(a),a), y(t(a),a) ], [0,pi], { color: 'purple' } ) );
+
+  var config = { type: 'svg', xMin: -3.2, xMax: 3.2,
+                              yMin: -1.6, yMax: 1.6, equalAspect: true };
+
+  evaluate( id, data, config );
+
+  lerp += .01 * direction;
+
+  if ( lerp <= 0 || lerp >= 1 ) direction = -direction;
+
+}
+
+parent.update( id );
+
+setInterval( parent.update, 100, id );
+
+</script>
+</div>
+
+<p>The involutes of the circle in blue are given parametrically on the right-hand side by</p>
+
+\[ \left[ \sin t - (t-a) \cos t, \cos t + (t-a) \sin t \right] \]
+
+<p>and on the left-hand side by reflecting the <i>x</i>-coordinate:</p>
+
+\[ \left[ -\sin t + (t-a) \cos t, \cos t + (t-a) \sin t \right] \]
+
+<p>The portions of the involutes begin with \( t = a \) on the red circle and all end at \( y = -1 \) when \( t = \pi \). The moving purple line connects points along the involutes that are linearly interpolated between the endpoints.</p>
+
+<p>The configuration explicitly sets minima and maxima to keep the plot centered during the evolution. It includes the setting for equal aspect to ensure the appearance of the circle.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -2689,9 +2689,9 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
   var texture = new THREE.Texture( canvas );
   texture.needsUpdate = true;
 
-  var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture } ) );
+  var sprite = new THREE.Sprite( new THREE.SpriteMaterial( { map: texture, sizeAttenuation: false } ) );
   sprite.position.set( x, y, z );
-  sprite.scale.set( 1, .25, 1 ); // ratio of width to height
+  sprite.scale.set( 1/4, 1/16, 1 ); // ratio of width to height plus scaling
   scene.add( sprite );
 
 }
@@ -2988,20 +2988,12 @@ if ( config.clippingPlane ) {
 
 }
 
-var scratch = new THREE.Vector3();
-
 function render() {
 
   if ( animate ) requestAnimationFrame( render );
   renderer.render( scene, camera );
 
   scene.children.forEach( child => {
-
-    if ( child.type === 'Sprite' ) {
-      var adjust = scratch.addVectors( child.position, scene.position )
-                          .sub( camera.position ).length() / 5;
-      child.scale.set( adjust, .25*adjust, 1 ); // ratio of canvas width to height
-    }
 
     if ( child.userData.rotateOnAxis && animate )
       child.rotateOnAxis( child.userData.axis, child.userData.angle );

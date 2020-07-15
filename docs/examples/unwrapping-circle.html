@@ -37,15 +37,14 @@ parent.update = function( id ) {
 
   function y( t, a ) { return cos(t) + ( t - a ) * sin(t); }
 
+  function t( a ) { return ( Math.PI - a ) * lerp + a; }
+
   if ( showInvolutes )
     for ( var a = 0 ; a < pi ; a += .3 )
       data.push( parametric( t => [ x(t,a), y(t,a) ], [a,pi] ),
                  parametric( t => [ -x(t,a), y(t,a) ], [a,pi] ) );
 
-  function t( a ) { return ( Math.PI - a ) * lerp + a; }
-
-  data.push( parametric( a => [ x(t(a),a), y(t(a),a) ], [0,pi], { color: 'purple' } ),
-             parametric( a => [ -x(t(a),a), y(t(a),a) ], [0,pi], { color: 'purple' } ) );
+  data.push( parametric( a => [ x(t(a),a), y(t(a),a) ], [0,2*pi], { color: 'purple' } ) );
 
   var config = { type: 'svg', xMin: -3.2, xMax: 3.2,
                               yMin: -1.6, yMax: 1.6, equalAspect: true };

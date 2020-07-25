@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>Hyperfunctions</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A visualization of <a href="https://en.wikipedia.org/wiki/Hyperfunction">hyperfunctions</a> on the real axis:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'buttons', values: [ 'delta', 'step' ], width: '1.5in',
+                                  labels: [ 'Dirac delta', 'Heaviside step' ], 
+                                  name: 'func', label: 'Function:' },
+                { type: 'slider', min: -2.5, max: -.5, default: -1,
+                                  name: 'logE', label: 'log<sub>10</sub>&varepsilon;' } ] );
+
+parent.update = function( id ) {
+
+  var func = getVariable( id, 'func' );
+  var logE = getVariable( id, 'logE' );
+
+  var ie = complex( 0, 10**logE );
+
+  var data = [];
+
+  if ( func === 'delta' )
+    data.push( plot( x => div( sub( inv(sub(x,ie)), inv(add(x,ie)) ),
+                               complex(0,2*pi) ).re, [-2,2,1000] ) );
+  else
+    data.push( plot( x => div( sub( ln(sub(x,ie)), ln(add(x,ie)) ),
+                               complex(0,2*pi) ).re + 1, [-2,2,1000] ) );
+
+  var config = { type: 'svg', includeOrigin: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Hyperfunctions are defined constructively as a limit of the difference across the real axis of the complex plane. For the Dirac delta function this difference is</p>
+
+\[ \delta(x) = \frac{1}{ 2 \pi i } \lim_{ \epsilon \to 0 }
+               \left[ \frac{1}{ x - i\epsilon } - \frac{1}{ x + i\epsilon } \right] \]
+
+<p>and for the Heaviside step function it is</p>
+
+\[ H(x) = \frac{1}{ 2 \pi i } \lim_{ \epsilon \to 0 }
+               \left[ \ln( x - i\epsilon ) - \ln( x + i\epsilon ) \right] + 1 \]
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a> for calculations with complex numbers. It is an interactive version of these <a href="https://www.chebfun.org/examples/complex/Hyperfuns.html">static plots</a>, hence more fun!</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

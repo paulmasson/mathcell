@@ -41,8 +41,8 @@ parent.update = function( id ) {
     data.push( plot( x => div( sub( inv(sub(x,ie)), inv(add(x,ie)) ),
                                complex(0,2*pi) ).re, [-2,2,1000] ) );
   else
-    data.push( plot( x => div( sub( ln(sub(x,ie)), ln(add(x,ie)) ),
-                               complex(0,2*pi) ).re + 1, [-2,2,1000] ) );
+    data.push( plot( x => div( sub( ln(add(-x,ie)), ln(sub(-x,ie)) ),
+                               complex(0,2*pi) ).re, [-2,2,1000] ) );
 
   var config = { type: 'svg', includeOrigin: true };
 
@@ -63,7 +63,7 @@ parent.update( id );
 <p>and for the Heaviside step function it is</p>
 
 \[ H(x) = \frac{1}{ 2 \pi i } \lim_{ \epsilon \to 0 }
-               \left[ \ln( x - i\epsilon ) - \ln( x + i\epsilon ) \right] + 1 \]
+               \left[ \ln( -x + i\epsilon ) - \ln( -x - i\epsilon ) \right] \]
 
 <p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a> for calculations with complex numbers. It is an interactive version of these <a href="https://www.chebfun.org/examples/complex/Hyperfuns.html">static plots</a>, hence more fun!</p>
 

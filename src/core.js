@@ -289,6 +289,10 @@ function getVariable( id, name ) {
 
       return input.checked;
 
+    case 'text':
+
+      return input.value;
+
   } else {
 
     var value = document.querySelector( 'input[name=' + id + name + ']:checked' ).value;

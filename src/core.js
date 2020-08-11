@@ -177,6 +177,14 @@ function interact( id, input ) {
 <input id=${id + name} type=checkbox ${ checked ? 'checked' : '' }
        onchange="window.id='${id}';${id}.update('${id}')"/>`;
 
+    case 'text':
+
+      var name = 'name' in input ? input.name : '';
+
+      return `
+<input id=${id + name} type=text style="width: calc(100% - .7in)"
+       onchange="window.id='${id}';${id}.update('${id}')"/>`;
+
     default:
 
       return 'Unsupported input type';

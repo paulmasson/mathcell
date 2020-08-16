@@ -51,18 +51,13 @@ parent.update = function( id ) {
 
   var data = [];
 
-  switch ( part ) {
+  if ( part === 'real' )
 
-    case 'real':
+    data.push( parametric( (x,y) => [x,y,real(x,y)], [-3,3,151], [-3,3,151] ) );
 
-      data.push( parametric( (x,y) => [x,y,real(x,y)], [-3,3,151], [-3,3,151] ) );
-      break;
+  else
 
-    case 'imaginary':
-
-      data.push( parametric( (x,y) => [x,y,imaginary(x,y)], [-3,3,151], [-3,3,151] ) );
-
-  }
+    data.push( parametric( (x,y) => [x,y,imaginary(x,y)], [-3,3,151], [-3,3,151] ) );
 
   var config = { type: 'threejs', axesLabels: false, zMin: -3, zMax: 3 };
 

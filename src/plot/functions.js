@@ -120,8 +120,20 @@ function parametric( vector, xRange, yRange, options={} ) {
   var faces = [];
   var count = slices + 1;
   for ( var i = 0 ; i < stacks ; i++ )
-    for ( var j = 0 ; j < slices ; j++ )
-      faces.push( [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)] );
+    for ( var j = 0 ; j < slices ; j++ ) {
+
+      var f = [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)];
+
+      if ( options.omitBranchCuts ) {
+        var m = options.omitBranchCuts === true ? 50 : options.omitBranchCuts;
+        if ( Math.abs( ( vertices[f[0]][2] - vertices[f[1]][2] ) / xStep ) > m ||
+             Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m    )
+          continue;
+      }
+
+      faces.push( f );
+
+    }
 
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 

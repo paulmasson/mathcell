@@ -124,8 +124,8 @@ function parametric( vector, xRange, yRange, options={} ) {
 
       var f = [j+count*i, j+count*i+1, j+count*(i+1)+1, j+count*(i+1)];
 
-      if ( options.omitBranchCuts ) {
-        var m = options.omitBranchCuts === true ? 50 : options.omitBranchCuts;
+      if ( options.maxFaceSlope ) {
+        var m = options.maxFaceSlope;
         if ( Math.abs( ( vertices[f[0]][2] - vertices[f[1]][2] ) / xStep ) > m ||
              Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m    )
           continue;

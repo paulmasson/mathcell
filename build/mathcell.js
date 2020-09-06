@@ -656,9 +656,19 @@ mathcellStyle.innerHTML = `
 
 }
 
+input[type=text] {
+
+  -webkit-appearance: none;
+  box-shadow: none;
+  border: 1px solid black;
+  border-radius: 5px;
+
+}
+
 input[type=number] {
 
   -webkit-appearance: none;
+  -moz-appearance:textfield;
   box-shadow: none;
   border: 1px solid black;
   border-radius: 5px;
@@ -670,12 +680,6 @@ input[type=number]::-webkit-inner-spin-button {
 
   -webkit-appearance: none;
   margin: 0;
-
-}
-
-input[type=number] {
-
-  -moz-appearance:textfield;
 
 }
 

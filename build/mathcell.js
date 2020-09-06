@@ -180,9 +180,10 @@ function interact( id, input ) {
     case 'text':
 
       var name = 'name' in input ? input.name : '';
+      var value = 'default' in input ? input.default : '';
 
       return `
-<input id=${id + name} type=text style="width: calc(100% - .7in)"
+<input id=${id + name} type=text value=${value} style="width: calc(100% - .7in)"
        onchange="window.id='${id}';${id}.update('${id}')"/>`;
 
     default:

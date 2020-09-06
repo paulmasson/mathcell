@@ -126,7 +126,7 @@ function interact( id, input ) {
 
       return `
 <input id=${id + name} type=range min=${min} max=${max} step=${step} value=${value}
-       style="vertical-align: middle; width: calc(100% - 1.2in)"
+       style="vertical-align: middle; width: calc(100% - 1.1in)"
        onchange="${id + name}Box.value=${id + name}.value;
                  window.id='${id}';${id}.update('${id}')"/>
 <input id=${id + name}Box type=number min=${min} max=${max} step=${step} value=${value}
@@ -182,8 +182,10 @@ function interact( id, input ) {
       var name = 'name' in input ? input.name : '';
       var value = 'default' in input ? input.default : '';
 
+      var width = 'width: ' + ( input.width ? input.width : 'calc(100% - .6in)' );
+
       return `
-<input id=${id + name} type=text value=${value} style="width: calc(100% - .7in)"
+<input id=${id + name} type=text value="${value}" style="${width}"
        onchange="window.id='${id}';${id}.update('${id}')"/>`;
 
     default:

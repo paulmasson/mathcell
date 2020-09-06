@@ -127,7 +127,9 @@ function parametric( vector, xRange, yRange, options={} ) {
       if ( options.maxFaceSlope ) {
         var m = options.maxFaceSlope;
         if ( Math.abs( ( vertices[f[0]][2] - vertices[f[1]][2] ) / xStep ) > m ||
-             Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m    )
+             Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m ||
+             Math.abs( ( vertices[f[2]][2] - vertices[f[3]][2] ) / xStep ) > m ||
+             Math.abs( ( vertices[f[3]][2] - vertices[f[0]][2] ) / yStep ) > m   )
           continue;
       }
 

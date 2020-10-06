@@ -2623,8 +2623,7 @@ function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r100/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r121/build/three.min.js"></script>
 
 <script>
 

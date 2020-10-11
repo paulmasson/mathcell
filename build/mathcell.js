@@ -2951,7 +2951,8 @@ function addSurface( s ) {
 
       material = new THREE.MeshStandardMaterial( {
                                color: s.options.color, side: side,
-                               transparent: transparent, opacity: s.options.opacity } );
+                               transparent: transparent, opacity: s.options.opacity,
+                               metalness: .5, roughness: .5 } );
       break;
 
     case 'phong':

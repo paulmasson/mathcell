@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Square Isobands</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>An animated rainbow of square isobands:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+var colors = [ 'red', 'orange', 'yellow', 'green', 'blue', 'purple' ];
+
+parent.update = function( id ) {
+
+  function square( x, y, level ) {
+
+    // check if point is inside square
+    if ( Math.abs(x) < level && Math.abs(y) < level ) return -1;
+
+    return 1;
+
+  }
+
+  var data = [];
+
+  // multiply two squares to get region in between
+  colors.forEach( (e,i,a) => data.push( isoband( (x,y) => square(x,y,i+1.2) * square(x,y,i+.8),
+                                        [-7,7,200], [-7,7,200], { color: e } ) ) );
+
+  var config = { type: 'svg', equalAspect: true, ticks: false };
+
+  evaluate( id, data, config );
+
+  // move last color to first place in array
+  colors.unshift( colors.pop() );
+
+}
+
+parent.update( id );
+
+setInterval( parent.update, 1000, id );
+
+</script>
+</div>
+
+<p>The <code>isoband()</code> function returns a filled region where the input function is less than some level, which by default is zero. To get the region between two functions, simply multiply them: the resulting combination of signs excludes the region less than the smaller functional value.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

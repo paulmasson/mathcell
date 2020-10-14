@@ -1733,6 +1733,21 @@ var colormaps = Object.assign( {}, matplotlib, mathematica );
 // return arrays of objects for all plots
 
 
+function checkValue( x ) {
+
+  // denominator must be greater than rounding decimal places downstream
+  if ( x === Infinity ) return Number.MAX_VALUE / 1e5;
+  if ( x === -Infinity ) return -Number.MAX_VALUE / 1e5;
+
+  if ( isNaN(x) ) {
+    console.log( 'NaN converted to zero while plotting' );
+    return 0;
+  }
+
+  return x;
+
+}
+
 function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
@@ -1742,7 +1757,7 @@ function plot( f, xRange, options={} ) {
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
-    x => points.push( [ x, f(x) ] )
+    x => points.push( [ x, checkValue( f(x) ) ] )
   );
 
   return [ { points: points, options: options, type: 'line' } ];
@@ -2293,8 +2308,6 @@ function cone( radius, height, options={} ) {
 
 
 function svg( id, data, config ) {
-
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
 
   function parsedLength( input ) {
 

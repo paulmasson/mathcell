@@ -4,9 +4,9 @@
 
 function checkValue( x ) {
 
-  // denominator must be greater than rounding decimal places downstream
-  if ( x === Infinity ) return Number.MAX_VALUE / 1e5;
-  if ( x === -Infinity ) return -Number.MAX_VALUE / 1e5;
+  // be aware of rounding decimal places downstream
+  if ( x === Infinity ) return 1e300;
+  if ( x === -Infinity ) return -1e300;
 
   if ( isNaN(x) ) {
     console.log( 'NaN converted to zero while plotting' );

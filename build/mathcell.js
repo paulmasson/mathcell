@@ -131,7 +131,7 @@ function interact( id, input ) {
                  window.id='${id}';${id}.update('${id}')"/>
 <input id=${id + name}Box type=number min=${min} max=${max} step=${step} value=${value}
        title="" style="width: .5in"
-       onchange="${id + name}.value=${id + name}Box.value;
+       onchange="checkLimits(this);${id + name}.value=${id + name}Box.value;
                  window.id='${id}';${id}.update('${id}')"/>`;
 
     case 'buttons':
@@ -164,9 +164,7 @@ function interact( id, input ) {
       return `
 <input id=${id + name} type=number min=${min} max=${max} step=${step} value=${value}
        style="width: 1in" title="" onload=this.onchange
-       onchange="if (+this.value < +this.min) this.value=this.min;
-                 if (+this.value > +this.max) this.value=this.max;
-                 window.id='${id}';${id}.update('${id}')"/>`;
+       onchange="checkLimits(this);window.id='${id}';${id}.update('${id}')"/>`;
 
     case 'checkbox':
 
@@ -270,6 +268,14 @@ ${rightBracket}
 function generateId() {
 
   return 'id' + Math.floor( 10**10 * Math.random() );
+
+}
+
+
+function checkLimits( input ) {
+
+  if ( +input.value < +input.min ) input.value = input.min;
+  if ( +input.value > +input.max ) input.value = input.max;
 
 }
 

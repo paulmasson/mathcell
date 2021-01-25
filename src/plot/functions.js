@@ -2,21 +2,6 @@
 // return arrays of objects for all plots
 
 
-function checkValue( x ) {
-
-  // be aware of rounding decimal places downstream
-  if ( x === Infinity ) return 1e300;
-  if ( x === -Infinity ) return -1e300;
-
-  if ( isNaN(x) ) {
-    console.log( 'NaN converted to zero while plotting' );
-    return 0;
-  }
-
-  return x;
-
-}
-
 function plot( f, xRange, options={} ) {
 
   if ( xRange.length < 3 ) xRange[2] = 200;
@@ -26,7 +11,7 @@ function plot( f, xRange, options={} ) {
 
   var points = [];
   linspace( xRange[0], xRange[1], xRange[2] ).forEach(
-    x => points.push( [ x, checkValue( f(x) ) ] )
+    x => points.push( [ x, f(x) ] )
   );
 
   return [ { points: points, options: options, type: 'line' } ];

@@ -43,6 +43,13 @@ function svg( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
     }
 
+  // infinite limits lead to a scale of zero
+  // be aware of possible overflow when rounding below
+  lines.forEach( l => l.points.forEach( (e,i,a) => {
+    if ( a[i][1] === Infinity )  a[i][1] = 1e300;
+    if ( a[i][1] === -Infinity ) a[i][1] = -1e300;
+  } ) );
+
   var all = [];
   for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
   for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
@@ -218,17 +225,26 @@ function svg( id, data, config ) {
       if ( p[1] > yMax ) p[1] = yMax + 1;
     } );
 
-    var x = l.points[0][0];
-    var y = l.points[0][1];
+    // automatically skip NaN
+    var j = 0;
+    while ( isNaN( l.points[j][1] ) ) j++;
+
+    var x = l.points[j][0];
+    var y = l.points[j][1];
 
     svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
-    var lastX = x;
-    var lastY = y;
+    var lastX = x, lastY = y;
 
-    for ( var k = 1 ; k < l.points.length ; k++ ) {
+    for ( var k = j+1 ; k < l.points.length ; k++ ) {
 
       x = l.points[k][0];
       y = l.points[k][1];
+
+      if ( isNaN(y) ) {
+        if ( k < l.points.length - 1 )
+          lastX = l.points[k+1][0], lastY = l.points[k+1][1];
+        continue;
+      }
 
       function intercept( u ) {
         return (u - lastY) / (y - lastY) * (x - lastX) + lastX;
@@ -236,7 +252,8 @@ function svg( id, data, config ) {
 
       // both points inside bounds
       if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-        svg += ` L ${ xPos(x) } ${ yPos(y) }`;
+        if ( y === lastY ) svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        else svg += ` L ${ xPos(x) } ${ yPos(y) }`;
 
       // both points outside bounds
       if ( ( lastY < yMin && y < yMin ) || ( lastY > yMax && y > yMax) )
@@ -276,8 +293,7 @@ function svg( id, data, config ) {
         svg += ` L ${ xPos(x) } ${ yPos(y) }`;
       }
 
-      var lastX = x;
-      var lastY = y;
+      lastX = x, lastY = y;
 
     }
 

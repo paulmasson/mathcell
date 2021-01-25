@@ -234,6 +234,7 @@ function svg( id, data, config ) {
 
     svg += `<path d="M ${ xPos(x) } ${ yPos(y) }`;
     var lastX = x, lastY = y;
+    var skip = false;
 
     for ( var k = j+1 ; k < l.points.length ; k++ ) {
 
@@ -241,8 +242,7 @@ function svg( id, data, config ) {
       y = l.points[k][1];
 
       if ( isNaN(y) ) {
-        if ( k < l.points.length - 1 )
-          lastX = l.points[k+1][0], lastY = l.points[k+1][1];
+        skip = true;
         continue;
       }
 
@@ -252,7 +252,10 @@ function svg( id, data, config ) {
 
       // both points inside bounds
       if ( ( lastY >= yMin && y >= yMin ) && ( lastY <= yMax && y <= yMax) )
-        if ( y === lastY ) svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+        if ( skip ) {
+          svg += ` M ${ xPos(x) } ${ yPos(y) }`;
+          skip = false;
+        }
         else svg += ` L ${ xPos(x) } ${ yPos(y) }`;
 
       // both points outside bounds

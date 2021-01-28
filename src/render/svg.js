@@ -43,13 +43,6 @@ function svg( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
     }
 
-  // infinite limits lead to a scale of zero
-  // be aware of possible overflow when rounding below
-  lines.forEach( l => l.points.forEach( (e,i,a) => {
-    if ( a[i][1] === Infinity )  a[i][1] = 1e300;
-    if ( a[i][1] === -Infinity ) a[i][1] = -1e300;
-  } ) );
-
   var all = [];
   for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
   for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
@@ -57,6 +50,11 @@ function svg( id, data, config ) {
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );
+
+  // infinite limits lead to a scale of zero
+  // be aware of possible overflow in subsequent rounding
+  if ( yMinMax.min === -Infinity ) yMinMax.min = -1e300;
+  if ( yMinMax.max === Infinity )  yMinMax.max = 1e300;
 
   // rounding currently to remove excessive decimals
   // add option when needed for rounding to significant digits

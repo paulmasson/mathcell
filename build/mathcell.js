@@ -3186,7 +3186,7 @@ function threejs( id, data, config ) {
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
   lines = JSON.stringify( lines );
-//  surfaces = JSON.stringify( surfaces );
+  surfaces = JSON.stringify( surfaces );
 
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 

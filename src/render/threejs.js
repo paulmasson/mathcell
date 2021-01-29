@@ -1,7 +1,8 @@
 
 function threejs( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
   if ( !( 'animate' in config ) ) config.animate = false;

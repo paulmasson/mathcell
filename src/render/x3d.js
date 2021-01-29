@@ -1,7 +1,8 @@
 
 function x3d( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
   function compositeRotation( first, second ) {
 

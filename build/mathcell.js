@@ -401,6 +401,28 @@ function minMax( d, index ) {
 
 }
 
+var numericInfinity = 1e300;
+
+function dataReplacer( key, value ) {
+
+  if ( value === Infinity ) return 'Infinity';
+  if ( value === -Infinity ) return '-Infinity';
+  if ( value !== value ) return 'NaN';
+
+  return value;
+
+}
+
+function dataReviver( key, value ) {
+
+  if ( value === 'Infinity' ) return numericInfinity;
+  if ( value === '-Infinity' ) return -numericInfinity;
+  if ( value === 'NaN' ) return NaN;
+
+  return value;
+
+}
+
 
 function linspace( a, b, points ) {
 
@@ -2300,6 +2322,9 @@ function cone( radius, height, options={} ) {
 
 function svg( id, data, config ) {
 
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
+
   function parsedLength( input ) {
 
     var frag = new DOMParser().parseFromString( input, 'text/html' );
@@ -2342,13 +2367,6 @@ function svg( id, data, config ) {
       if ( d.type === 'line' ) lines.push( d );
     }
 
-  // infinite limits lead to a scale of zero
-  // be aware of possible overflow when rounding below
-  lines.forEach( l => l.points.forEach( (e,i,a) => {
-    if ( a[i][1] === Infinity )  a[i][1] = 1e300;
-    if ( a[i][1] === -Infinity ) a[i][1] = -1e300;
-  } ) );
-
   var all = [];
   for ( var i = 0 ; i < texts.length ; i++ ) all.push( texts[i].point );
   for ( var i = 0 ; i < points.length ; i++ ) all.push( points[i].point );
@@ -2356,6 +2374,11 @@ function svg( id, data, config ) {
 
   var xMinMax = minMax( all, 0 );
   var yMinMax = minMax( all, 1 );
+
+  // infinite limits lead to a scale of zero
+  // be aware of possible overflow in subsequent rounding
+  if ( yMinMax.min === -Infinity ) yMinMax.min = -numericInfinity;
+  if ( yMinMax.max === Infinity )  yMinMax.max = numericInfinity;
 
   // rounding currently to remove excessive decimals
   // add option when needed for rounding to significant digits
@@ -2515,8 +2538,7 @@ function svg( id, data, config ) {
 
   for ( var i = 0 ; i < lines.length ; i++ ) {
 
-    // working copy of line
-    var l = JSON.parse( JSON.stringify( lines[i] ) );
+    var l = lines[i];
 
     l.points.forEach( p => {
       // set possibly huge values to just beyond limits
@@ -3072,7 +3094,8 @@ if ( !animate ) render();
 
 function threejs( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
   if ( !( 'animate' in config ) ) config.animate = false;
@@ -3163,7 +3186,7 @@ function threejs( id, data, config ) {
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
   lines = JSON.stringify( lines );
-  surfaces = JSON.stringify( surfaces );
+//  surfaces = JSON.stringify( surfaces );
 
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 
@@ -3175,7 +3198,8 @@ function threejs( id, data, config ) {
 
 function x3d( id, data, config ) {
 
-  if ( JSON.stringify( data ).includes( 'null' ) ) throw Error( 'Infinity or NaN in plot data' );
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
   function compositeRotation( first, second ) {
 

@@ -1,6 +1,9 @@
 
 function svg( id, data, config ) {
 
+  // working copy of data
+  var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
+
   function parsedLength( input ) {
 
     var frag = new DOMParser().parseFromString( input, 'text/html' );
@@ -53,8 +56,8 @@ function svg( id, data, config ) {
 
   // infinite limits lead to a scale of zero
   // be aware of possible overflow in subsequent rounding
-  if ( yMinMax.min === -Infinity ) yMinMax.min = -1e300;
-  if ( yMinMax.max === Infinity )  yMinMax.max = 1e300;
+  if ( yMinMax.min === -Infinity ) yMinMax.min = -numericInfinity;
+  if ( yMinMax.max === Infinity )  yMinMax.max = numericInfinity;
 
   // rounding currently to remove excessive decimals
   // add option when needed for rounding to significant digits
@@ -214,8 +217,7 @@ function svg( id, data, config ) {
 
   for ( var i = 0 ; i < lines.length ; i++ ) {
 
-    // working copy of line
-    var l = JSON.parse( JSON.stringify( lines[i] ) );
+    var l = lines[i];
 
     l.points.forEach( p => {
       // set possibly huge values to just beyond limits

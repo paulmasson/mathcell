@@ -13,6 +13,28 @@ function minMax( d, index ) {
 
 }
 
+var numericInfinity = 1e300;
+
+function dataReplacer( key, value ) {
+
+  if ( value === Infinity ) return 'Infinity';
+  if ( value === -Infinity ) return '-Infinity';
+  if ( value !== value ) return 'NaN';
+
+  return value;
+
+}
+
+function dataReviver( key, value ) {
+
+  if ( value === 'Infinity' ) return numericInfinity;
+  if ( value === '-Infinity' ) return -numericInfinity;
+  if ( value === 'NaN' ) return NaN;
+
+  return value;
+
+}
+
 
 function linspace( a, b, points ) {
 

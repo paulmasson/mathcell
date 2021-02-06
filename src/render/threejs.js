@@ -92,7 +92,7 @@ function threejs( id, data, config ) {
 
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
-  lines = JSON.stringify( lines );
+  lines = JSON.stringify( lines, dataReplacer );
   surfaces = JSON.stringify( surfaces );
 
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );

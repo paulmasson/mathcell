@@ -2954,16 +2954,31 @@ function addSurface( s ) {
   // apply aspect multipliers for convenience
   s.vertices.forEach( v => { v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2]; } );
 
-  // remove faces completely outside vertical range
+  var badVertices = [];
+
+  // remove faces completely outside vertical range or containing NaN
   for ( var i = s.faces.length - 1 ; i >= 0 ; i-- ) {
     var f = s.faces[i];
+
     var check = true;
-    f.forEach( index => check = check && s.vertices[index][2] < zMin );
+    f.forEach( index => check &&= s.vertices[index][2] < zMin );
     if ( check ) s.faces.splice( i, 1 );
+
     var check = true;
-    f.forEach( index => check = check && s.vertices[index][2] > zMax );
+    f.forEach( index => check &&= s.vertices[index][2] > zMax );
+    if ( check ) s.faces.splice( i, 1 );
+
+    var check = false;
+    f.forEach( index => {
+      if ( isNaN( s.vertices[index][2] ) ) {
+        badVertices.push( index );
+        check = true;
+      } } );
     if ( check ) s.faces.splice( i, 1 );
   }
+
+  // set bad vertices to dummy value
+  badVertices.forEach( index => s.vertices[index][2] = 0 );
 
   // constrain vertices to vertical range
   for ( var i = 0 ; i < s.vertices.length ; i++ ) {
@@ -3189,7 +3204,7 @@ function threejs( id, data, config ) {
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
   lines = JSON.stringify( lines, dataReplacer );
-  surfaces = JSON.stringify( surfaces );
+  surfaces = JSON.stringify( surfaces, dataReplacer );
 
   var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
 

@@ -320,7 +320,7 @@ function addSurface( s ) {
     var check = false;
     f.forEach( index => {
       if ( isNaN( s.vertices[index][2] ) ) {
-        badVertices.push( index );
+        if ( !badVertices.includes( index ) ) badVertices.push( index );
         check = true;
       } } );
     if ( check ) s.faces.splice( i, 1 );

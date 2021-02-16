@@ -163,14 +163,14 @@ function svg( id, data, config ) {
   }
 
   var svg = `
-<svg width="${width}" height="${height}" preserveAspectRatio="none"
-     viewBox="${-xShift} ${-yShift} ${xTotal} ${yTotal}"
+<svg width="${ width }" height="${ height }" preserveAspectRatio="none"
+     viewBox="${ -xShift } ${ -yShift } ${ xTotal } ${ yTotal }"
      xmlns="http://www.w3.org/2000/svg">`;
 
   if ( axes ) {
 
-    svg += `<path d="M ${-ext} ${yAxis} L ${width + ext} ${yAxis}" stroke="black"/>`;
-    svg += `<path d="M ${xAxis} ${-ext} L ${xAxis} ${height + ext}" stroke="black"/>`;
+    svg += `<path d="M ${ -ext } ${ yAxis } L ${ width + ext } ${ yAxis }" stroke="black"/>`;
+    svg += `<path d="M ${ xAxis } ${ -ext } L ${ xAxis } ${ height + ext }" stroke="black"/>`;
 
     if ( ticks ) {
 
@@ -178,11 +178,11 @@ function svg( id, data, config ) {
       for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
         if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
           var x = Math.round( xOrigin + xScale*i );
-          svg += `<path d="M ${x} ${yAxis} L ${x} ${yAxis - Math.sign(yOffset)*tickSize}"
+          svg += `<path d="M ${ x } ${ yAxis } L ${ x } ${ yAxis - Math.sign(yOffset)*tickSize }"
                         stroke="black" />`;
-          svg += `<text x="${x}" y="${yAxis + yOffset}"
+          svg += `<text x="${ x }" y="${ yAxis + yOffset }"
                         font-family="monospace" text-anchor="middle">
-                  ${+i.toFixed(xTickDecimals)}</text>`;
+                  ${ +i.toFixed(xTickDecimals) }</text>`;
         }
       }
 
@@ -190,22 +190,22 @@ function svg( id, data, config ) {
       for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
         if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
           var y = Math.round( yOrigin - yScale*i );
-          svg += `<path d="M ${xAxis} ${y} L ${xAxis + Math.sign(xOffset)*tickSize} ${y}"
+          svg += `<path d="M ${ xAxis } ${ y } L ${ xAxis + Math.sign(xOffset)*tickSize } ${ y }"
                         stroke="black" />`;
-          svg += `<text x="${xAxis - xOffset}" y="${y}"
+          svg += `<text x="${ xAxis - xOffset }" y="${ y }"
                         font-family="monospace" text-anchor="end" dominant-baseline="central">
-                  ${+i.toFixed(yTickDecimals)}</text>`;
+                  ${ +i.toFixed(yTickDecimals) }</text>`;
         }
       }
 
     }
 
-    svg += `<text x="${width + ext + Math.abs(xOffset)}" y="${yAxis}"
+    svg += `<text x="${ width + ext + Math.abs(xOffset) }" y="${ yAxis }"
             font-family="monospace" font-size="110%" font-weight="bold"
-            dominant-baseline="central">${xAxisLabel}</text>`;
-    svg += `<text x="${xAxis}" y="${-ext - yLabel/2}"
+            dominant-baseline="central">${ xAxisLabel }</text>`;
+    svg += `<text x="${ xAxis }" y="${ -ext - yLabel/2 }"
             font-family="monospace" font-size="110%" font-weight="bold"
-            text-anchor="middle">${yAxisLabel}</text>`;
+            text-anchor="middle">${ yAxisLabel }</text>`;
 
   }
 

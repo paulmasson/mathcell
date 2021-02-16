@@ -300,7 +300,8 @@ function svg( id, data, config ) {
 
     }
 
-    svg += `" stroke="${l.options.color}" stroke-width="1.5" fill="${l.options.fill ? l.options.color : 'none'}"/>`;
+    svg += `" stroke="${ l.options.color }" stroke-width="1.5" opacity="${ l.options.opacity }"
+ fill="${ l.options.fill ? l.options.color : 'none' }"/>`;
 
   }
 
@@ -310,7 +311,7 @@ function svg( id, data, config ) {
 
     var c = points[i];
     svg += `<circle cx="${ xPos(c.point[0]) }" cy="${ yPos(c.point[1]) }"
-                    r="${ 3 * c.options.size }" fill="${ c.options.color }"/>`;
+                    r="${ 3 * c.options.size }" fill="${ c.options.color }" opacity="${ c.options.opacity }"/>`;
 
   }
 

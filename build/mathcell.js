@@ -1962,6 +1962,39 @@ function surfaceFromLines( lines, options={} ) {
 
 }
 
+function diskFromLines( lines, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+  if ( !( 'material' in options ) ) options.material = 'phong';
+
+  var vertices = [], faces = [];
+
+  vertices = vertices.concat( lines[0] );
+  var l = vertices.length - 1;
+
+  for ( var i = 1 ; i < lines.length ; i++ ) {
+
+    // assume same initial point
+    vertices = vertices.concat( lines[i].slice(1) );
+
+    faces.push( [ 0, (i-1)*l + 1, i*l + 1 ] );
+
+    for ( var j = 1 ; j < l ; j++ )
+      faces.push( [ (i-1)*l + j, (i-1)*l + j + 1, i*l + j + 1, i*l + j ] ); 
+
+  }
+
+  // final seam
+  faces.push( [ 0, (i-1)*l + 1, 1 ] );
+
+  for ( var j = 1 ; j < l ; j++ )
+    faces.push( [ (i-1)*l + j, (i-1)*l + j + 1, j + 1, j ] ); 
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
 
 function slopeField( f, xRange, yRange, zRange, options={} ) {
 

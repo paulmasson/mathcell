@@ -17,7 +17,7 @@ function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r121/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r125/build/three.min.js"></script>
 
 <script>
 
@@ -60,11 +60,13 @@ var xMid = ( xMin + xMax ) / 2;
 var yMid = ( yMin + yMax ) / 2;
 var zMid = ( zMin + zMax ) / 2;
 
-var box = new THREE.Geometry();
-box.vertices.push( new THREE.Vector3( xMin, yMin, zMin ) );
-box.vertices.push( new THREE.Vector3( xMax, yMax, zMax ) );
-var boxMesh = new THREE.Line( box );
-if ( config.frame ) scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
+if ( config.frame ) {
+  var vertices = [ xMin, yMin, zMin, xMax, yMax, zMax ];
+  var box = new THREE.BufferGeometry();
+  box.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+  var boxMesh = new THREE.Line( box );
+  scene.add( new THREE.BoxHelper( boxMesh, 'black' ) );
+}
 
 if ( config.axesLabels ) {
 
@@ -199,9 +201,10 @@ for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
 
 function addPoint( p ) {
 
-  var geometry = new THREE.Geometry();
   var v = p.point;
-  geometry.vertices.push( new THREE.Vector3( a[0]*v[0], a[1]*v[1], a[2]*v[2] ) );
+  var vertices = [ a[0]*v[0], a[1]*v[1], a[2]*v[2] ];
+  var geometry = new THREE.BufferGeometry();
+  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 
   var canvas = document.createElement( 'canvas' );
   canvas.width = 128;
@@ -273,11 +276,14 @@ for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
 
 function addLine( l ) {
 
-  var geometry = new THREE.Geometry();
+  var vertices = [];
   for ( var i = 0 ; i < l.points.length ; i++ ) {
     var v = l.points[i];
-    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
+    vertices.push( v[0], v[1], v[2] );
   }
+
+  var geometry = new THREE.BufferGeometry();
+  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 
   var transparent = l.options.opacity < 1 ? true : false;
   var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
@@ -335,17 +341,16 @@ function addSurface( s ) {
     if ( s.vertices[i][2] > zMax ) s.vertices[i][2] = zMax;
   }
 
-  // no appreciable speedup with BufferGeometry
-  var geometry = new THREE.Geometry();
-  for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-    var v = s.vertices[i];
-    geometry.vertices.push( new THREE.Vector3( v[0], v[1], v[2] ) );
-  }
+  var indices = [];
   for ( var i = 0 ; i < s.faces.length ; i++ ) {
     var f = s.faces[i];
     for ( var j = 0 ; j < f.length - 2 ; j++ )
-      geometry.faces.push( new THREE.Face3( f[0], f[j+1], f[j+2] ) );
+      indices.push( f[0], f[j+1], f[j+2] );
   }
+
+  var geometry = new THREE.BufferGeometry();
+  geometry.setIndex( indices );
+  geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( s.vertices.flat(), 3 ) );
   geometry.computeVertexNormals();
 
   var side = s.options.singleSide ? THREE.FrontSide : THREE.DoubleSide;
@@ -378,12 +383,12 @@ function addSurface( s ) {
   }
 
   if ( 'colors' in s.options ) {
-    for ( var i = 0 ; i < geometry.vertices.length ; i++ )
-      geometry.colors.push( new THREE.Color( s.options.colors[i] ) );
-    for ( var i = 0 ; i < geometry.faces.length ; i++ ) {
-      var f = geometry.faces[i];
-      f.vertexColors = [ geometry.colors[f.a], geometry.colors[f.b], geometry.colors[f.c] ];
+    var colors = [];
+    for ( var i = 0 ; i < s.options.colors.length ; i++ ) {
+      var c = s.options.colors[i];
+      colors.push( c.r, c.g, c.b );
     }
+    geometry.setAttribute( 'color', new THREE.Float32BufferAttribute( colors, 3 ) );
     material.vertexColors = THREE.VertexColors;
     material.color.set( 'white' ); // crucial!
   }

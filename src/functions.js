@@ -244,6 +244,8 @@ function hueToColor( h ) {
 
 function colorToHexString( color ) {
 
+  // deprecated function
+
   var hex = ( color.r * 255 ) << 16 ^ ( color.g * 255 ) << 8 ^ ( color.b * 255 ) << 0;
 
   return '#' + ( '000000' + hex.toString(16) ).slice(-6);

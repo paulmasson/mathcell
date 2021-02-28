@@ -79,7 +79,7 @@ function threejs( id, data, config ) {
         if ( z < zMin ) z = zMin;
         if ( z > zMax ) z = zMax;
         var w = ( z - zMin ) / ( zMax - zMin );
-        s.options.colors.push( colorToHexString( f(w) ) );
+        s.options.colors.push( f(w) );
       }
     }
   } );

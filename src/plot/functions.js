@@ -109,10 +109,10 @@ function parametric( vector, xRange, yRange, options={} ) {
       if ( 'colormap' in options ) {
         if ( options.colormap === 'complexArgument' ) {
           var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
-          options.colors.push( colorToHexString( hueToColor(p) ) );
+          options.colors.push( hueToColor(p) );
         }
         if ( typeof( options.colormap ) === 'function' )
-          options.colors.push( colorToHexString( options.colormap(x,y) ) );
+          options.colors.push( options.colormap(x,y) );
       }
     }
   }

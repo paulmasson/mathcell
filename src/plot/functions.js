@@ -185,6 +185,9 @@ function surfaceFromLines( lines, options={} ) {
   if ( !( 'opacity' in options ) ) options.opacity = 1;
   if ( !( 'material' in options ) ) options.material = 'phong';
 
+  if ( !lines.every( e => e.length === lines[0].length ) )
+    throw Error( 'All lines must be of equal length' );
+
   var vertices = [], faces = [];
 
   vertices = vertices.concat( lines[0] );
@@ -208,6 +211,9 @@ function diskFromLines( lines, options={} ) {
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;
   if ( !( 'opacity' in options ) ) options.opacity = 1;
   if ( !( 'material' in options ) ) options.material = 'phong';
+
+  if ( !lines.every( e => e.length === lines[0].length ) )
+    throw Error( 'All lines must be of equal length' );
 
   var vertices = [], faces = [];
 

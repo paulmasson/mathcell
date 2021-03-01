@@ -361,7 +361,7 @@ function evaluate( id, data, config ) {
       var output = outputs[i];
       var n = output.id.substr( output.id.indexOf('output') + 6 );
 
-      var c = Array.isArray(config) ? config[i] : config;
+      var c = Array.isArray(config) ? config[i] : JSON.parse( JSON.stringify( config ) );
       c.output = n;
       c.no3DBorder = true;
 

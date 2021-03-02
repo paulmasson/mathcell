@@ -41,9 +41,9 @@ var matplotlib = {
          g: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
          b: [ [ x => 1, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ] },
 
-  hsv: { r: [ [ x => hueToColor(x).r, [0,1] ] ],
-         g: [ [ x => hueToColor(x).g, [0,1] ] ],
-         b: [ [ x => hueToColor(x).b, [0,1] ] ] },
+  hsv: { r: [ [ x => colorFromHue(x).r, [0,1] ] ],
+         g: [ [ x => colorFromHue(x).g, [0,1] ] ],
+         b: [ [ x => colorFromHue(x).b, [0,1] ] ] },
 
   ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
            g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],

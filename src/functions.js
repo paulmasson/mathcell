@@ -219,7 +219,7 @@ function getCompleteCode() {
 
 }
 
-function hueToColor( h ) {
+function colorFromHue( h ) {
 
   h = ( h % 1 + 1 ) % 1; // restrict to [0,1]
 
@@ -239,6 +239,14 @@ function hueToColor( h ) {
   var b = hue2rgb( 0, 1, h - 1/3 );
 
   return { r: r, g: g, b: b };
+
+}
+
+function colorFromArg( x ) {
+
+  var h = Math.atan2( x.im, x.re ) / Math.PI / 2;
+
+  return colorFromHue(h);
 
 }
 

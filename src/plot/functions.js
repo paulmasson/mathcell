@@ -107,10 +107,8 @@ function parametric( vector, xRange, yRange, options={} ) {
       else vertices.push( v );
 
       if ( 'colormap' in options ) {
-        if ( options.colormap === 'complexArgument' ) {
-          var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
-          options.colors.push( hueToColor(p) );
-        }
+        if ( options.colormap === 'complexArgument' )
+          options.colors.push( colorFromArg( v[2] ) );
         if ( typeof( options.colormap ) === 'function' )
           options.colors.push( options.colormap(x,y) );
       }

@@ -607,7 +607,7 @@ function getCompleteCode() {
 
 }
 
-function hueToColor( h ) {
+function colorFromHue( h ) {
 
   h = ( h % 1 + 1 ) % 1; // restrict to [0,1]
 
@@ -627,6 +627,14 @@ function hueToColor( h ) {
   var b = hue2rgb( 0, 1, h - 1/3 );
 
   return { r: r, g: g, b: b };
+
+}
+
+function colorFromArg( x ) {
+
+  var h = Math.atan2( x.im, x.re ) / Math.PI / 2;
+
+  return colorFromHue(h);
 
 }
 
@@ -1670,9 +1678,9 @@ var matplotlib = {
          g: [ [ x => 2*x, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ],
          b: [ [ x => 1, [0,.5] ], [ x => 2*(1-x), [.5,1] ] ] },
 
-  hsv: { r: [ [ x => hueToColor(x).r, [0,1] ] ],
-         g: [ [ x => hueToColor(x).g, [0,1] ] ],
-         b: [ [ x => hueToColor(x).b, [0,1] ] ] },
+  hsv: { r: [ [ x => colorFromHue(x).r, [0,1] ] ],
+         g: [ [ x => colorFromHue(x).g, [0,1] ] ],
+         b: [ [ x => colorFromHue(x).b, [0,1] ] ] },
 
   ocean: { r: [ [ x => 0, [0,.667] ], [ x => 3*x - 2, [.667,1] ] ],
            g: [ [ x => Math.abs( (3*x-1)/2 ), [0,1] ] ],
@@ -1868,10 +1876,8 @@ function parametric( vector, xRange, yRange, options={} ) {
       else vertices.push( v );
 
       if ( 'colormap' in options ) {
-        if ( options.colormap === 'complexArgument' ) {
-          var p = Math.atan2( v[2].im, v[2].re ) / Math.PI / 2;
-          options.colors.push( hueToColor(p) );
-        }
+        if ( options.colormap === 'complexArgument' )
+          options.colors.push( colorFromArg( v[2] ) );
         if ( typeof( options.colormap ) === 'function' )
           options.colors.push( options.colormap(x,y) );
       }

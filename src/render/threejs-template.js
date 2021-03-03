@@ -294,7 +294,8 @@ function addLine( l ) {
   geometry.boundingBox.getCenter( c );
   geometry.translate( -c.x, -c.y, -c.z );
 
-  var mesh = new THREE.Line( geometry, material );
+  var mesh = l.options.useLineSegments ? new THREE.LineSegments( geometry, material )
+                                       : new THREE.Line( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   scene.add( mesh );
 

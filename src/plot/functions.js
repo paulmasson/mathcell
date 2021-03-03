@@ -249,7 +249,7 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
   var xStep = ( xRange[1] - xRange[0] ) / xRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / yRange[2];
 
-  var field = [];
+  var field = [], points = [];
 
   function scale( v, s ) {
     for ( var i = 0 ; i < v.length ; i++ ) v[i] *= s;
@@ -286,13 +286,15 @@ function slopeField( f, xRange, yRange, zRange, options={} ) {
       for ( var k = 0 ; k <= zRange[2] ; k++ ) {
         var z = zRange[0] + k * zStep;
         var v = scale( normalize( [ 1, f(x,y,z)[0], f(x,y,z)[1] ] ), size );
-        // individual lines sluggish to render - need LineSegements geometry
-        field.push( line( translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] ), options )[0] );
+        v = translate( [ [-v[0],-v[1],-v[2]], [v[0],v[1],v[2]] ], [x,y,z] );
+        points.push( v[0], v[1] );
       }
     }
   }
 
-  return field;
+  options.useLineSegments = true;
+
+  return line( points, options );
 
 }
 

@@ -71,7 +71,7 @@ if ( config.frame ) {
 if ( config.axesLabels ) {
 
   var d = config.decimals; // decimals
-  var offsetRatio = 0.1;
+  var offsetRatio = .1;
   var al = config.axesLabels;
 
   var offset = offsetRatio * ( yMax - yMin );
@@ -126,7 +126,9 @@ function addLabel( text, x, y, z, color='black', fontsize=14 ) {
 
 if ( config.axes ) scene.add( new THREE.AxesHelper( Math.min( xMax, yMax, zMax ) ) );
 
-var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight,
+                                          config.cameraNear ? config.cameraNear : .1,
+                                          config.cameraFar ? config.cameraFar : 1000 );
 camera.up.set( 0, 0, 1 );
 
 // default auto position, followed by rotation to viewpoint direction

@@ -1884,7 +1884,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     }
   }
 
-  var faces = [], removeUnused = false;
+  var faces = [], resetUnused = false;
   var count = slices + 1;
   for ( var i = 0 ; i < stacks ; i++ )
     for ( var j = 0 ; j < slices ; j++ ) {
@@ -1897,7 +1897,7 @@ function parametric( vector, xRange, yRange, options={} ) {
              Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m ||
              Math.abs( ( vertices[f[2]][2] - vertices[f[3]][2] ) / xStep ) > m ||
              Math.abs( ( vertices[f[3]][2] - vertices[f[0]][2] ) / yStep ) > m   ) {
-          removeUnused = true;
+          resetUnused = true;
           continue;
         }
       }
@@ -1906,7 +1906,7 @@ function parametric( vector, xRange, yRange, options={} ) {
 
     }
 
-  if ( removeUnused ) {
+  if ( resetUnused ) {
 
     // set unused vertices to dummy value
     var dummy = !isNaN( vertices[0][2] ) ? vertices[0][2] : 0;

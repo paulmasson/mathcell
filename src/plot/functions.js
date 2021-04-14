@@ -140,9 +140,9 @@ function parametric( vector, xRange, yRange, options={} ) {
   if ( resetUnused ) {
 
     // set unused vertices to dummy value
-    var dummy = !isNaN( vertices[0][2] ) ? vertices[0][2] : 0;
-
     var faceSet = new Set( faces.flat() );
+    var dummy = vertices[ faceSet.values().next().value ][2];
+
     for ( var i = 0 ; i < vertices.length ; i++ )
       if ( !faceSet.has(i) ) vertices[i][2] = dummy;
 

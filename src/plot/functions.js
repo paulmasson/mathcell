@@ -115,7 +115,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     }
   }
 
-  var faces = [];
+  var faces = [], removeUnused = false;
   var count = slices + 1;
   for ( var i = 0 ; i < stacks ; i++ )
     for ( var j = 0 ; j < slices ; j++ ) {
@@ -127,13 +127,26 @@ function parametric( vector, xRange, yRange, options={} ) {
         if ( Math.abs( ( vertices[f[0]][2] - vertices[f[1]][2] ) / xStep ) > m ||
              Math.abs( ( vertices[f[1]][2] - vertices[f[2]][2] ) / yStep ) > m ||
              Math.abs( ( vertices[f[2]][2] - vertices[f[3]][2] ) / xStep ) > m ||
-             Math.abs( ( vertices[f[3]][2] - vertices[f[0]][2] ) / yStep ) > m   )
+             Math.abs( ( vertices[f[3]][2] - vertices[f[0]][2] ) / yStep ) > m   ) {
+          removeUnused = true;
           continue;
+        }
       }
 
       faces.push( f );
 
     }
+
+  if ( removeUnused ) {
+
+    // set unused vertices to dummy value
+    var dummy = !isNaN( vertices[0][2] ) ? vertices[0][2] : 0;
+
+    var faceSet = new Set( faces.flat() );
+    for ( var i = 0 ; i < vertices.length ; i++ )
+      if ( !faceSet.has(i) ) vertices[i][2] = dummy;
+
+  }
 
   return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
 

@@ -219,6 +219,8 @@ function getCompleteCode() {
 
 }
 
+function color( r, g, b ) { return { r: r, g: g, b: b }; }
+
 function colorFromHue( h ) {
 
   h = ( h % 1 + 1 ) % 1; // restrict to [0,1]

@@ -41,7 +41,7 @@ parent.update = function( id ) {
   var data = [ sphere( .5, { center: [-2,0,0], steps: 50 } ),
                sphere( .5, { center: [2,0,0], steps: 50, color: '#ff0000', opacity: .5 } ),
                parametric( (x,y) => [ x, y, 1-x**2-y**2 ], [-1,1], [-1,1],
-                           { colormap: (x,y) => hueToColor( 1-x**2-y**2 ) } ) ];
+                           { colormap: (x,y) => colorFromHue( 1-x**2-y**2 ) } ) ];
 
   var config = { type: 'x3d', viewer: viewer, saveAsXML: saveAsXML };
 

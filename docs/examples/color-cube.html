@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>Color Cube</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>This simple visualization colors a cube using the <i>x</i>-coordinate for the red value, the <i>y</i>-coordinate for the green value and the <i>z</i>-coordinate for the blue value:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var points = 10, size = 2;
+
+  var step = 1 / ( points - 1 );
+
+  var data = [];
+
+  for ( var i = 0 ; i < points ; i++ )
+    for ( var j = 0 ; j < points ; j++ )
+      for ( var k = 0 ; k < points ; k++ ) {
+
+        var x = step * i;
+        var y = step * j;
+        var z = step * k;
+
+        var r = Math.round( 255 * x );
+        var g = Math.round( 255 * y );
+        var b = Math.round( 255 * z );
+
+        var rgbString = `rgb( ${r}, ${g}, ${b} )`;
+
+        data.push( point( [ x, y, z ], { size: size, color: rgbString } ) );
+
+      }
+
+  var config = { type: 'threejs', frame: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>With this coloration, the origin is black and the point [1,1,1] is white.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

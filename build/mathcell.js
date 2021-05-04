@@ -3452,11 +3452,8 @@ function x3d( id, data, config ) {
     if ( 'colors' in s.options ) {
       var colors = '';
       for ( var j = 0 ; j < s.options.colors.length ; j++ ) {
-        p.style.color = s.options.colors[j];
-        rgb = p.style.color.replace( /[^\d,]/g, '' ).split(',');
-        rgb.forEach( (e,i,a) => a[i] /= 255 );
-        rgb = roundTo( rgb, 3 );
-        colors +=  rgb.join(' ') + ' ';
+        var c = s.options.colors[j];
+        colors +=  `${c.r} ${c.g} ${c.b} `;
       }
       x3d += `
 <Color color="${colors}"></Color>`;

@@ -1,0 +1,125 @@
+<html>
+<head>
+<title>Flow Lines</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>This visualization shows typical flow lines for a three-dimensional system of real linear first-order differential equations:</p>
+
+<div class="mathcell" style="width: 6in; height: 5.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ [ { type: 'number', min: -5, max: 5, default: '.1',
+                                  name: 're1', label: 'Re(<i>&lambda;</i><sub>1</sub>)' },
+                  { type: 'number', min: -5, max: 5, default: '1',
+                                  name: 'im1', label: 'Im(<i>&lambda;</i><sub>1</sub>)' },
+                  { type: 'number', min: -5, max: 5, default: '.5',
+                                  name: 're3', label: 'Re(<i>&lambda;</i><sub>3</sub>)' } ] ] );
+
+parent.update = function( id ) {
+
+  var re1 = getVariable( id, 're1' );
+  var im1 = getVariable( id, 'im1' );
+  var re3 = getVariable( id, 're3' );
+
+  var range = 10; // size of visualization
+  var points = 8; // even number of starting points
+  var extent = 1; // length of paths
+
+  var step = 2 * range / points;
+
+  var data = [];
+
+  for ( var i = 0 ; i < points ; i++ )
+    for ( var j = 0 ; j < points ; j++ )
+      for ( var k = 0 ; k < points ; k++ ) {
+
+        var x0 = -range + step/2 + step * i;
+        var y0 = -range + step/2 + step * j;
+        var z0 = -range + step/2 + step * k;
+
+        var r = Math.round( 255 * ( x0 + range ) / 2 / range );
+        var g = Math.round( 255 * ( y0 + range ) / 2 / range );
+        var b = Math.round( 255 * ( z0 + range ) / 2 / range );
+
+        var rgbString = `rgb( ${r}, ${g}, ${b} )`;
+
+        var l = parametric( t => [ Math.exp(re1*t)
+                                   * ( Math.cos(im1*t) * x0 + Math.sin(im1*t) * y0 ),
+                                   Math.exp(re1*t)
+                                   * ( Math.cos(im1*t) * y0 - Math.sin(im1*t) * x0 ),
+                                   Math.exp(re3*t) * z0 ], [0,extent],
+                                   { color: rgbString } );
+        data.push( l );
+
+        var ps = l[0].points;
+        var p = ps[ ps.length - 1 ];
+
+        if ( p[0] > -range && p[0] < range && p[1] > -range && p[1] < range
+             && p[2] > -range && p[2] < range ) {
+          var p0 = ps[ ps.length - 2 ];
+          var t = normalize( [ p[0] - p0[0], p[1] - p0[1], p[2] - p0[2] ] );
+          data.push( cone( 1/range, 2/range, { axis: t, center: p, color: rgbString } ) );
+        }
+
+      }
+
+  var config = { type: 'threejs', xMin: -range, xMax: range,
+                 yMin: -range, yMax: range, zMin: -range, zMax: range };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>A general system of linear first-order differential equations and its formal solution are</p>
+
+\[ \frac{ d \mathbf{x} }{ dt } = A \mathbf{x}
+   \hspace{2em} \rightarrow \hspace{2em} \mathbf{x} = e^{At} \mathbf{x}_0 \]
+
+<p>where <i>A</i> is a square matrix. If it is restricted to three dimensions it will have three eigenvalues. If all elements of the matrix are real, the eigenvalues are either all real, or one real and a complex conjugate pair.</p>
+
+<p>Since three eigenvalues are not enought information to determine the nine elements of the general matrix, a choice has to be made as to how the matrix will depend on only three values. The simplest choice is</p>
+
+\[ A = \left[ \begin{array}{ccc} a & b & 0 \\ -b & a & 0 \\ 0 & 0 & c \end{array} \right] \]
+
+<p>The upper block of this matrix is a two-dimensional representation of the imaginary unit, so this matrix exponentiates easily to</p>
+
+\[ e^{At} = \left[ \begin{array}{ccc} e^{at} \cos bt & e^{at} \sin bt & 0 \\
+                                      -e^{at} \sin bt & e^{at} \cos bt & 0 \\
+                                      0 & 0 & e^{ct} \end{array} \right] \]
+
+<p>The values here relate to the eigenvalues according to</p>
+
+\[ a = \operatorname{Re} \lambda_1 = \operatorname{Re} \lambda_2 \hspace{3em}
+   b = \operatorname{Im} \lambda_1 = -\operatorname{Im} \lambda_2 \hspace{3em}
+   c = \lambda_3 = \operatorname{Re} \lambda_3 \]
+
+<p>The exponentiated solution is visualized starting from points evenly spaced over the entire cube, with the lines truncated if they exit the framed region. The lines are colored with the scheme of <a href="color-cube.html">this example</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

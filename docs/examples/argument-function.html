@@ -1,0 +1,65 @@
+<html>
+<head>
+<title>Argument Function</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>The argument of a complex number on the complex plane:</p>
+
+<div class="mathcell" style="width: 6in; height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var range = 20;
+
+  function arg( x, y ) { return Math.atan2( y, x ); }
+
+  var s = parametric( (x,y) => [ x, y, arg(x,y) ], [-range,range,150], [-range,range,150],
+                      { colormap: (x,y) => colorFromArg( { re: x, im: y } ),
+                        maxFaceSlope: 5 } );
+
+  var data = [ s ];
+
+  var config = { type: 'threejs', viewpoint: [1,-1,1] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>When a complex number is written in polar form</p>
+
+<p style="text-align: center">
+<i>x</i> + <i>iy</i> = <i>r e<sup>i&phi;</sup></i></p>
+
+<p>then its argument is the real value <i>&phi;</i> in the exponent. It is calculated numerically using the <a href="https://en.wikipedia.org/wiki/Atan2">atan2</a> function.</p>
+
+<p>This example deliberately replicates some of the arithmetic of complex numbers of <a href="https://github.com/paulmasson/math">Math</a> to avoid importing that entire library for a couple lines of code. It also encodes the tiny amount of mathematical notation in HTML to void importing all of MathJax.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

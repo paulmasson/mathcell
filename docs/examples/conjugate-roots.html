@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Conjugate Roots</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A visual explanation of why complex roots of polynomials occur in conjugate pairs:</p>
+ 
+<div class="mathcell" style="width: 6in; height: 6in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ [ { type: 'checkbox', default: false,
+                                      name: 'sPlus', label: 'Show extension to 2+<i>i</i>:' },
+                  { type: 'checkbox', default: false,
+                                      name: 'sNeg', label: 'Show extension to 2&minus;<i>i</i>:' } ] ] );
+
+parent.update = function( id ) {
+
+  var sPlus = getVariable( id, 'sPlus' );
+  var sNeg = getVariable( id, 'sNeg' );
+
+  data = [ parametric( x => [ x, 0, (x-2)**2 + 1 ], [ 2-Math.sqrt(2), 2+Math.sqrt(2) ],
+                       { color: 'black' } ),
+           line( [[0,0,0],[4,0,0]], { color: 'black' } ), text( 'x', [4.25,0,0] ),
+           line( [[0,0,0],[0,0,4]], { color: 'black' } ), text( 'z', [0,0,4.25] ),
+           sphere( .03, { color: 'red', center: [2,1,0] } ),
+           sphere( .03, { color: 'red', center: [2,-1,0] } ),
+           parametric( (x,y) => [x,y,0], [0,4], [-2,2],
+                       { color: 'gray', opacity: .1, renderOrder: -1 } ) ];
+
+  if ( sPlus ) data.push( parametric( (x,y) => [ x, y, (x-2)**2 + (y-1)**2 ],
+                          [ 2-Math.sqrt(2), 2+Math.sqrt(2) ], [0,2],
+                          { opacity: .3, renderOrder: -1 } ) ); 
+
+  if ( sNeg ) data.push( parametric( (x,y) => [ x, y, (x-2)**2 + (y+1)**2 ],
+                         [ 2-Math.sqrt(2), 2+Math.sqrt(2) ], [-2,0],
+                         { opacity: .3, renderOrder: -1 } ) ); 
+
+  var config = { type: 'threejs', frame: false, viewpoint: [1,-1,0] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The black parabola is the function</p>
+
+\[ z = (x-2)^2 + 1 \]
+
+<p>It clearly does not intersect the real <i>x</i>-axis, but has the pair of conjugate roots \( 2 \pm i \)&nbsp;, shown as red spheres. This can be understood by extending the real parabola over the complex plane using the pair of functions</p>
+
+\[ (x-2)^2 + (y \mp 1)^2 \]
+
+<p>where <i>y</i> is the imaginary part of the independent variable. Since the extension can happen in either direction, the solutions necessarily come in complex conjugate pairs.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

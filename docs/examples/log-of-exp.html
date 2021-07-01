@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>Logarithm of Exponential</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The logarithm function officially inverts a complex exponential on paper but not numerically:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var i = complex(0,1);
+
+  var data = [];
+
+  var c = 2; // half number of cycles less one
+  var nudge = 1e-3; // to avoid discontinuities
+
+  for ( var k = -c ; k <= c ; k++ )
+    data.push( plot( x => mul( neg(i), log( exp(mul(i,x)) ) ).re,
+                     [ -pi + 2*pi*k + nudge, pi + 2*pi*k - nudge ] ) );
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The graph above is the real part of</p>
+
+\[ -i \log[ \exp( ix ) ] \]
+
+<p>A straightforward inversion says this should be equal to \(x\), but since \(\exp(2 \pi i)=1\) the numerical evaluation is in practice modulus \(2 \pi i\). This is one example of differences to keep in mind between formal mathematics and numerical implementation.</p>
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

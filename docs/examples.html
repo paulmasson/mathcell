@@ -31,11 +31,12 @@ var observer = new IntersectionObserver( entries => {
 
 var xhr = new XMLHttpRequest();
 
-xhr.open( 'GET', 'https://api.github.com/repos/paulmasson/mathcell/contents/docs/examples', true );
+// GitHub API not consistenly loaded by Google...
+xhr.open( 'GET', 'https://paulmasson.github.io/sitemap.txt', true );
 
 xhr.onload = function() {
 
-  var files = JSON.parse( xhr.response );
+  var files = xhr.response.split( '\n' ).filter( e => e.includes( '/docs/examples/' ) );
   var xhrs = [];
 
   for ( var i = 0 ; i < files.length ; i++ ) {
@@ -46,7 +47,7 @@ xhr.onload = function() {
     document.body.appendChild( div );
 
     xhrs[i] = new XMLHttpRequest();
-    xhrs[i].fileName = 'examples/' + files[i].name;
+    xhrs[i].fileName = files[i];
     xhrs[i].responseType = 'text';
     xhrs[i].id = div.id;
 
@@ -56,7 +57,7 @@ xhr.onload = function() {
 
       var parser = new DOMParser();
       var dom = parser.parseFromString( this.response, 'text/html' );
-      var title = dom.getElementsByTagName( 'title' )[0];
+      var title = dom.getElementsByTagName( 'title' )[0]; // HTMLCollection
       var cell = dom.getElementsByClassName( 'mathcell' )[0];
 
       var a = document.createElement( 'a' );

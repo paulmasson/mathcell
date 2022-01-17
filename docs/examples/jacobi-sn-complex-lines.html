@@ -39,8 +39,12 @@ parent.update = function( id ) {
 
   var rate = .1;
 
-  var curve = parametric( x => [ sn( mul( complex(a,b), x ), m ).re,
-                                 sn( mul( complex(a,b), x ), m ).im, rate*x ], [0,100,5000] );
+  function vectorFunction( x ) {
+    var z = sn( mul( complex(a,b), x ), m );
+    return [ z.re, z.im, rate*x ];
+  }
+
+  var curve = parametric( vectorFunction, [0,100,5000] );
 
   curve[0].points.forEach( p => {
     if ( Math.hypot( p[0], p[1] ) > 50 ) console.log(

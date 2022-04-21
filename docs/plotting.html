@@ -7,15 +7,15 @@
 
 <body>
 
-<p>Options for graphics objects are specified as JavaScript dictionaries. Common default options are</p>
+<p>Options for plots are specified as JavaScript dictionaries. Common default options are</p>
 
 <table style="margin-left: 1in"><tr><td style="width: 1in">
-  <code>color</code></td><td>azure blue
+  <code>color</code></td><td>rgb(0,127,255) - rich azure blue
 </td></tr><tr><td>
   <code>opacity</code></td><td>1
 </td></tr></table>
 
-<p>Colors are specified using standard HTML color code strings. Predefined colormaps can be applied by setting an option of <code>colormap</code> equal to the string name of one of the <a href="colormaps.html">available maps</a>. A reversed colormap can be used by also setting an option of <code>reverseColormap</code> to <code>true</code>.</p>
+<p>Colors are specified using standard HTML color code strings.  Predefined <a href="colormaps.html">colormaps</a> are also available.</p>
 
 <p>Surfaces can be assigned a <code>group</code> name for common animation operations.</p>
 
@@ -32,7 +32,7 @@
 <p><b>parametric( vector, xRange, yRange, options )</b> &mdash; surface plot of a vector function of two variables over ranges given as arrays <code>[begin,end]</code> or <code>[begin,end,points]</code>. An option of <code>colormap</code> allows a function that specifies RGB colors in the range 0 to 1.</p>
 
 <blockquote>
-For visualizing complex surfaces, an option of <code>complexFunction</code> can be set to <code>'re'</code>, <code>'im'</code> or <code>'abs'</code> to display the real part, imaginary part or absoluate value of a function returned as the object <code>{ re: re, im: im }</code>. Setting the <code>colormap</code> to the string <code>'complexArgument'</code> rather than a function will then color the surface accordingly without significant computational overhead.
+For visualizing complex surfaces, an option of <code>complexFunction</code> can be set to 're', 'im' or 'abs' to display the real part, imaginary part or absoluate value of a function returned as the object <code>{ re: re, im: im }</code>. Setting the <code>colormap</code> to the string 'complexArgument' rather than a function will then color the surface accordingly without significant computational overhead.
 </blockquote>
 
 <blockquote>

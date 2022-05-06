@@ -13,7 +13,7 @@
 
 <p>The real and imaginary parts of an inverse function on the complex plane. For fractional values of the exponent only the principle sheet is displayed. Limits are set on the <i>z</i>-axis to trim the infinite peaks at poles.</p>
 
-<div class="mathcell" style="width: 6in; height: 6in">
+<div class="mathcell" style="width: 6in; height: 6.5in">
 <script>
 
 var parent = document.currentScript.parentNode;
@@ -24,28 +24,33 @@ parent.id = id;
 MathCell( id, [ { type: 'slider', max: 5, default: 2.5,
                                   name: 'n', label: 'n' },
                 { type: 'buttons', values: [ 'real', 'imaginary' ], width: '1in',
-                                   name: 'part', label: 'Part:' } ] );
+                                   name: 'part', label: 'Part:' },
+                { type: 'checkbox', name: 'colorByArg', label: 'Color by complex argument:' } ] );
 
 parent.update = function( id ) {
 
   var n = getVariable( id, 'n' );
   var part = getVariable( id, 'part' );
+  var colorByArg = getVariable( id, 'colorByArg' );
+
+  var options = colorByArg ? { colormap: (x,y) => colorFromHue( Math.atan2(imag(x,y),real(x,y)) / Math.PI/2 ) }
+                           : {};
 
   function real( x, y ) {
 
     var r = Math.sqrt( x**2 + y**2 );
     var phi = Math.atan2( y, x );
 
-    return ( 1 - r * Math.cos(n*phi) ) / ( ( 1 - r*Math.cos(n*phi) )**2 + r**2 * Math.sin(n*phi)**2 );
+    return ( 1 - r**n * Math.cos(n*phi) ) / ( ( 1 - r**n * Math.cos(n*phi) )**2 + r**(2*n) * Math.sin(n*phi)**2 );
 
   }
 
-  function imaginary( x, y ) {
+  function imag( x, y ) {
 
     var r = Math.sqrt( x**2 + y**2 );
     var phi = Math.atan2( y, x );
 
-    return -r * Math.sin(n*phi) / ( ( 1 - r*Math.cos(n*phi) )**2 + r**2 * Math.sin(n*phi)**2 );
+    return r**n * Math.sin(n*phi) / ( ( 1 - r**n * Math.cos(n*phi) )**2 + r**(2*n) * Math.sin(n*phi)**2 );
 
   }
 
@@ -53,13 +58,13 @@ parent.update = function( id ) {
 
   if ( part === 'real' )
 
-    data.push( parametric( (x,y) => [x,y,real(x,y)], [-3,3,151], [-3,3,151] ) );
+    data.push( parametric( (x,y) => [x,y,real(x,y)], [-3,3,151], [-3,3,151], options ) );
 
   else
 
-    data.push( parametric( (x,y) => [x,y,imaginary(x,y)], [-3,3,151], [-3,3,151] ) );
+    data.push( parametric( (x,y) => [x,y,imag(x,y)], [-3,3,151], [-3,3,151], options ) );
 
-  var config = { type: 'threejs', axesLabels: false, zMin: -3, zMax: 3 };
+  var config = { type: 'threejs', axesLabels: true, zMin: -3, zMax: 3 };
 
   evaluate( id, data, config );
 
@@ -77,9 +82,9 @@ parent.update( id );
 <p>With the parametrization \( z = r e^{ i \phi } \) the function can be written</p>
 
 \[ \begin{align}
-   f(z) &= \frac{ 1 }{ 1 - r \cos n\phi + i r \sin n\phi } \\
-        &= \frac{ 1 - r \cos n\phi }{ ( 1 - r \cos n\phi )^2 + r^2 \sin^2 n\phi }
-           - i \frac{ r \sin n\phi }{ ( 1 - r \cos n\phi )^2 + r^2 \sin^2 n\phi }
+   f(z) &= \frac{ 1 }{ 1 - r^n \cos n\phi - i r^n \sin n\phi } \\
+        &= \frac{ 1 - r^n \cos n\phi }{ ( 1 - r^n \cos n\phi )^2 + r^{2n} \sin^2 n\phi }
+           + i \frac{ r^n \sin n\phi }{ ( 1 - r^n \cos n\phi )^2 + r^{2n} \sin^2 n\phi }
    \end{align} \]
 
 <p>so that evaluations can be done with standard JavaScript functions. More complicated functions would require a library that can handle the arithmetic of complex numbers, such as <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>

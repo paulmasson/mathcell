@@ -3190,7 +3190,7 @@ function threejs( id, data, config ) {
   if ( !( 'animate' in config ) ) config.animate = false;
   if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
   if ( !( 'axes' in config ) ) config.axes = false;
-  if ( !( 'axesLabels' in config ) ) config.axesLabels = ['x','y','z'];
+  if ( !( 'axesLabels' in config ) || config.axesLabels === true ) config.axesLabels = ['x','y','z'];
   if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
   if ( !( 'decimals' in config ) ) config.decimals = 2;
   if ( !( 'equalAspect' in config ) ) config.equalAspect = false;

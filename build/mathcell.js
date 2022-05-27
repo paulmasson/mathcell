@@ -2540,14 +2540,14 @@ function svg( id, data, config ) {
 
   if ( yOrigin < 0 ) {
     yAxis = -1.5*ext;
-    yTotal += .5*ext + yOffset;
+    yTotal = height + 2.5*ext + yLabel + yOffset;
     yShift = 1.5*ext + yOffset;
     yOffset = -6;
     if ( yLabel > 0 ) yLabel += 12;
   }
   if ( yOrigin > height ) {
     yAxis = height + 1.5*ext;
-    yTotal += .5*ext + 1.5*yOffset;
+    yTotal = height + 2.5*ext + yLabel + 1.5*yOffset;
   }
 
   var svg = `

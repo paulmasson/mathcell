@@ -2550,6 +2550,13 @@ function svg( id, data, config ) {
     yTotal = height + 2.5*ext + yLabel + 1.5*yOffset;
   }
 
+  if ( !axes ) {
+    xShift = 0;
+    yShift = 0;
+    xTotal = width;
+    yTotal = height;
+  }
+
   var svg = `
 <svg width="${ width }" height="${ height }" preserveAspectRatio="none"
      viewBox="${ -xShift } ${ -yShift } ${ xTotal } ${ yTotal }"

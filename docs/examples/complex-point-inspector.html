@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>Complex Point Inspector</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style>
+
+tspan { font-family: monospace }
+
+</style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<p>This example evaluates a complex function at eight locations encircling a specified point of the complex plane. By decreasing the radius of the circle of evaluation, one can get an idea of the nature of the function at that complex point:</p>
+
+<div class="mathcell" style="width: 6in; height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ [ { type: 'text', default: '1+i', name: 'p', label: 'Point:' },
+                  { type: 'text', default: '1e-5', name: 'r', label: 'Radius:' } ],
+                  { type: 'text', default: 'sin(x)', name: 'f', label: 'Function:' } ] );
+
+parent.update = function( id ) {
+
+  var p = complexFromString( getVariable( id, 'p' ) );
+  var r = +getVariable( id, 'r' );
+  var f = getVariable( id, 'f' );
+
+  var u = 1 / Math.sqrt(2);
+
+  var offsets = [ complex(1,0), complex(u,u), complex(0,1), complex(-u,u),
+                  complex(-1,0), complex(-u,-u), complex(0,-1), complex(u,-u) ];
+
+  var data = [ text( '<tspan>x</tspan>', [p.re,p.im] ) ];
+
+  offsets.forEach( o => {
+
+    var z = add( p, mul(r,o) );
+    var v = Function( 'x', 'return ' + f )(z);
+
+    var loc = add(p,o), n = 5;
+
+    data.push( text( '<tspan>Re: ' + v.re.toExponential(n) + '</tspan>', [loc.re,loc.im+.08] ),
+               text( '<tspan>Im: ' + v.im.toExponential(n) + '</tspan>', [loc.re,loc.im-.08] ) )
+
+  } );
+
+  var config = { type: 'svg', xMin: p.re-1.5, xMax: p.re+1.5,
+                              yMin: p.im-1.5, yMax: p.im+1.5,
+                              axes: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The point location is entered as a string of the sort one normally uses to express complex numbers. The function to be inspected must use <code>x</code> as the independent variable.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

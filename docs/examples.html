@@ -44,47 +44,43 @@ xhr.onload = function() {
     var div = document.createElement( 'div' );
     div.id = 'example' + i;
     div.style.display = 'inline-block';
-    document.body.appendChild( div );
+    document.body.append( div );
 
     xhrs[i] = new XMLHttpRequest();
     xhrs[i].fileName = files[i];
-    xhrs[i].responseType = 'text';
+    xhrs[i].responseType = 'document';
     xhrs[i].id = div.id;
 
     xhrs[i].open( 'GET', xhrs[i].fileName, true );
 
     xhrs[i].onload = function() {
 
-      var parser = new DOMParser();
-      var dom = parser.parseFromString( this.response, 'text/html' );
-      var title = dom.getElementsByTagName( 'title' )[0]; // HTMLCollection
-      var cell = dom.getElementsByClassName( 'mathcell' )[0];
-
       var a = document.createElement( 'a' );
       a.href = this.fileName;
-      a.title = title.innerHTML;
+      a.title = this.response.title;
 
       var div = document.createElement( 'div' );
-      a.appendChild( div );
+      a.append( div );
 
-      var math = this.response.includes( 'math.js' ) ? `
-<script src="../../math/build/math.js"><\/script>` : '';
+      var newDocument = document.implementation.createHTMLDocument();
 
-      var mathjax = this.response.includes( 'mathjax' ) ? `
-<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"><\/script>` : '';
+      for ( var i = this.response.scripts.length - 1 ; i >= 0 ; i-- ) {
+        var s = this.response.scripts[i];
+        if ( s.innerHTML === '' ) {
+          s.src = s.src; // forces absolute URL
+          newDocument.children[0].children[1].append( s ); // mutates collection
+        }
+      }
+
+      var cell = this.response.getElementsByClassName( 'mathcell' )[0];
+      newDocument.children[0].children[1].append( cell );
 
       var iframe = document.createElement( 'iframe' );
-      iframe.source = `
-<html>
-<body style="overflow: hidden">
-<script src="../build/mathcell.js"><\/script> ${math} ${mathjax}
-${cell.outerHTML}
-</body>
-</html>`;
+      iframe.source = newDocument.documentElement.outerHTML;
       iframe.scrolling = 'no';
-      a.appendChild( iframe );
+      a.append( iframe );
 
-      document.getElementById( this.id ).appendChild( a );
+      document.getElementById( this.id ).append( a );
 
       observer.observe( iframe );
 

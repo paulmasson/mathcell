@@ -2193,8 +2193,6 @@ function line( points, options={} ) {
 
   else {
 
-    if ( !( 'linewidth' in options ) ) options.linewidth = 1;
-
     return [ { points: points, options: options, type: 'line' } ];
 
   }
@@ -2696,7 +2694,9 @@ function svg( id, data, config ) {
 
     }
 
-    svg += `" stroke="${ l.options.color }" stroke-width="1.5" opacity="${ l.options.opacity }"
+    var thickness = l.options.thickness ? l.options.thickness : 1.5;
+
+    svg += `" stroke="${ l.options.color }" stroke-width="${ thickness }" opacity="${ l.options.opacity }"
  fill="${ l.options.fill ? l.options.color : 'none' }"/>`;
 
   }
@@ -3014,8 +3014,9 @@ function addLine( l ) {
   var geometry = new THREE.BufferGeometry();
   geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 
+  var linewidth = l.options.thickness ? l.options.thickness : 1;
   var transparent = l.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
+  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: linewidth,
                                                 transparent: transparent, opacity: l.options.opacity } );
 
   var c = new THREE.Vector3();

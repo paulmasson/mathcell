@@ -106,8 +106,6 @@ function line( points, options={} ) {
 
   else {
 
-    if ( !( 'linewidth' in options ) ) options.linewidth = 1;
-
     return [ { points: points, options: options, type: 'line' } ];
 
   }

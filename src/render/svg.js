@@ -308,7 +308,9 @@ function svg( id, data, config ) {
 
     }
 
-    svg += `" stroke="${ l.options.color }" stroke-width="1.5" opacity="${ l.options.opacity }"
+    var thickness = l.options.thickness ? l.options.thickness : 1.5;
+
+    svg += `" stroke="${ l.options.color }" stroke-width="${ thickness }" opacity="${ l.options.opacity }"
  fill="${ l.options.fill ? l.options.color : 'none' }"/>`;
 
   }

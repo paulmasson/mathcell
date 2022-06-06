@@ -287,8 +287,9 @@ function addLine( l ) {
   var geometry = new THREE.BufferGeometry();
   geometry.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
 
+  var linewidth = l.options.thickness ? l.options.thickness : 1;
   var transparent = l.options.opacity < 1 ? true : false;
-  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: l.options.linewidth,
+  var material = new THREE.LineBasicMaterial( { color: l.options.color, linewidth: linewidth,
                                                 transparent: transparent, opacity: l.options.opacity } );
 
   var c = new THREE.Vector3();

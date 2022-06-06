@@ -163,10 +163,11 @@ function svg( id, data, config ) {
   }
 
   if ( !axes ) {
-    xShift = 0;
-    yShift = 0;
-    xTotal = width;
-    yTotal = height;
+    // minor shifts to avoid cutting off edges of objects
+    xShift = 5;
+    yShift = 5;
+    xTotal = width + 10;
+    yTotal = height + 10;
   }
 
   var svg = `

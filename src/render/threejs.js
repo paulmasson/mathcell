@@ -35,9 +35,16 @@ function threejs( id, data, config ) {
   for ( var i = 0 ; i < data.length ; i++ )
     for ( var j = 0 ; j < data[i].length ; j++ ) {
       var d = data[i][j];
-      if ( d.type === 'text' ) texts.push( d );
-      if ( d.type === 'point' ) points.push( d );
+      if ( d.type === 'text' ) {
+        if ( typeof d.point[2] === 'undefined' ) d.point[2] = 0;
+        texts.push( d );
+      }
+      if ( d.type === 'point' ) {
+        if ( typeof d.point[2] === 'undefined' ) d.point[2] = 0;
+        points.push( d );
+      }
       if ( d.type === 'line' ) {
+        d.points.forEach ( p => { if ( typeof p[2] === 'undefined' ) p[2] = 0; } );
         d.points = roundTo( d.points, 3, false ); // reduce raw data size
         lines.push( d );
       }

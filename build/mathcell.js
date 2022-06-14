@@ -2420,7 +2420,8 @@ function svg( id, data, config ) {
   var height = output.offsetHeight;
   var ext = 20; // axis extension
 
-  if ( config.includeOrigin ) data.push( [ { points: [[0,0]], options: { color: '' }, type: 'line' } ] );
+  if ( config.includeOrigin )
+    data.push( [ { points: [[0,0]], options: { color: '', opacity: 0 }, type: 'line' } ] );
 
   var texts = [], points = [], lines = [];
 

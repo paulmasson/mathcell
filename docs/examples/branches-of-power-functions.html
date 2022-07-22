@@ -1,0 +1,79 @@
+<html>
+<head>
+<title>Braches of Power Functions</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The real part of successive branches of the power function
+\( z^n = ( x + i y )^n \)
+with noninteger exponent:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'number', max: 4, step: .1, default: .7,
+                                  name: 'n', label: 'n' },
+                { type: 'slider', min: -10, max: 10, step: 1, default: 0,
+                                  name: 'k', label: 'Branch:' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+  var k = getVariable( id, 'k' );
+
+  var range = 1;
+
+  var data = [ parametric( (x,y) =>[ x, y, mul( pow( complex(x,y), n ), exp( complex(0,2*n*k*pi) ) ) ],
+                           [-range,range], [-range,-.0001],
+                           { complexFunction: 're', colormap: 'complexArgument' } ),
+               parametric( (x,y) =>[ x, y, mul( pow( complex(x,y), n ), exp( complex(0,2*n*k*pi) ) ) ],
+                           [-range,range], [.0001,range],
+                           { complexFunction: 're', colormap: 'complexArgument' } ) ];
+
+  var config = { type: 'threejs', axesLabels: ['x','y','Re(f)'], viewpoint: [-1,-1,1] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Each branch is rendered in two parts to keep the branch cut along the negative real axis clean.</p>
+
+<p>Successive branches differ by an overall complex factor, which can be motivated using the branch behavior of the logaritm:</p>
+
+\[ [z^n]_k = [e^{n \log z}]_k = e^{n( \log z + 2k \pi i )} = e^{2k n \pi i} z^n \]
+
+<p>An exponent with one decimal place is equivalent a fraction with ten in the denomiator, which is why in general here it takes ten sheets to recapitulate the principal branch. The exceptions to this are integer exponents which have no denominator and hence one sheet, and half-integral exponents where the fraction reduces to two and there are only two distinct sheets. If three decimal places were allowed as input it would in general take one hundred sheets to recapitulate the principal branch, unless the fraction again reduced.</p>
+
+<p>This example is useful for thinking about the branches of the Bessel functions
+\( J_k(z) \) and \( I_k(z) \), both of which have power-function behavior about the origin.</p>
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

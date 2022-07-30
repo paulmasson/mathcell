@@ -114,11 +114,12 @@ ${t}
 
 function interact( id, input ) {
 
+  var name = 'name' in input ? input.name : '';
+
   switch ( input.type ) {
 
     case 'slider':
 
-      var name = 'name' in input ? input.name : '';
       var min = 'min' in input ? input.min : 0;
       var max = 'max' in input ? input.max : 1;
       var step = 'step' in input ? input.step : .01;
@@ -136,7 +137,6 @@ function interact( id, input ) {
 
     case 'buttons':
 
-      var name = 'name' in input ? input.name : '';
       var values = 'values' in input ? input.values : [1,2,3];
       var labels = 'labels' in input ? input.labels : false;
       var select = 'default' in input ? input.default : values[0];
@@ -155,7 +155,6 @@ function interact( id, input ) {
 
     case 'number':
 
-      var name = 'name' in input ? input.name : '';
       var min = 'min' in input ? input.min : 0;
       var max = 'max' in input ? input.max : 1;
       var step = 'step' in input ? input.step : .01;
@@ -168,7 +167,6 @@ function interact( id, input ) {
 
     case 'checkbox':
 
-      var name = 'name' in input ? input.name : '';
       var checked = 'default' in input ? input.default : '';
 
       return `
@@ -177,7 +175,6 @@ function interact( id, input ) {
 
     case 'text':
 
-      var name = 'name' in input ? input.name : '';
       var value = 'default' in input ? input.default : '';
 
       var width = 'width: ' + ( input.width ? input.width : 'calc(100% - .6in)' );

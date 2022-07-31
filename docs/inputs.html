@@ -7,7 +7,7 @@
 
 <body>
 
-<p>There are five kinds of input: <code>slider</code>, <code>buttons</code>, <code>number</code>, <code>checkbox</code> and <code>text</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these string values, followed by a comma-separated list of optional attributes. Entries in the array can also be arrays of inputs, following the logic of matrices, to allow for arbitrary arrangements.</p>
+<p>There are five kinds of input: <code>slider</code>, <code>buttons</code>, <code>number</code>, <code>checkbox</code>, <code>text</code> and <code>iterator</code>. The array of inputs in the <code>MathCell()</code> command should contain a dictionary for each input desired, with <code>type</code> set equal to one of these string values, followed by a comma-separated list of optional attributes. Entries in the array can also be arrays of inputs, following the logic of matrices, to allow for arbitrary arrangements.</p>
 
 <p>All inputs have two additional string options: a <code>name</code> that is used to identify the input in subsequent code, and a <code>label</code> that appears next to the input. The label can be any valid HTML. Single letter labels are italicized by default.</p>
 
@@ -61,6 +61,14 @@ var x = getVariable( id, 'x' );
   <code>default</code></td><td>empty
 </td></tr><tr><td>
   <code>width</code></td><td>automatic
+</td></tr></table>
+
+<p>An <code>iterator</code> input allows one to step forward or backward numerically, and has two additional options width default values</p>
+
+<table style="width: 2.5in; margin-left: 1.75in"><tr><td>
+  <code>default</code></td><td>0
+</td></tr><tr><td>
+  <code>reversible</code></td><td>false
 </td></tr></table>
 
 <br/><p>The minimum and maximum values of slider and number inputs can be set via the helper function</p>

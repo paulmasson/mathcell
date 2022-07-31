@@ -183,6 +183,25 @@ function interact( id, input ) {
 <input id=${id + name} type=text value="${value}" style="${width}"
        onchange="window.id='${id}';${id}.update('${id}')"/>`;
 
+    case 'iterator':
+
+      var value = 'default' in input ? input.default : 0;
+
+      var width = '.75in', last = '';
+
+      if ( input.reversible )
+        last = `
+<button onclick="${id + name}.innerHTML--;window.id='${id}';${id}.update('${id}')"
+    style="width: ${width}">Last</button>`;
+
+      return `
+<div id=${id + name}
+    style="display: inline-block; width: .5in; text-align: left">${value}</div> ${last}
+<button onclick="${id + name}.innerHTML++;window.id='${id}';${id}.update('${id}')"
+    style="width: ${width}">Next</button>
+<button onclick="${id + name}.innerHTML=${value};window.id='${id}';${id}.update('${id}')"
+    style="width: ${width}">Reset</button>`;
+
     default:
 
       return 'Unsupported input type';
@@ -283,6 +302,8 @@ function getVariable( id, name ) {
   // input type already validated on creation
 
   var input = document.getElementById( id + name );
+
+  if ( input.innerHTML ) return +input.innerHTML; // iterator
 
   if ( input ) switch ( input.type ) {
 

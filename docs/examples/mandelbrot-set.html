@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>Mandelbrot Set</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>The infamous <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot set</a> produced by successive iteration:</p>
+
+<div class="mathcell" style="height: 5.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+// globally accessible variables
+var points = []; // points included at each iteration step
+var step = .02;  // density of points
+var size = .5;   // size of points
+
+MathCell( id, [ { type: 'iterator', name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  if ( n === 0 ) {
+
+    points = [];
+
+    for ( var x = -2; x <= 2 ; x += step )
+      for ( var y = -2; y <= 2 ; y += step )
+        if ( !( x*x + y*y > 4 ) )
+          // original point plus interates
+          points.push( [x,y,x,y] );
+
+  } else {
+
+    for ( var i = points.length - 1 ; i >= 0 ; i-- ) {
+
+      var p = points[i];
+
+      var xn = p[2]**2 - p[3]**2 + p[0];
+      var yn = 2*p[2]*p[3] + p[1];
+
+      if ( xn*xn + yn*yn > 4 ) points.splice( i, 1 );
+      else { p[2] = xn; p[3] = yn; }
+
+    }
+
+  }
+
+  var data = [];
+
+  points.forEach( p => data.push( point( [p[0],p[1]], { size: size, color: 'purple' } ) ) );
+
+  var config = { type: 'svg', equalAspect: true, axes: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The Mandelbrot set is defined by repeated application of the equation</p>
+
+\[ z_{n+1} = z_n^2 + c \hspace{2em} , \hspace{2em} z_0 = 0 \]
+
+<p>where the subscript \( n \) indicates the step in the iteration. One determines whether some starting number \( c \) is in the set by computing \( z_1 \) from the equation with \( z_0 \) as indicated, plugging the result back into the right-hand side to get \( z_2 \), plugging that back into the right-hand side to get \( z_3 \) and so on. If the successive numbers get larger and larger in size, then the initial number \( c \) is not in the set and needs to be excluded. The resulting shape at each step of the process is from points not excluded at that step.</p>
+
+<p>The set in the end consists of points along the real axis as well as points in the complex plane. A complex number is of the form \( z = x + iy \), where the square of imaginary unit is \( i^2 = -1 \). The size of a complex number is given by its absolute value, which is calculated as the square root of the number times its complex conjugate:</p>
+
+\[ |z| = \sqrt{ z \overline{z} } = \sqrt{ (x + iy)(x - iy) }
+       = \sqrt{ x^2 + y^2 } \]
+
+<p>For the Mandelbrot set it is known that when this value exceeds two the point will not belong to the set. That is why the starting set of points above is a circle of radius two.</p>
+
+<p>The calculation at each step in mathematical notation, with \( c = a + ib \), is</p>
+
+\[ z_{n+1} = (x_n + iy_n)^2 + a + ib = (x_n^2 - y_n^2 + a) + i (2x_ny_n + b) \]
+
+<p>Since JavaScript does not handle imaginary numbers natively, the code works explicitly with the real and imaginary parts of complex numbers. Each entry in the array <code>points</code> contains the original real and imaginary parts in the first two positions, and the real and imaginary parts at each step of the iteration in the third and fourth positions. To speed up the code a bit, at each step squares of absolute values are compared to four, and the original point is excluded when this value is exceeded.</p>
+
+<p>The final pattern appears much less dense that the starting circle because so much of the latter is discarded in the process and the image recenters at each step. More detail can of course be provided by decreasing the <code>step</code> value, but this makes the browser extremely sluggish.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

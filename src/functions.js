@@ -246,6 +246,9 @@ function colorFromHue( h ) {
 
 function colorFromArg( x ) {
 
+  if ( !( typeof x === 'object' && 're' in x ) ) // from Math
+    x = { re: x, im: 0 };
+
   var h = Math.atan2( x.im, x.re ) / Math.PI / 2;
 
   return colorFromHue(h);

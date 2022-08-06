@@ -90,7 +90,9 @@ function parametric( vector, xRange, yRange, options={} ) {
       var x = xRange[0] + j * xStep;
       var v = vector(x,y);
 
-      if ( 'complexFunction' in options )
+      if ( 'complexFunction' in options ) {
+        if ( !( typeof v[2] === 'object' && 're' in v[2] ) ) // from Math
+          v[2] = { re: v[2], im: 0 };
         switch( options.complexFunction ) {
           case 're':
             vertices.push( [ v[0], v[1], v[2].re ] );
@@ -104,7 +106,7 @@ function parametric( vector, xRange, yRange, options={} ) {
           default:
             throw Error( 'Unsupported complex function case' );
         }
-      else vertices.push( v );
+      } else vertices.push( v );
 
       if ( 'colormap' in options ) {
         if ( options.colormap === 'complexArgument' )

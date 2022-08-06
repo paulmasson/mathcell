@@ -1851,10 +1851,18 @@ function polarPlot( f, aRange, options={} ) {
 
 function parametric( vector, xRange, yRange, options={} ) {
 
+  var test = Math.random();
+
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
 
   if ( !Array.isArray( yRange ) ) {
+
+    if ( !Array.isArray( vector(test) ) ) {
+      var f = vector;
+      vector = x => [ x, f(x) ];
+      console.log( 'Parametric expects a vector function' );
+    }
 
     var points = [];
     for ( var i = 0 ; i <= slices ; i++ ) {
@@ -1872,6 +1880,12 @@ function parametric( vector, xRange, yRange, options={} ) {
 
   var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  if ( !Array.isArray( vector(test,test) ) ) {
+    var f = vector;
+    vector = (x,y) => [ x, y, f(x,y) ];
+    console.log( 'Parametric expects a vector function' );
+  }
 
   var vertices = [];
   if ( 'colormap' in options ) options.colors = [];

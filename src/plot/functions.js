@@ -176,11 +176,19 @@ function wireframe( vector, xRange, yRange, options={} ) {
 
   if ( !options.openEnded ) options.openEnded = true;
 
+  var test = Math.random();
+
   var slices = xRange.length < 3 ? 50 : xRange[2];
   var xStep = ( xRange[1] - xRange[0] ) / slices;
 
   var stacks = yRange.length < 3 ? 50 : yRange[2];
   var yStep = ( yRange[1] - yRange[0] ) / stacks;
+
+  if ( !Array.isArray( vector(test,test) ) ) {
+    var f = vector;
+    vector = (x,y) => [ x, y, f(x,y) ];
+    console.log( 'Wireframe expects a vector function' );
+  }
 
   var lines = [];
 

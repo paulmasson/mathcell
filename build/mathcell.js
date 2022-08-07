@@ -1861,7 +1861,6 @@ function parametric( vector, xRange, yRange, options={} ) {
     if ( !Array.isArray( vector(test) ) ) {
       var f = vector;
       vector = x => [ x, f(x) ];
-      console.log( 'Parametric expects a vector function' );
     }
 
     var points = [];
@@ -1884,7 +1883,6 @@ function parametric( vector, xRange, yRange, options={} ) {
   if ( !Array.isArray( vector(test,test) ) ) {
     var f = vector;
     vector = (x,y) => [ x, y, f(x,y) ];
-    console.log( 'Parametric expects a vector function' );
   }
 
   var vertices = [];
@@ -1979,7 +1977,6 @@ function wireframe( vector, xRange, yRange, options={} ) {
   if ( !Array.isArray( vector(test,test) ) ) {
     var f = vector;
     vector = (x,y) => [ x, y, f(x,y) ];
-    console.log( 'Wireframe expects a vector function' );
   }
 
   var lines = [];

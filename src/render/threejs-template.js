@@ -185,6 +185,7 @@ window.addEventListener( 'touchend', suspendAnimation );
 var suspendTimer;
 
 function suspendAnimation() {
+  if ( config.animateOnInteraction ) return;
   clearInterval( suspendTimer );
   animate = false;
   suspendTimer = setTimeout( function() { if ( config.animate ) { animate = true; render(); } }, 5000 );
@@ -400,11 +401,18 @@ function addSurface( s ) {
   var mesh = new THREE.Mesh( geometry, material );
   mesh.position.set( c.x, c.y, c.z );
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
+
   if ( s.options.rotationAxisAngle ) {
     mesh.userData.rotateOnAxis = true;
     var v = s.options.rotationAxisAngle[0];
     mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
     mesh.userData.angle = s.options.rotationAxisAngle[1];
+  }
+
+  if ( s.options.translation ) {
+    mesh.userData.translation = Function( 't', 'return ' + s.options.translation );
+    mesh.userData.translationStep = s.options.translationStep ? s.options.translationStep : .05;
+    mesh.userData.t = 0;
   }
 
   if ( 'group' in s.options ) {
@@ -432,7 +440,7 @@ if ( config.clippingPlane ) {
 
   var v = config.clippingPlane[0];
   var d = config.clippingPlane[1];
-  var plane = new THREE.Plane( new THREE.Vector3(v[0],v[1],v[2]).normalize(), d );
+  var plane = new THREE.Plane( new THREE.Vector3( v[0], v[1], v[2] ).normalize(), d );
   renderer.clippingPlanes = [ plane ];
 
 }
@@ -446,6 +454,12 @@ function render() {
 
     if ( child.userData.rotateOnAxis && animate )
       child.rotateOnAxis( child.userData.axis, child.userData.angle );
+
+    if ( child.userData.translation && animate ) {
+      var v = child.userData.translation( child.userData.t );
+      child.position.set( v[0], v[1], v[2] );
+      child.userData.t += child.userData.translationStep;
+    }
 
   } );
 

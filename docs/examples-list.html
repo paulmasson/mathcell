@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>MathCell - Examples</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style></style>
+</head>
+
+<body>
+
+<div id="columns" style="column-count: 2"></div>
+
+<script>
+
+var xhr = new XMLHttpRequest();
+
+// GitHub API not consistenly loaded by Google...
+xhr.open( 'GET', 'https://paulmasson.github.io/sitemap.txt', true );
+
+xhr.onload = function() {
+
+  var files = xhr.response.split( '\n' ).filter( e => e.includes( '/docs/examples/' ) );
+  var xhrs = [];
+
+  for ( var i = 0 ; i < files.length ; i++ ) {
+
+    var div = document.createElement( 'div' );
+    div.id = 'example' + i;
+    columns.append( div );
+
+    xhrs[i] = new XMLHttpRequest();
+    xhrs[i].fileName = files[i];
+    xhrs[i].responseType = 'document';
+    xhrs[i].id = div.id;
+
+    xhrs[i].open( 'GET', xhrs[i].fileName, true );
+
+    xhrs[i].onload = function() {
+
+      var a = document.createElement( 'a' );
+      a.href = this.fileName;
+      a.innerHTML = this.response.title;
+
+      document.getElementById( this.id ).append( a );
+
+    }
+
+    xhrs[i].send();
+
+  }
+
+}
+
+xhr.send();
+
+</script>
+
+</body>
+</html>

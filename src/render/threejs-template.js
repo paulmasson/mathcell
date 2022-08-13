@@ -416,9 +416,11 @@ function addSurface( s ) {
   }
 
   if ( s.options.translation ) {
-    mesh.userData.translation = Function( 't', 'return ' + s.options.translation );
-    mesh.userData.translationStep = s.options.translationStep ? s.options.translationStep : .05;
-    mesh.userData.t = 0;
+    var arg = s.options.translation.argument ? s.options.translation.argument : 't';
+    var step = s.options.translation.step ? s.options.translation.step : .05;
+    mesh.userData.translation = { 
+      vector: Function( arg, 'return ' + s.options.translation.vector ),
+      step: step, t: 0 };
   }
 
   if ( 'group' in s.options ) {
@@ -461,9 +463,9 @@ function render() {
       child.rotateOnAxis( child.userData.rotation.axis, child.userData.rotation.angle );
 
     if ( child.userData.translation && animate ) {
-      var v = child.userData.translation( child.userData.t );
+      var v = child.userData.translation.vector( child.userData.translation.t );
       child.position.set( v[0], v[1], v[2] );
-      child.userData.t += child.userData.translationStep;
+      child.userData.translation.t += child.userData.translation.step;
     }
 
   } );

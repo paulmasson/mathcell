@@ -28,7 +28,7 @@ parent.update = function( id ) {
   data = [ parametric( t => [ Math.sin(.7*t), Math.cos(.3*t), Math.sin(.2*t) ],
                        [ 0, 20*Math.PI, 300 ],
                        { radius: .01, color: 'limegreen',
-                         group: 'main', rotationAxisAngle: [ [0,0,1], .01 ] } ) ] 
+                         group: 'main', rotation: { axis: [0,0,1], angle: .01 } } ) ] 
 
   var config = { type: 'threejs', frame: false, animate: true };
 

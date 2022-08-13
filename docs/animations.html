@@ -1,0 +1,39 @@
+<html>
+<head>
+<title>MathCell - Styling</title>
+<link rel="stylesheet" type="text/css" href="style.css">
+<style></style>
+</head>
+
+<body>
+
+<p>While options are available for animating two-dimensional SVG graphics, it is currently simpler just to render the graphic repeatedly with updated parameters. This aspect of the library is left for possible future revision.</p>
+
+<p>The situation with three-dimensional graphics is quite the opposite, since there is already significant overhead in initially loading scenes with current rendering options. The following animation options and suboptions are available for individual objects with the Three.js renderer:</p>
+
+<table style="width: 5.5in; margin-left: 1in"><tr><td>
+<code>rotation</code></td><td><code>axis</code></td><td>three-dimensional array of normal vector
+</td></tr><tr><td/><td>
+  <code>angle</code></td><td>number setting rotation rate
+</td></tr></table>
+
+<br/><table style="width: 5.5in; margin-left: 1in"><tr><td>
+<code>translation</code></td><td><code>vector</code></td><td>string of three-dimensional array of functions
+</td></tr><tr><td/><td>
+  <code>step</code></td><td>number setting translation rate
+</td></tr><tr><td/><td>
+  <code>argument</code></td><td>defaults to 't'
+</td></tr></table>
+
+<p>Suboptions are input as JavaScript dictionaries under the given option.</p>
+
+<p>The <code>vector</code> determining translation paths must be entered as a string because JSON cannot process functions. The <code>argument</code> suboption can be used to specify a variable other than time.</p>
+
+<p>Animations are initiated by setting <code>animate</code> equal to <code>true</code> in the output configuration. Animations by default pause for five seconds when the user interacts with the scene, but this can be overridden by setting <code>animateOnInteraction</code> to <code>true</code>.</p>
+
+<p>Objects and surfaces can be assigned a <code>group</code> name in their <code>options</code> dictionaries for common animation operations.</p>
+
+<p></p>
+
+</body>
+</html>

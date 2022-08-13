@@ -5,13 +5,10 @@ function threejs( id, data, config ) {
   var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
   if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
-  if ( !( 'animate' in config ) ) config.animate = false;
   if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
-  if ( !( 'axes' in config ) ) config.axes = false;
   if ( !( 'axesLabels' in config ) || config.axesLabels === true ) config.axesLabels = ['x','y','z'];
   if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
   if ( !( 'decimals' in config ) ) config.decimals = 2;
-  if ( !( 'equalAspect' in config ) ) config.equalAspect = false;
   if ( !( 'frame' in config ) ) config.frame = true;
   if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
 

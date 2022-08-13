@@ -303,9 +303,11 @@ function getVariable( id, name ) {
 
   var input = document.getElementById( id + name );
 
-  if ( input && input.innerHTML ) return +input.innerHTML; // iterator
+  if ( input ) {
 
-  if ( input ) switch ( input.type ) {
+    if ( input.innerHTML ) return +input.innerHTML; // iterator
+
+    switch ( input.type ) {
 
     case 'number':
     case 'range':
@@ -320,12 +322,14 @@ function getVariable( id, name ) {
 
       return input.value;
 
+    }
+
   } else {
 
     var value = document.querySelector( 'input[name=' + id + name + ']:checked' ).value;
 
     if ( isNaN(value) ) return value;
-    else return +value;
+    return +value;
 
   }
 

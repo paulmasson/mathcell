@@ -402,11 +402,17 @@ function addSurface( s ) {
   mesh.position.set( c.x, c.y, c.z );
   if ( s.options.renderOrder ) mesh.renderOrder = s.options.renderOrder;
 
+  // to be removed
   if ( s.options.rotationAxisAngle ) {
-    mesh.userData.rotateOnAxis = true;
-    var v = s.options.rotationAxisAngle[0];
-    mesh.userData.axis = new THREE.Vector3( v[0], v[1], v[2] ).normalize();
-    mesh.userData.angle = s.options.rotationAxisAngle[1];
+    s.options.rotation = { axis: s.options.rotationAxisAngle[0],
+                           angle: s.options.rotationAxisAngle[1] }
+    console.log( 'rotationAxisAngle is deprecated: see documentation for new format' );
+  }
+
+  if ( s.options.rotation ) {
+    var v = s.options.rotation.axis;
+    mesh.userData.rotation = { axis: new THREE.Vector3( v[0], v[1], v[2] ).normalize(),
+                               angle: s.options.rotation.angle };
   }
 
   if ( s.options.translation ) {
@@ -425,11 +431,10 @@ function addSurface( s ) {
     }
     group.add( mesh );
 
-    if ( mesh.userData.rotateOnAxis ) {
-      mesh.userData.rotateOnAxis = false;
-      group.userData.rotateOnAxis = true;
-      group.userData.axis = mesh.userData.axis;
-      group.userData.angle = mesh.userData.angle;
+    if ( mesh.userData.rotation ) {
+      group.userData.rotation = { axis: mesh.userData.rotation.axis,
+                                  angle: mesh.userData.rotation.angle };
+      mesh.userData.rotation = false;
     }
 
   } else scene.add( mesh );
@@ -452,8 +457,8 @@ function render() {
 
   scene.children.forEach( child => {
 
-    if ( child.userData.rotateOnAxis && animate )
-      child.rotateOnAxis( child.userData.axis, child.userData.angle );
+    if ( child.userData.rotation && animate )
+      child.rotateOnAxis( child.userData.rotation.axis, child.userData.rotation.angle );
 
     if ( child.userData.translation && animate ) {
       var v = child.userData.translation( child.userData.t );

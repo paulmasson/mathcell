@@ -303,7 +303,7 @@ function getVariable( id, name ) {
 
   var input = document.getElementById( id + name );
 
-  if ( input.innerHTML ) return +input.innerHTML; // iterator
+  if ( input && input.innerHTML ) return +input.innerHTML; // iterator
 
   if ( input ) switch ( input.type ) {
 

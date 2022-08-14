@@ -1,0 +1,64 @@
+<html>
+<head>
+<title>Moving Spheres</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<p>A few moving spheres to introduce translation:</p>
+
+<div class="mathcell" style="width: 6in; height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [] );
+
+parent.update = function( id ) {
+
+  var v1 = '[ 4*Math.cos(t), 4*Math.sin(t), -4 ]';
+  var v2 = '[ 4*Math.sin(t), 4*Math.cos(t), 4 ]';
+  var v3 = '[ 4*Math.sin(t), 4*Math.cos(t), -2 ]';
+  var v4 = '[ 4*Math.cos(t), 4*Math.sin(t), 2 ]';
+  var v5 = '[ 4*Math.sin(t), 4*Math.sin(t), 0 ]';
+  var v6 = '[ 2, 3*Math.sin(t), 3*Math.cos(t) ]';
+  var v7 = '[ -2, 3*Math.cos(t), 3*Math.sin(t) ]';
+
+  var data = [ sphere( .5, { translation: { vector: v1 }, color: 'blue' } ),
+               sphere( .5, { translation: { vector: v2 }, color: 'red' } ),
+               sphere( .5, { translation: { vector: v3 }, color: 'green' } ),
+               sphere( .5, { translation: { vector: v4 }, color: 'yellow' } ),
+               sphere( .5, { translation: { vector: v5 }, color: 'purple' } ),
+               sphere( .5, { translation: { vector: v6 }, color: 'pink' } ),
+               sphere( .5, { translation: { vector: v7 }, color: 'cyan' } ) ];
+
+  var config = { type: 'threejs', xMin: -5, xMax: 5, yMin: -5, yMax: 5, zMin: -5, zMax: 5,
+                                  axesLabels: false, viewpoint: [1,0,0],
+                                  animate: true, animateOnInteraction: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

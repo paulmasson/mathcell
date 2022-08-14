@@ -23,21 +23,21 @@ MathCell( id, [] );
 
 parent.update = function( id ) {
 
-  var v1 = '[ 4*Math.cos(t), 4*Math.sin(t), -4 ]';
-  var v2 = '[ 4*Math.sin(t), 4*Math.cos(t), 4 ]';
-  var v3 = '[ 4*Math.sin(t), 4*Math.cos(t), -2 ]';
-  var v4 = '[ 4*Math.cos(t), 4*Math.sin(t), 2 ]';
-  var v5 = '[ 4*Math.sin(t), 4*Math.sin(t), 0 ]';
-  var v6 = '[ 2, 3*Math.sin(t), 3*Math.cos(t) ]';
-  var v7 = '[ -2, 3*Math.cos(t), 3*Math.sin(t) ]';
+  var p1 = '[ 4*Math.cos(t), 4*Math.sin(t), 4*Math.cos(t/5) ]';
+  var p2 = '[ 4*Math.cos(t-1), 4*Math.sin(t-1), 4*Math.cos(t/5) ]';
+  var p3 = '[ 4*Math.cos(t-2), 4*Math.sin(t-2), 4*Math.cos(t/5) ]';
+  var p4 = '[ 4*Math.cos(t-3), 4*Math.sin(t-3), 4*Math.cos(t/5) ]';
+  var p5 = '[ 4*Math.cos(t-4), 4*Math.sin(t-4), 4*Math.cos(t/5) ]';
+  var p6 = '[ 2*Math.cos(2*t), 2*Math.sin(2*t), 2*Math.cos(t) ]';
+  var p7 = '[ -2*Math.cos(2*t), -2*Math.sin(2*t), -2*Math.cos(t) ]';
 
-  var data = [ sphere( .5, { translation: { vector: v1 }, color: 'blue' } ),
-               sphere( .5, { translation: { vector: v2 }, color: 'red' } ),
-               sphere( .5, { translation: { vector: v3 }, color: 'green' } ),
-               sphere( .5, { translation: { vector: v4 }, color: 'yellow' } ),
-               sphere( .5, { translation: { vector: v5 }, color: 'purple' } ),
-               sphere( .5, { translation: { vector: v6 }, color: 'pink' } ),
-               sphere( .5, { translation: { vector: v7 }, color: 'cyan' } ) ];
+  var data = [ sphere( .5, { translation: { path: p1 }, color: 'red' } ),
+               sphere( .5, { translation: { path: p2 }, color: 'yellow' } ),
+               sphere( .5, { translation: { path: p3 }, color: 'lime' } ),
+               sphere( .5, { translation: { path: p4 }, color: 'cyan' } ),
+               sphere( .5, { translation: { path: p5 }, color: 'blue' } ),
+               sphere( .5, { translation: { path: p6 }, color: 'magenta' } ),
+               sphere( .5, { translation: { path: p7 }, color: 'purple' } ) ];
 
   var config = { type: 'threejs', xMin: -5, xMax: 5, yMin: -5, yMax: 5, zMin: -5, zMax: 5,
                                   axesLabels: false, viewpoint: [1,0,0],

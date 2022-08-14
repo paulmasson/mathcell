@@ -18,7 +18,7 @@
 </td></tr></table>
 
 <br/><table style="width: 5.5in; margin-left: 1in"><tr><td>
-<code>translation</code></td><td><code>vector</code></td><td>string of three-dimensional array of functions
+<code>translation</code></td><td><code>path</code></td><td>string of three-dimensional array of functions
 </td></tr><tr><td/><td>
   <code>step</code></td><td>number setting translation rate
 </td></tr><tr><td/><td>
@@ -27,7 +27,7 @@
 
 <p>Suboptions are input as JavaScript dictionaries under the given option.</p>
 
-<p>The <code>vector</code> determining translation paths must be entered as a string because JSON cannot process functions. The <code>argument</code> suboption can be used to specify a variable other than time.</p>
+<p>The vector determining the translation <code>path</code> must be entered as a string because JSON cannot process functions. The <code>argument</code> suboption can be used to specify a variable other than time.</p>
 
 <p>Animations are initiated by setting <code>animate</code> equal to <code>true</code> in the output configuration. Animations by default pause for five seconds when the user interacts with the scene, but this can be overridden by setting <code>animateOnInteraction</code> to <code>true</code>.</p>
 

@@ -419,7 +419,7 @@ function addSurface( s ) {
     var arg = s.options.translation.argument ? s.options.translation.argument : 't';
     var step = s.options.translation.step ? s.options.translation.step : .05;
     mesh.userData.translation = { 
-      vector: Function( arg, 'return ' + s.options.translation.vector ),
+      path: Function( arg, 'return ' + s.options.translation.path ),
       step: step, t: 0 };
   }
 
@@ -463,7 +463,7 @@ function render() {
       child.rotateOnAxis( child.userData.rotation.axis, child.userData.rotation.angle );
 
     if ( child.userData.translation && animate ) {
-      var v = child.userData.translation.vector( child.userData.translation.t );
+      var v = child.userData.translation.path( child.userData.translation.t );
       child.position.set( v[0], v[1], v[2] );
       child.userData.translation.t += child.userData.translation.step;
     }

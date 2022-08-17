@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>Kepler Problem Orbits</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Dynamic elliptical orbits for the two-body Kepler problem:</p>
+
+<div class="mathcell" style="width: 6in; height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: .9, default: .5, name: 'e', label: 'e' },
+                { type: 'checkbox', name: 'showOrbit', label: 'Show orbit:' } ] );
+
+parent.update = function( id ) {
+
+  var e = getVariable( id, 'e' );
+  var showOrbit = getVariable( id, 'showOrbit' );
+
+  var a = 5;
+
+  var path = `[ ${a} * ( cos( findRoot( u => t-u+${e}*sin(u), t ) ) - ${e} ),
+                ${a} * sqrt(${1-e**2}) * sin( findRoot( u => t-u+${e}*sin(u), t ) ), 0 ]`;
+
+  var data = [ sphere( .1, { translation: { path: path }, color: 'cyan' } ),
+               sphere( .5, { center: [0,0,0], color: 'yellow' } ) ];
+
+  if ( showOrbit )
+    data.push( parametric( u => [ a*(cos(u)-e), a*sqrt(1-e**2)*sin(u), 0 ], [0,2*pi],
+                           { color: 'white' } ) );
+
+  var config = { type: 'threejs', xMin: -a*(1+e)-.01, xMax: a*(1-e) > 2 ? a*(1-e)+.01 : 2,
+                                  yMin: -a*sqrt(1-e**2), yMax: a*sqrt(1-e**2),
+                                  zMax: 2, axes: true, frame: false,
+                                  viewpoint: [1,-1,1], clearColor: 'black',
+                                  animate: true, animateOnInteraction: true, includeMath: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>In terms of the eccentric anomaly, the <a href="https://analyticphysics.com/Classical Mechanics/Explicit Temporal Evolution for the Kepler Problem.htm" target="_blank">parametrization</a> of the orbit in Cartesian coordinates is</p>
+
+\[ x(u) = a (\cos u - e) \hspace{4em} y(u) = a \sqrt{1-e^2} \sin u \]
+
+<p>with semimajor axis \( a \) and semiminor axis \( b = a \sqrt{1-e^2} \). The ellipse is offset along the negative <i>x</i>-axis by \( c = a e \), which is just the distance to a focus of the ellipse. The statements are confirmed by evaluating</p>
+
+\[ \frac{ (x + ae)^2 }{ a^2 } + \frac{ y^2 }{ b^2 } = \cos^2 u + \sin^2 u = 1 \]
+
+<p>which is the expression for a shifted ellipse. The amount of the shift means the larger body is always at a focus (using reduced mass). The major axis of the ellipse remains a constant \( 2a \) as the eccentricity changes.</p>
+
+<p>Cartesian coordinates are not only simpler here but less tricky to employ. The radial variable can be written simply as a function of eccentric anomaly, but cannot be visualized as a polar plot without also including the dependence of the physical polar angle \( \phi \) on eccentric anomaly as well.</p>
+
+<p>The eccentric anomaly has the same domain as the physical polar angle, but neither tranverse their domains evenly as a function of time. To get the actual physical behavior of the orbit, one must determine the eccentric anomaly in terms of constantly flowing time from the Kepler equation</p>
+
+\[ \omega t = u - e \sin u \]
+
+<p>This equation cannot be solved explicitly in terms of known functions, and is generally solved numerically. That is why this example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>. The frequency is set equal to one to reduce an already involved calculation.</p>
+
+<p>As a final note on the code, the path of the orbiting body is constructed using a JavaScript template literal in order to included variables easily. It could of course be constructed by adding together regular strings.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

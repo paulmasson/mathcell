@@ -82,10 +82,12 @@
 </td></tr><tr><td>
   <code>frame</code></td><td><code>true</code>
 </td></tr><tr><td>
+  <code>includeMath</code></td><td><code>false</code>
+</td></tr><tr><td>
   <code>viewpoint</code></td><td>automatic
 </td></tr></table>
 
-<p><code>axesLabels</code> can be disabled independent of <code>frame</code> with a setting of <code>false</code>. <code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin. <code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates, that is automatically preserved between renderings upon manipulation of inputs.</p>
+<p><code>axesLabels</code> can be disabled independent of <code>frame</code> with a setting of <code>false</code>. <code>clippingPlane</code> is an array consisting of a three-dimensional normal vector and a distance from the origin. <code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates; the current viewpoint is automatically preserved between renderings upon manipulation of inputs.</p>
 
 <p>Additional options specific to individual objects:</p>
 
@@ -99,7 +101,7 @@
 
 <p><code>material</code> can take the additional values 'normal' or 'standard'.</p>
 
-<p>See the <a href="animations.html">animations</a> page for those two options.</p>
+<p>See the <a href="animations.html">animations</a> page for those two options and <code>includeMath</code>.</p>
 
 <br/><p>A <code>matrix</code> output displays the contents of a two-dimensional array in matrix form. You may need to adjust the width and height of the MathCell to show the entire array properly.</p>
 

@@ -22,6 +22,15 @@ function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 <script>
 
 var config = ${config};
+
+if ( config.includeMath ) {
+
+  var script = document.createElement( 'script' );
+  script.src = 'https://cdn.jsdelivr.net/gh/paulmasson/math/build/math.js';
+  document.head.append( script ); // more reliable than body
+
+}
+
 var scene = new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -164,6 +173,7 @@ scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.target.set( xMid, yMid, zMid );
 controls.addEventListener( 'change', function() { if ( !animate ) render(); } );
+controls.update();
 
 window.addEventListener( 'resize', function() {
 
@@ -473,8 +483,6 @@ function render() {
 }
 
 render();
-controls.update();
-if ( !animate ) render();
 
 </script>
 

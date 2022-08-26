@@ -10,6 +10,9 @@ function MathCell( id, inputs, config={} ) {
     var label = 'label' in input ? input.label : '';
     if ( label.length === 1 ) label = `<i>${label}</i>`;
 
+    if ( input.type === 'action' ) return `
+<div style="width: 100%; display: inline-block"> ${interact( id, input )} </div>`;
+
     return `
 <div style="white-space: nowrap">
 <div style="min-width: .5in; display: inline-block">${label}</div>
@@ -201,6 +204,16 @@ function interact( id, input ) {
     style="width: ${width}">Next</button>
 <button onclick="${id + name}.innerHTML=${value};window.id='${id}';${id}.update('${id}')"
     style="width: ${width}">Reset</button>`;
+
+    case 'action':
+
+      var script = 'script' in input ? input.script : 'doNothing';
+      var label = 'label' in input ? input.label : '&nbsp;';
+
+      var width = 'width' in input ? input.width : '1in';
+
+      if ( input.subtype === 'updateParent' ) return `
+<button onclick="${id}.${script}" style="width: ${width}">${label}</button>`;
 
     default:
 
@@ -2801,7 +2814,7 @@ if ( config.includeMath ) {
 
   var script = document.createElement( 'script' );
   script.src = 'https://cdn.jsdelivr.net/gh/paulmasson/math/build/math.js';
-  document.head.append( script );
+  document.head.append( script ); // more reliable than body
 
 }
 

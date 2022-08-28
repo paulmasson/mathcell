@@ -678,6 +678,8 @@ function colorFromArg( x ) {
 
 }
 
+function colorStringFromHue( h ) { return `hsl(${360*h},100%,50%)`; }
+
 function colorToHexString( color ) {
 
   // deprecated function

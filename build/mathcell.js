@@ -3248,8 +3248,8 @@ function addSurface( s ) {
 
 if ( config.clippingPlane ) {
 
-  var v = config.clippingPlane[0];
-  var d = config.clippingPlane[1];
+  var v = config.clippingPlane.vector;
+  var d = config.clippingPlane.distance;
   var plane = new THREE.Plane( new THREE.Vector3( v[0], v[1], v[2] ).normalize(), d );
   renderer.clippingPlanes = [ plane ];
 

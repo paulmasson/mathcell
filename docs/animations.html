@@ -29,6 +29,14 @@
 
 <p>The vector determining the translation <code>path</code> must be entered as a string because JSON cannot process functions. The <code>argument</code> suboption can be used to specify a variable other than time.</p>
 
+<p>Functions that are not part of standard JavaScript can be included with this command after <code>evaluate()</code> in the cell template:</p>
+
+<pre>
+injectFunctions( id, { name1: function1, name2: function2, &hellip; } )
+</pre>
+
+<p>The name keys are the function names used in the context window of the visualization and their values are references to the function implementations. Only functions explicitly called need to be included: JavaScript automatically handles internal dependencies. For multiple outputs a third argument can specify the number of the target output.</p>
+
 <p>Animations are initiated by setting <code>animate</code> equal to <code>true</code> in the output configuration. Animations by default pause for five seconds when the user interacts with the scene, but this can be overridden by setting <code>animateOnInteraction</code> to <code>true</code>.</p>
 
 <p>Objects and surfaces can be assigned a <code>group</code> name in their <code>options</code> dictionaries for common animation operations.</p>

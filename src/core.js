@@ -421,3 +421,17 @@ function evaluate( id, data, config ) {
 
 }
 
+
+function injectFunctions( id, functions, n='' ) {
+
+  var output = document.getElementById( id + 'output' + n );
+
+  if ( output.children.length > 0 && output.children[0].contentWindow ) {
+
+    var cw = output.children[0].contentWindow;
+    Object.keys( functions ).forEach( k => cw[k] = functions[k] );
+
+  } else throw Error( 'injectFuctions must follow evaluate' );
+
+}
+

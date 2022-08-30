@@ -46,9 +46,11 @@ parent.update = function( id ) {
                                   yMin: -a*sqrt(1-e**2), yMax: a*sqrt(1-e**2),
                                   zMax: 2, axes: true, frame: false,
                                   viewpoint: [1,-1,1], clearColor: 'black',
-                                  animate: true, animateOnInteraction: true, includeMath: true };
+                                  animate: true, animateOnInteraction: true };
 
   evaluate( id, data, config );
+
+  injectFunctions( id, { cos: cos, sin: sin, sqrt: sqrt, findRoot: findRoot } );
 
 }
 

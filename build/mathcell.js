@@ -2829,15 +2829,6 @@ function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 <script>
 
 var config = ${config};
-
-if ( config.includeMath ) {
-
-  var script = document.createElement( 'script' );
-  script.src = 'https://cdn.jsdelivr.net/gh/paulmasson/math/build/math.js';
-  document.head.append( script ); // more reliable than body
-
-}
-
 var scene = new THREE.Scene();
 
 var renderer = new THREE.WebGLRenderer( { antialias: true } );

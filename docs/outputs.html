@@ -11,11 +11,11 @@
 
 <p>Multiple outputs are available by including a configuration dictionary containing a <code>multipleOutputs</code> entry as the third argument of the <code>MathCell()</code> command. The value for this key is then an array of arbitrary numerical values indicating the layout of the outputs. The data for the <code>evaluate()</code> function should then be an array of the usual data arrays. The configuration supplied to this function can either be a single dictionary for identical formatting of all outputs or an array of individual dictionaries.</p>
 
-<p>Both two- and three-dimensional outputs automatically omit nonnumerical data points. This allows the graphic to appear at least in part, but be aware that this occurs.</p>
+<p>Unless otherwise specified input data is an array of arrays of data points, <i>i.e.</i> a three-dimensional array. Both two- and three-dimensional outputs automatically omit nonnumerical data points. This allows the graphic to appear at least in part, but be aware that this occurs.</p>
 
 <p>Colors are specified using standard HTML color code strings.</p>
 
-<br/><p>An <code>svg</code> output displays a two-dimensional plot of the data. The input data should be an array of arrays of data points, <i>i.e.</i> a three-dimensional array. The output has the options and default values</p>
+<br/><p>An <code>svg</code> output displays a two-dimensional plot of the input data with the options and default values</p>
 
 <table style="width: 3.5in; margin-left: 1in"><tr><td>
 <code>xMin</code></td><td>calculated

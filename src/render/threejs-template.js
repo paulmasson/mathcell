@@ -367,19 +367,24 @@ function addSurface( s ) {
 
     case 'standard':
 
+      var metalness = s.options.metalness >= 0 ? s.options.metalness : .5;
+      var roughness = s.options.roughness >= 0 ? s.options.roughness : .5;
+
       material = new THREE.MeshStandardMaterial( {
                                color: s.options.color, side: side,
                                transparent: transparent, opacity: s.options.opacity,
-                               metalness: .5, roughness: .5 } );
+                               metalness: metalness, roughness: roughness } );
       break;
 
     case 'phong':
     default:
 
+      var shininess = s.options.shininess >= 0 ? s.options.shininess : 20;
+
       material = new THREE.MeshPhongMaterial( {
                                color: s.options.color, side: side,
                                transparent: transparent, opacity: s.options.opacity,
-                               shininess: 20 } );
+                               shininess: shininess } );
 
   }
 

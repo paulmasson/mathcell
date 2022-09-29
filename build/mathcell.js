@@ -3225,7 +3225,7 @@ function addSurface( s ) {
 
   if ( s.options.translation ) {
     var arg = s.options.translation.argument ? s.options.translation.argument : 't';
-    var step = s.options.translation.step ? s.options.translation.step : .05;
+    var step = Number.isFinite(s.options.translation.step) ? s.options.translation.step : .05;
     mesh.userData.translation = { 
       path: Function( arg, 'return ' + s.options.translation.path ),
       step: step, t: 0 };

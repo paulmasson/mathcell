@@ -744,6 +744,7 @@ mathcellStyle.innerHTML = `
 
   width: 5in;
   margin: .25in auto .25in auto;
+  background-color: white; /* light gray? */
   border: 2px solid black;
   display: flex;
   flex-direction: column;

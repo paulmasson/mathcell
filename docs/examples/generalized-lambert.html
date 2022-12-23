@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>A Generalized Lambert Function</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A generalized Lambert function as described below:</p>
+
+<div class="mathcell" style="height: 4.5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', max: 5, default: 2.5,
+                                  name: 'n', label: 'n' } ] );
+
+parent.update = function( id ) {
+
+  var n = getVariable( id, 'n' );
+
+  function f( x ) {
+
+    if ( n === 1 ) return lambertW(x);
+
+    return findRoot( w => w * ( 1 + (1-n)*w )**(1/(1-n)) - x, [-1,1000] );
+
+  }
+
+  var data = [ plot( f, [0,5] ) ];
+
+  var config = { type: 'svg' };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The exponential function can be generalized by the expression</p>
+
+\[ f(x) = \left[ 1 + (1-n) x \right]^\frac{1}{1-n} \]
+
+<p>The derivative of this function is a power of itself</p>
+
+\[ \frac{d f(x)}{dx} = f(x)^n \]
+
+<p>and matches the exponential function exactly in the limit \( n \to 1 \). This prompts one to consider using it to define a Lambert-type function:</p>
+
+\[ W(x) \left[ 1 + (1-n) W(x) \right]^\frac{1}{1-n} = x \]
+
+<p>The principle branch of this function is evaluated by numerical root finding.</p>
+
+<p>This example requires the higher-level mathematics of <a href="https://github.com/paulmasson/math" target="_blank">Math</a>.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

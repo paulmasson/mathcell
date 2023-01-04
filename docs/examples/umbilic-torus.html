@@ -36,7 +36,7 @@ parent.update = function( id ) {
 
   var config = { type: 'threejs', frame: false };
 
-  if ( clip ) config.clippingPlane = [ [-1,-1,0], 0 ];
+  if ( clip ) config.clippingPlane = { vector: [-1,-1,0], distance: 0 };
 
   evaluate( id, data, config );
 

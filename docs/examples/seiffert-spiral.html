@@ -34,7 +34,7 @@ parent.update = function( id ) {
 
   var data = [ parametric( s => [ sn(s,m)*cos(m**2*s), sn(s,m)*sin(m**2*s), cn(s,m) ],
                            [0,length,50*length], { color: 'black' } ),
-               sphere( 1,{ opacity: .1, singleSide: true } ) ];
+               sphere( 1,{ opacity: .1, steps: 50, singleSide: true } ) ];
 
   var config = { type: 'threejs', frame: false, axes: true };
 

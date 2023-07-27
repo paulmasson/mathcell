@@ -58,7 +58,7 @@ parent.update = function( id ) {
   var data = [ parametric( t => f( t,  1 ), [0,2*Math.PI,300], { color: 'black' } ),
                parametric( t => f( t, -1 ), [0,2*Math.PI,300], { color: 'black' } ),
                ellipsoid( Math.sqrt(2*T*I3), Math.sqrt(2*T*I2), Math.sqrt(2*T*I1),
-                          { opacity: .1, singleSide: true } ) ];
+                          { opacity: .1, steps: 50, singleSide: true } ) ];
 
   var config = { type: 'threejs', frame: false, axes: true };
 

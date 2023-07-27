@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Seiffert Spiral</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+<script src="../../../math/build/math.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>If one moves on the surface of a sphere with constant speed and constant angular velocity relative to a longitudinal diameter, the result is a <a href="https://en.wikipedia.org/wiki/Seiffert%27s_spiral">Seiffert</a> spiral:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 1, max: 50, default: 10, step: 1,
+                                  name: 'length', label: 'Length:' },
+                { type: 'slider', default: .5,
+                                  name: 'm', label: 'm' } ] );
+
+parent.update = function( id ) {
+
+  var length = getVariable( id, 'length' );
+  var m = getVariable( id, 'm' );
+
+  var data = [ parametric( s => [ sn(s,m)*cos(m**2*s), sn(s,m)*sin(m**2*s), cn(s,m) ],
+                           [0,length,50*length], { color: 'black' } ),
+               sphere( 1,{ opacity: .1, singleSide: true } ) ];
+
+  var config = { type: 'threejs', frame: false, axes: true };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The spiral is parametrized in cylindrical coordinates by</p>
+
+\[ r = \operatorname{sn}(s|m) \hspace{5em} \phi = m^2 s \hspace{5em}
+   z = \operatorname{cn}(s|m) \]
+
+<p>where the elliptic parameter <i>m</i> is employed rather than the traditional elliptic modulus. The square of this parameter sets the angular velocity.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

@@ -4,7 +4,6 @@ function threejs( id, data, config ) {
   // working copy of data
   var data = JSON.parse( JSON.stringify( data, dataReplacer ), dataReviver );
 
-  if ( !( 'ambientLight' in config ) ) config.ambientLight = 'rgb(127,127,127)';
   if ( !( 'aspectRatio' in config ) ) config.aspectRatio = [1,1,1];
   if ( !( 'axesLabels' in config ) || config.axesLabels === true ) config.axesLabels = ['x','y','z'];
   if ( !( 'clearColor' in config ) ) config.clearColor = 'white';
@@ -13,6 +12,13 @@ function threejs( id, data, config ) {
   if ( !( 'viewpoint' in config ) ) config.viewpoint = 'auto';
 
   if ( !config.frame ) config.axesLabels = false;
+
+  if ( !( 'lights' in config ) )
+    config.lights = [
+      { type: 'ambient', color: 'rgb(127,127,127)', intensity: 4 },
+      { type: 'directional', parent: 'camera', position: [-5,3,0],
+                         color: 'rgb(127,127,127)', intensity: 9 }
+    ];
 
   var n = 'output' in config ? config.output : '';
   var output = document.getElementById( id + 'output' + n );
@@ -91,15 +97,12 @@ function threejs( id, data, config ) {
   var border = config.no3DBorder ? 'none' : '1px solid black';
 
   config = JSON.stringify( config );
-
-  var lights = JSON.stringify( [ { position: [-5,3,0], color: 'rgb(127,127,127)', parent: 'camera' } ] );
-
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
   lines = JSON.stringify( lines, dataReplacer );
   surfaces = JSON.stringify( surfaces, dataReplacer );
 
-  var html = threejsTemplate( config, lights, texts, points, lines, surfaces );
+  var html = threejsTemplate( config, texts, points, lines, surfaces );
 
   return `<iframe style="width: 100%; height: 100%; border: ${border};"
                   srcdoc="${html.replace( /\"/g, '&quot;' )}" scrolling="no"></iframe>`;

@@ -1,5 +1,5 @@
 
-function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
+function threejsTemplate( config, texts, points, lines, surfaces ) {
 
   return `
 <!DOCTYPE html>
@@ -17,7 +17,7 @@ function threejsTemplate( config, lights, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@latest/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r155/build/three.min.js"></script>
 
 <script>
 
@@ -144,22 +144,32 @@ if ( config.viewpoint !== 'auto' ) {
 }
 
 camera.position.add( defaultOffset );
-
-var lights = ${lights};
-
-for ( var i = 0 ; i < lights.length ; i++ ) {
-  var light = new THREE.DirectionalLight( lights[i].color, 1 );
-  var v = lights[i].position;
-  light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
-  if ( lights[i].parent === 'camera' ) {
-    light.target.position.set( xMid, yMid, zMid );
-    scene.add( light.target );
-    camera.add( light );
-  } else scene.add( light );
-}
 scene.add( camera );
 
-scene.add( new THREE.AmbientLight( config.ambientLight, 1 ) );
+config.lights.forEach( l => {
+
+  switch( l.type ) {
+
+    case 'ambient':
+
+      scene.add( new THREE.AmbientLight( l.color, l.intensity ) );
+      break;
+
+    case 'directional':
+
+      var light = new THREE.DirectionalLight( l.color, l.intensity );
+      var v = l.position;
+      light.position.set( a[0]*v[0], a[1]*v[1], a[2]*v[2] );
+      if ( l.parent === 'camera' ) {
+        light.target.position.set( xMid, yMid, zMid );
+        scene.add( light.target );
+        camera.add( light );
+      } else scene.add( light );
+      break;
+
+  }
+
+} );
 
 var controls = new THREE.OrbitControls( camera, renderer.domElement );
 controls.target.set( xMid, yMid, zMid );

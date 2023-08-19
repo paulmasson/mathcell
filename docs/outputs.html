@@ -62,8 +62,6 @@
 </td></tr><tr><td>
   <code>zMax</code></td><td>calculated
 </td></tr><tr><td>
-  <code>ambientLight</code></td><td>rgb(127,127,127)
-</td></tr><tr><td>
   <code>animate</code></td><td><code>false</code>
 </td></tr><tr><td>
   <code>animateOnInteraction</code></td><td><code>false</code>
@@ -93,6 +91,8 @@
 
 <p><code>axesLabels</code> can be disabled independent of <code>frame</code> with a setting of <code>false</code>. <code>clippingPlane</code> is a dictionary consisting of a three-dimensional normal <code>vector</code> and a <code>distance</code> from the origin. <code>viewpoint</code> is a vector with respect to the center of the visible scene, not absolute world coordinates; the current viewpoint is automatically preserved between renderings upon manipulation of inputs.</p>
 
+<p><code>lights</code> can be specified as an array of dictionaries with <code>type</code> either 'ambient' or 'directional'. Both can take an HTML <code>color</code> and float <code>intensity</code>. A directional light can also have a <code>position</code> as an array of three coordiantes, and <code>parent</code> object of either 'camera' or 'scene'.</p>
+
 <p>Additional options specific to individual objects:</p>
 
 <table style="width: 3.5in; margin-left: 1.5in"><tr><td>
@@ -102,6 +102,8 @@
 </td></tr><tr><td>
   <code>singleSide</code></td><td><code>false</code>
 </td></tr></table>
+
+<p>Objects are drawn from numerically lowest <code>renderOrder</code> to highest.</p>
 
 <p><code>material</code> can take the additional values 'normal' or 'standard'. Individual materials have the additional options and default values</p>
 

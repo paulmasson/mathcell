@@ -203,15 +203,11 @@ function suspendAnimation() {
 }
 
 var texts = ${texts};
-
-for ( var i = 0 ; i < texts.length ; i++ ) {
-  var t = texts[i];
-  addLabel( t.text, t.point[0], t.point[1], t.point[2], t.options.color, t.options.fontSize );
-}
+texts.forEach( t => addLabel( t.text, t.point[0], t.point[1], t.point[2],
+                              t.options.color, t.options.fontSize ) );
 
 var points = ${points};
-
-for ( var i = 0 ; i < points.length ; i++ ) addPoint( points[i] );
+points.forEach( p => addPoint( p ) );
 
 function addPoint( p ) {
 
@@ -249,7 +245,6 @@ function addPoint( p ) {
 }
 
 var lines = ${lines};
-
 var newLines = [], tempPoints = [];
 
 for ( var i = 0 ; i < lines.length ; i++ ) {
@@ -286,7 +281,7 @@ for ( var i = 0 ; i < lines.length ; i++ ) {
 newLines.forEach( l => lines.push( l ) );
 newLines = [], tempPoints = [];
 
-for ( var i = 0 ; i < lines.length ; i++ ) addLine( lines[i] );
+lines.forEach( l => addLine( l ) );
 
 function addLine( l ) {
 
@@ -317,8 +312,7 @@ function addLine( l ) {
 }
 
 var surfaces = ${surfaces};
-
-for ( var i = 0 ; i < surfaces.length ; i++ ) addSurface( surfaces[i] );
+surfaces.forEach( s => addSurface( s ) );
 
 function addSurface( s ) {
 

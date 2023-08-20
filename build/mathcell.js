@@ -2825,7 +2825,7 @@ function threejsTemplate( config, texts, points, lines, surfaces ) {
 
 <body>
 
-<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@r155/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/paulmasson/threejs-with-controls@latest/build/three.min.js"></script>
 
 <script>
 

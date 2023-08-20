@@ -245,11 +245,11 @@ function addPoint( p ) {
 }
 
 var lines = ${lines};
-var newLines = [], tempPoints = [];
+var newLines = [];
 
-for ( var i = 0 ; i < lines.length ; i++ ) {
+lines.forEach( l => {
 
-  lines[i].points.forEach( v => {
+  l.points.forEach( v => {
     // apply aspect multipliers for convenience
     //   and set points outside bounds or NaN to empty array
     v[0] *= a[0]; v[1] *= a[1]; v[2] *= a[2];
@@ -259,27 +259,28 @@ for ( var i = 0 ; i < lines.length ; i++ ) {
   } );
 
   // split lines at empty points
-  for ( var j = 0 ; j < lines[i].points.length ; j++ )
-    if ( lines[i].points[j].length === 0 ) {
-      tempPoints = lines[i].points.splice( j );
-      if ( j === 0 ) lines[i].points = [[0,0,0]]; // dummy line for options
+  var tempPoints = [];
+  for ( var i = 0 ; i < l.points.length ; i++ )
+    if ( l.points[i].length === 0 ) {
+      tempPoints = l.points.splice( i );
+      if ( i === 0 ) l.points = [[0,0,0]]; // dummy line for options
     }
 
-  var l = [];
-  for ( var j = 0 ; j < tempPoints.length ; j++ ) {
-    var p = tempPoints[j];
-    if ( p.length > 0 ) l.push( p );
-    else if ( l.length > 0 ) {
-      newLines.push( { points: l, options: lines[i].options } );
-      l = [];
+  var tempLine = [];
+  for ( var i = 0 ; i < tempPoints.length ; i++ ) {
+    var p = tempPoints[i];
+    if ( p.length > 0 ) tempLine.push( p );
+    else if ( tempLine.length > 0 ) {
+      newLines.push( { points: tempLine, options: l.options } );
+      tempLine = [];
     }
   }
-  if ( l.length > 0 ) newLines.push( { points: l, options: lines[i].options } );
+  if ( tempLine.length > 0 ) newLines.push( { points: tempLine, options: l.options } );
 
-}
+} );
 
 newLines.forEach( l => lines.push( l ) );
-newLines = [], tempPoints = [];
+newLines = [];
 
 lines.forEach( l => addLine( l ) );
 

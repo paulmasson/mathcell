@@ -456,6 +456,7 @@ function dataReplacer( key, value ) {
 
   if ( value === Infinity ) return 'Infinity';
   if ( value === -Infinity ) return '-Infinity';
+  if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
   return value;
@@ -2700,8 +2701,9 @@ function svg( id, data, config ) {
     } );
 
     // automatically skip NaN
-    var j = 0;
-    while ( isNaN( l.points[j][1] ) ) j++;
+    var j = 0, len = l.points.length;
+    while ( j < len && isNaN( l.points[j][1] ) ) j++;
+    if ( j === len ) continue;
 
     var x = l.points[j][0];
     var y = l.points[j][1];

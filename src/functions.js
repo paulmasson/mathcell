@@ -19,6 +19,7 @@ function dataReplacer( key, value ) {
 
   if ( value === Infinity ) return 'Infinity';
   if ( value === -Infinity ) return '-Infinity';
+  if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
   return value;

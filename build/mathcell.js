@@ -2477,19 +2477,27 @@ function svg( id, data, config ) {
 
   }
 
-  function decimalsInNumber( x ) {
+  var switchToExp = 4;
 
-    for ( var i = 0 ; i < 100 ; i++ ) {
-      if ( roundTo( x, i, false ) === x ) break;
-    }
-    return i;
+  function significant( x ) {
+
+    return Math.abs(x) < 10**(-switchToExp) || Math.abs(x) > 10**switchToExp;
 
   }
 
-  function chop( x, tolerance=1e-10 ) {
+  function decimalsInNumber( x ) {
 
-    if ( Math.abs(x) < tolerance ) x = 0;
-    return x;
+    if ( significant(x) ) {
+      x = x / 10**Math.trunc(Math.log10(x));
+      x = roundTo( x, 10 ) // remove round-off error
+      return decimalsInNumber(x) + 1;
+    }
+
+    // max decimals controlled by limit here
+    for ( var i = 0 ; i < switchToExp + 5 ; i++ ) {
+      if ( roundTo( x, i, false ) === x ) break;
+    }
+    return i;
 
   }
 
@@ -2526,13 +2534,11 @@ function svg( id, data, config ) {
   if ( yMinMax.min === -Infinity ) yMinMax.min = -numericInfinity;
   if ( yMinMax.max === Infinity )  yMinMax.max = numericInfinity;
 
-  // rounding currently to remove excessive decimals
-  // add option when needed for rounding to significant digits
-
-  var xMin = 'xMin' in config ? config.xMin : floorTo( xMinMax.min, 4, false );
-  var xMax = 'xMax' in config ? config.xMax : ceilTo( xMinMax.max, 4, false );
-  var yMin = 'yMin' in config ? config.yMin : floorTo( yMinMax.min, 4, false );
-  var yMax = 'yMax' in config ? config.yMax : ceilTo( yMinMax.max, 4, false );
+  // unnecessary rounding to remove excessive decimals kills exponential values
+  var xMin = 'xMin' in config ? config.xMin : xMinMax.min;
+  var xMax = 'xMax' in config ? config.xMax : xMinMax.max;
+  var yMin = 'yMin' in config ? config.yMin : yMinMax.min;
+  var yMax = 'yMax' in config ? config.yMax : yMinMax.max;
 
   if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
   if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
@@ -2576,10 +2582,13 @@ function svg( id, data, config ) {
   var xTickDecimals = decimalsInNumber( ticks[0] );
   var yTickDecimals = decimalsInNumber( ticks[1] );
 
+  var xSig = significant( ticks[0] );
+  var ySig = significant( ticks[1] );
+
   // size of largest y-axis tick label
-  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, false ).toString().length,
-                                roundTo( yMax, yTickDecimals, false ).toString().length,
-                                roundTo( 3*ticks[1], yTickDecimals, false ).toString().length  );
+  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, ySig ).toString().length,
+                                roundTo( yMax, yTickDecimals, ySig ).toString().length,
+                                roundTo( 3*ticks[1], yTickDecimals, ySig ).toString().length  );
 
   // offsets of numbers from axes, inverted when on right/top
   var xOffset = 10;
@@ -2649,27 +2658,34 @@ function svg( id, data, config ) {
 
     if ( ticks ) {
 
+      function formatNumber( x, decimals, sig ) {
+
+        if ( sig ) return x.toExponential(decimals-1);
+        return x.toFixed(decimals)
+
+      }
+
       var xStart = ticks[0] * Math.ceil( xMin / ticks[0] );
       for ( var i = xStart ; i <= xMax ; i += ticks[0] ) {
-        if ( chop(i) !== 0 || ( yOrigin !== yAxis && yLabel === 0 ) ) {
+        if ( Math.abs(i) > xRange/1e10 || yOrigin !== yAxis && yLabel === 0 ) {
           var x = Math.round( xOrigin + xScale*i );
           svg += `<path d="M ${ x } ${ yAxis } L ${ x } ${ yAxis - Math.sign(yOffset)*tickSize }"
                         stroke="${ ac }" />`;
           svg += `<text x="${ x }" y="${ yAxis + yOffset }" fill="${ ac }"
                         font-family="monospace" text-anchor="middle">
-                  ${ +i.toFixed(xTickDecimals) }</text>`;
+                  ${ formatNumber( i, xTickDecimals, xSig ) }</text>`;
         }
       }
 
       var yStart = ticks[1] * Math.ceil( yMin / ticks[1] );
       for ( var i = yStart ; i <= yMax ; i += ticks[1] ) {
-        if ( chop(i) !== 0 || ( xOrigin !== xAxis && xLabel === 0 ) ) {
+        if ( Math.abs(i) > yRange/1e10 || xOrigin !== xAxis && xLabel === 0 ) {
           var y = Math.round( yOrigin - yScale*i );
           svg += `<path d="M ${ xAxis } ${ y } L ${ xAxis + Math.sign(xOffset)*tickSize } ${ y }"
                         stroke="${ ac }" />`;
           svg += `<text x="${ xAxis - xOffset }" y="${ y }" fill="${ ac }"
                         font-family="monospace" text-anchor="end" dominant-baseline="central">
-                  ${ +i.toFixed(yTickDecimals) }</text>`;
+                  ${ formatNumber( i, yTickDecimals, ySig ) }</text>`;
         }
       }
 

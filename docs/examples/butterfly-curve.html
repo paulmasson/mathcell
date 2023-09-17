@@ -35,8 +35,7 @@ parent.update = function( id ) {
 
   i = ( i + .1 ) % 1;
 
-  var data = [ parametric( phi => [ r(phi)*Math.cos(phi), r(phi)*Math.sin(phi) ],
-                           [ 0, 12*Math.PI, 1500 ], { color: color } ) ];
+  var data = [ polarPlot( r, [ 0, 12*Math.PI, 1500 ], { color: color } ) ];
 
   var config = { type: 'svg' };
 

@@ -1,0 +1,87 @@
+<html>
+<head>
+<title>Plane Cutting a Cylinder</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>A plane cutting a cylinder always produces an ellipse:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: -1, max: 1, default: 0,
+                                  name: 'phi', label: '&phi;' } ] );
+
+parent.update = function( id ) {
+
+  var phi = getVariable( id, 'phi' );
+
+  var c = cylinder( 1, 6, { color: 'rgb(0,255,0)', opacity: .7, axis: [1,0,0] } );
+
+  var p = plane( 5, 5, { normal: [1,0,0], color: 'gray', opacity: .3, renderOrder: 1 } );
+  rotateObject( p, phi, [0,0,1] );
+
+  var points = [];
+
+  for ( var a = 0 ; a < 2*Math.PI ; a += 2*Math.PI/100 )
+    points.push( [ -Math.sin(a)*Math.tan(phi), Math.sin(a), Math.cos(a) ] );
+
+  var l = line( points, { color: 'red', radius: .05 } );
+
+  var data = [ c, p, l ];
+
+  var config = { type: 'threejs', frame: false };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>A cylinder along the <i>x</i>-axis has the equation of a circle, independent of this variable:</p>
+
+\[ y^2 + z^2 = 1 \]
+
+<p>A vertical plane through the origin has no <i>z</i>-dependence:</p>
+
+\[ n_x x + n_y y = x \cos\phi + y \sin\phi = 0 \]
+
+<p>Taking <i>y</i> as the independent variable, a parametrization of the intersection is</p>
+
+\[ \left[ -y \tan\phi, y, z \right] = \left[ -y \tan\phi, y, \sqrt{1-y^2} \right] \]
+
+<p>Squaring and summing the first two coordinates on the left-hand side gives</p>
+
+\[ y^2 (\tan^2\phi + 1) = y^2 \sec^2\phi  \]
+
+<p>so that the parametrization represents the ellipse</p>
+
+\[ \frac{ y^2 }{ \sec^2\phi } + z^2 = 1 \]
+
+<p>For numerical efficiency the variable <i>y</i> is replaced by a circular function in the code.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

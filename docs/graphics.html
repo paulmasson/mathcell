@@ -17,7 +17,9 @@
 
 <p>Colors are specified using standard HTML color code strings. Predefined <a href="colormaps.html">colormaps</a> are also available.</p>
 
-<p>Objects composed of lines have an additional option of <code>thickness</code> that defaults to 1.5 in two dimensions. Due to limitations of WebGL, in three dimensions it renders as 1 on most platforms regardless of the setting.</p>
+<p>Objects composed of lines have an additional option of <code>thickness</code> that defaults to 1.5 in two dimensions. Due to limitations of WebGL, in three dimensions it renders as 1 on most platforms regardless of the setting: a numeric option of <code>radius</code> should be used instead.</p>
+
+<p>The <code>axis</code> for three-dimensional objects is rotated from the <i>z</i>-axis. This can produce unexpected behavior for objects that do not have rotational symmetry. The utility function <code>rotateObject</code> is available for further adjustment.</p>
 
 <p>Additional object-specific options are listed below each.</p>
 

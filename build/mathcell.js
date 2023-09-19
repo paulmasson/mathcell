@@ -2279,6 +2279,26 @@ function line( points, options={} ) {
 
 // simple 3D objects
 
+function plane( width, depth, options={} ) {
+
+  if ( !( 'color' in options ) ) options.color = defaultPlotColor;
+  if ( !( 'opacity' in options ) ) options.opacity = 1;
+
+  var x = width / 2;
+  var y = depth / 2;
+
+  var vertices = [ [x,y,0], [-x,y,0], [-x,-y,0], [x,-y,0] ];
+
+  var faces = [ [0,1,2,3] ];
+
+  if ( 'normal' in options ) rotateFromZAxis( vertices, options.normal );
+
+  if ( 'center' in options ) translate( vertices, options.center );
+
+  return [ { vertices: vertices, faces: faces, options: options, type: 'surface' } ];
+
+}
+
 function box( width, depth, height, options={} ) {
 
   if ( !( 'color' in options ) ) options.color = defaultPlotColor;

@@ -27,7 +27,7 @@
   <code>size</code></td><td>1
 </td></tr></table>
 
-<p><b>box( width, depth, height, options )</b> &mdash; box of specified dimensions centered at the origin</p>
+<p><b>box( width, depth, height, options )</b> &mdash; box of specified dimensions</p>
 
 <table style="margin-left: 1in"><tr><td style="width: 1in">
   <code>axis</code></td><td>arbitrary vector direction, default [0,0,1]
@@ -73,6 +73,14 @@
   <code>endcaps</code></td><td>Boolean to include spheres to smooth joints, default <code>false</code>
 </td></tr><tr><td>
   <code>radius</code></td><td>float for drawing the line as an extended cylinder
+</td></tr></table>
+
+<p><b>plane( width, depth, options )</b> &mdash; plane of specified dimensions</p>
+
+<table style="margin-left: 1in"><tr><td style="width: 1in">
+  <code>normal</code></td><td>arbitrary vector direction, default [0,0,1]
+</td></tr><tr><td>
+  <code>center</code></td><td>vector position, default [0,0,0]
 </td></tr></table>
 
 <p><b>point( point, options )</b> &mdash; two- or three-dimensional point</p>

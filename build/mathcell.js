@@ -491,6 +491,7 @@ function lerp( a, b ) {
 
 }
 
+
 // rounding functions
 
 function roundTo( x, n, significant=true ) {
@@ -550,6 +551,7 @@ function floorTo( x, n, significant=true ) {
 
 }
 
+
 // transformation functions
 
 function normalize( vector ) {
@@ -571,6 +573,8 @@ function translate( points, vector ) {
 }
 
 function rotate( points, angle=0, vector=[0,0,1] ) {
+
+  // fails silently without defaults
 
   var dimension = points[0].length;
 
@@ -641,6 +645,13 @@ function rotateFromZAxis( points, vector ) {
   rotate( points, angle, [ -vector[1], vector[0], 0 ] );
 
 }
+
+function rotateObject( object, angle, vector ) {
+
+  object.forEach( e => rotate( e.vertices, angle, vector ) );
+
+}
+
 
 // presentation functions
 

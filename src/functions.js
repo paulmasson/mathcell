@@ -267,7 +267,13 @@ function colorFromArg( x ) {
 
 }
 
-function colorStringFromHue( h ) { return `hsl(${360*h},100%,50%)`; }
+function colorStringFromHue( h ) {
+
+  h = ( h % 1 + 1 ) % 1; // restrict to [0,1]
+
+  return `hsl(${360*h},100%,50%)`;
+
+}
 
 function colorToHexString( color ) {
 
@@ -276,7 +282,6 @@ function colorToHexString( color ) {
   var hex = ( color.r * 255 ) << 16 ^ ( color.g * 255 ) << 8 ^ ( color.b * 255 ) << 0;
 
   return '#' + ( '000000' + hex.toString(16) ).slice(-6);
-
 
 }
 

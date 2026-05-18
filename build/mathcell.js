@@ -556,9 +556,11 @@ function floorTo( x, n, significant=true ) {
 
 function normalize( vector ) {
 
-  var len = Math.hypot.apply( null, vector );
-  for ( var i = 0 ; i < vector.length ; i++ ) vector[i] /= len;
-  return vector;
+  var norm = Math.hypot.apply( null, vector );
+  if ( norm !== 0 && norm !== 1 )
+    for ( var i = 0 ; i < vector.length ; i++ ) vector[i] /= norm;
+
+  return vector; // for convenience in other functions
 
 }
 
@@ -568,7 +570,7 @@ function translate( points, vector ) {
     for ( var j = 0 ; j < vector.length ; j++ )
       points[i][j] += vector[j];
 
-  return points;
+  return points; // for convenience in other functions
 
 }
 
@@ -597,10 +599,7 @@ function rotate( points, angle=0, vector=[0,0,1] ) {
 
     case 3:
 
-      var norm = Math.hypot.apply( null, vector );
-      if ( norm === 0 ) break;
-      if ( norm !== 1 )
-        for ( var i = 0 ; i < 3 ; i++ ) vector[i] /= norm;
+      normalize( vector );
 
       var n1 = vector[0];
       var n2 = vector[1];

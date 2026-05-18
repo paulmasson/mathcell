@@ -2203,7 +2203,7 @@ function arrow( begin, end, options={} ) {
 
   } else {
 
-    var h = Math.sqrt( (end[0]-begin[0])**2 + (end[1]-begin[1])**2 + (end[2]-begin[2])**2 ) / 2;
+    var h = Math.hypot.apply( null, [ end[0]-begin[0], end[1]-begin[1], end[2]-begin[2] ] ) / 2;
     var size = .1 * ( options.size ? options.size : 1 );
 
     var center = [ (end[0]+begin[0])/2, (end[1]+begin[1])/2, (end[2]+begin[2])/2 ];
@@ -2265,7 +2265,7 @@ function line( points, options={} ) {
       var a = points[i-1];
       var b = points[i];
 
-      var height = Math.sqrt( (b[0]-a[0])**2 + (b[1]-a[1])**2 + (b[2]-a[2])**2 );
+      var height = Math.hypot.apply( null, [ b[0]-a[0], b[1]-a[1], b[2]-a[2] ] );
 
       options.axis = [ b[0]-a[0], b[1]-a[1], b[2]-a[2] ];
       options.center = [ (a[0]+b[0])/2, (a[1]+b[1])/2, (a[2]+b[2])/2 ];

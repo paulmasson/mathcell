@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>Gyroid Minimal Surface</title>
+<link rel="stylesheet" type="text/css" href="../style.css">
+<style></style>
+</head>
+
+<body>
+
+<script src="../../build/mathcell.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/mathjax/MathJax@2.7.5/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<p>Gyroid minimal surface generated using marching cubes:</p>
+
+<div class="mathcell" style="height: 5in">
+<script>
+
+var parent = document.currentScript.parentNode;
+
+var id = generateId();
+parent.id = id;
+
+MathCell( id, [ { type: 'slider', min: 3, max: 10, default: 7.5,
+                                  name: 'rMax', label: '<i>r</i><sub>max</sub>' } ] );
+
+parent.update = function( id ) {
+
+  var rMax = getVariable( id, 'rMax' );
+
+  function f( x, y, z ) {
+    return Math.sin(x) * Math.cos(y) + Math.sin(y) * Math.cos(z) + Math.sin(z) * Math.cos(x);
+  }
+
+  var s = isosurface( (r,theta,phi) => f( r * Math.sin(theta) * Math.cos(phi),
+                                          r * Math.sin(theta) * Math.sin(phi),
+                                          r * Math.cos(theta) ),
+                      [0,rMax], [0,Math.PI], [0,2*Math.PI], { colors: [] } );
+
+  for ( var i = 0 ; i < s[0].vertices.length ; i++ ) {
+
+    var v = s[0].vertices[i];
+
+    var x = v[0] * Math.sin(v[1]) * Math.cos(v[2]);
+    var y = v[0] * Math.sin(v[1]) * Math.sin(v[2]);
+    var z = v[0] * Math.cos(v[1]);
+
+    s[0].vertices[i] = [ x, y, z ];
+
+    s[0].options.colors.push( colorFromHue( v[0]/rMax ) ); 
+
+  }
+ 
+  var data = [ s ];
+
+  var config = { type: 'threejs', frame: false, viewpoint: [0,1,0] };
+
+  evaluate( id, data, config );
+
+}
+
+parent.update( id );
+
+</script>
+</div>
+
+<p>The surface is defined implicitly by</p>
+
+\[ \sin x \cos y + \sin y \cos z + \sin z \cos x = 0 \]
+
+<p>The generated surface is restricted to the radial range determined by the slider input. The coloration goes from red at the origin to red at the outer extent, scaled by the ratio of radial variable to its maximum.</p>
+
+<p>This example illustrates some of the inner workings of MathCell. These features may be included in the base code in future releases.</p>
+
+<p>Complete code for this example:</p>
+
+<pre id="codeDisplay"></pre>
+
+<script> getCompleteCode(); </script>
+
+<p><a href="../examples.html">Examples Page</a></p>
+
+</body>
+</html>

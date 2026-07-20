@@ -83,7 +83,7 @@ ${t}
         if ( Array.isArray(column) )  t += outputTable( column );
         else {
           t += `
-<div id=${id}output${outputIndex} style="width: ${100/outputs[0].length}%; height: calc(100% - 5px);
+<div id=${id}output${outputIndex} style="width: ${100/row.length}%; height: calc(100% - 5px);
                                          border: 1px solid black; display: inline-block"></div>`;
           outputIndex++;
         }
@@ -279,7 +279,7 @@ function graphic( id, data, config ) {
      style="border: 1.5px solid black; border-left: none"></svg>`;
 
       return `
-<div style="display: flex; width: 97%; height: 97%; text-align: center">
+<div style="display: flex; width: 97%; height: 97%; margin: auto">
 ${leftBracket}
 ${s}
 ${rightBracket}
@@ -402,7 +402,10 @@ function evaluate( id, data, config ) {
 
       output.innerHTML = graphic( id, data[i], c );
       if ( c.type === 'threejs' ) iOSFix( output );
-      if ( c.type === 'matrix' ) output.style.border = 'none';
+      if ( c.type === 'matrix' ) {
+        output.style.border = '';
+        output.style.verticalAlign = 'text-bottom';
+      }
 
     }
 

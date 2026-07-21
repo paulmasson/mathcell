@@ -402,6 +402,13 @@ function evaluate( id, data, config ) {
 
       output.innerHTML = graphic( id, data[i], c );
       if ( c.type === 'threejs' ) iOSFix( output );
+
+      if ( c.type === 'svg' ) {
+        var svg = output.children[0];
+        svg.style.width = Math.floor( .99 * svg.width.baseVal.value ) + 'px';
+        svg.style.height = Math.floor( .99 * svg.height.baseVal.value ) + 'px';
+      }
+
       if ( c.type === 'matrix' ) {
         output.style.border = '';
         output.style.verticalAlign = 'text-bottom';

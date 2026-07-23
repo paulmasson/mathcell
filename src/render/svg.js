@@ -135,7 +135,7 @@ function svg( id, data, config ) {
   var xLabel = xAxisLabel.length > 0 ? Math.max( 20, 15 * parsedLength( xAxisLabel ) ) : 0;
   var yAxisLabel = 'axesLabels' in config ? config.axesLabels[1] : '';
   var yLabelSize = 4.5 * parsedLength( yAxisLabel );
-  var yLabel = yAxisLabel.length > 0 ? 20 : 0;
+  var yLabel = yAxisLabel.length > 0 ? 25 : 0;
 
   // mathematical origin vs. location of axis
   var xOrigin = Math.round( -xMin * xScale );
@@ -166,9 +166,9 @@ function svg( id, data, config ) {
   if ( yOrigin < 0 ) {
     yAxis = -1.5*ext;
     yTotal = height + 2.5*ext + yLabel + yOffset;
-    yShift = 1.5*ext + yOffset;
+    yShift = 1.5*ext + Math.max( ext, yLabel );
     yOffset = -6;
-    if ( yLabel > 0 ) yLabel += 12;
+    if ( yLabel > 0 ) yLabel += 20;
   }
   if ( yOrigin > height ) {
     yAxis = height + 1.5*ext;

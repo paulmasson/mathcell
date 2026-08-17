@@ -733,6 +733,8 @@ function colorToHexString( color ) {
 
 function colormap( name, reversed=false ) {
 
+  if ( !colormaps[name] ) throw Error( 'Unknown colormap name' );
+
   function piecewise( pieces ) { 
 
     return function( x ) {

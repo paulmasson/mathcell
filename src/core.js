@@ -394,7 +394,7 @@ function evaluate( id, data, config ) {
     for ( var i = 0 ; i < outputs.length ; i ++ ) {
 
       var output = outputs[i];
-      var n = output.id.substr( output.id.indexOf('output') + 6 );
+      var n = output.id.substring( output.id.indexOf('output') + 6 );
 
       var c = Array.isArray(config) ? config[i] : JSON.parse( JSON.stringify( config ) );
       c.output = n;

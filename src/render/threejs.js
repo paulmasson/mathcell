@@ -76,22 +76,34 @@ function threejs( id, data, config ) {
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
   surfaces.forEach( s => {
-    // process predefined colormaps
-    if ( 'colormap' in s.options &&
-          ( !( 'colors' in s.options ) || s.options.colors.length === 0 ) ) {
+
+    // process pending colormaps
+    if ( 'colormap' in s.options && !( 'colors' in s.options ) ) {
       s.options.colors = [];
-      var f = colormap( s.options.colormap, s.options.reverseColormap );
-      var zMinMax = minMax( s.vertices, 2 );
-      var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
-      var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
-      for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-        var z = s.vertices[i][2];
-        if ( z < zMin ) z = zMin;
-        if ( z > zMax ) z = zMax;
-        var w = ( z - zMin ) / ( zMax - zMin );
-        s.options.colors.push( f(w) );
+
+      if ( typeof s.options.colormap === 'string' ) {
+        var f = colormap( s.options.colormap, s.options.reverseColormap );
+        var zMinMax = minMax( s.vertices, 2 );
+        var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
+        var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
+        for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+          var z = s.vertices[i][2];
+          if ( z < zMin ) z = zMin;
+          if ( z > zMax ) z = zMax;
+          var w = ( z - zMin ) / ( zMax - zMin );
+          s.options.colors.push( f(w) );
+        }
       }
+
+      if ( typeof s.options.colormap === 'function' ) {
+        for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+          var [ x, y, z ] = s.vertices[i];
+          s.options.colors.push( s.options.colormap(x,y,z) );
+        }
+      }
+
     }
+
   } );
 
   var border = config.no3DBorder ? 'none' : '1px solid black';

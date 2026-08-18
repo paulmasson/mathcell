@@ -469,6 +469,8 @@ function dataReplacer( key, value ) {
   if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
+  if ( typeof value === 'function' ) return 'function: ' + value;
+
   return value;
 
 }
@@ -478,6 +480,9 @@ function dataReviver( key, value ) {
   if ( value === 'Infinity' ) return numericInfinity;
   if ( value === '-Infinity' ) return -numericInfinity;
   if ( value === 'NaN' ) return NaN;
+
+  if ( typeof value === 'string' && value.indexOf('function: ') === 0 )
+    return Function( 'return ' + value.substring(10) )();
 
   return value;
 
@@ -1947,8 +1952,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     vector = (x,y) => [ x, y, f(x,y) ];
   }
 
-  var vertices = [];
-  if ( 'colormap' in options ) options.colors = [];
+  var vertices = [], colors = [];
 
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
@@ -1974,14 +1978,13 @@ function parametric( vector, xRange, yRange, options={} ) {
         }
       } else vertices.push( v );
 
-      if ( 'colormap' in options ) {
-        if ( options.colormap === 'complexArgument' )
-          options.colors.push( colorFromArg( v[2] ) );
-        if ( typeof( options.colormap ) === 'function' )
-          options.colors.push( options.colormap(x,y) );
-      }
+      if ( 'colormap' in options && options.colormap === 'complexArgument' )
+        colors.push( colorFromArg( v[2] ) );
+
     }
   }
+
+  if ( colors.length > 0 ) options.colors = colors;
 
   var faces = [], unused = [];
   var count = slices + 1;
@@ -3443,22 +3446,34 @@ function threejs( id, data, config ) {
   if ( !( 'zMax' in config ) ) config.zMax = zMinMax.max;
 
   surfaces.forEach( s => {
-    // process predefined colormaps
-    if ( 'colormap' in s.options &&
-          ( !( 'colors' in s.options ) || s.options.colors.length === 0 ) ) {
+
+    // process pending colormaps
+    if ( 'colormap' in s.options && !( 'colors' in s.options ) ) {
       s.options.colors = [];
-      var f = colormap( s.options.colormap, s.options.reverseColormap );
-      var zMinMax = minMax( s.vertices, 2 );
-      var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
-      var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
-      for ( var i = 0 ; i < s.vertices.length ; i++ ) {
-        var z = s.vertices[i][2];
-        if ( z < zMin ) z = zMin;
-        if ( z > zMax ) z = zMax;
-        var w = ( z - zMin ) / ( zMax - zMin );
-        s.options.colors.push( f(w) );
+
+      if ( typeof s.options.colormap === 'string' ) {
+        var f = colormap( s.options.colormap, s.options.reverseColormap );
+        var zMinMax = minMax( s.vertices, 2 );
+        var zMin = zMinMax.min < config.zMin ? config.zMin : zMinMax.min;
+        var zMax = zMinMax.max > config.zMax ? config.zMax : zMinMax.max;
+        for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+          var z = s.vertices[i][2];
+          if ( z < zMin ) z = zMin;
+          if ( z > zMax ) z = zMax;
+          var w = ( z - zMin ) / ( zMax - zMin );
+          s.options.colors.push( f(w) );
+        }
       }
+
+      if ( typeof s.options.colormap === 'function' ) {
+        for ( var i = 0 ; i < s.vertices.length ; i++ ) {
+          var [ x, y, z ] = s.vertices[i];
+          s.options.colors.push( s.options.colormap(x,y,z) );
+        }
+      }
+
     }
+
   } );
 
   var border = config.no3DBorder ? 'none' : '1px solid black';

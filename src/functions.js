@@ -22,6 +22,8 @@ function dataReplacer( key, value ) {
   if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
+  if ( typeof value === 'function' ) return 'function: ' + value;
+
   return value;
 
 }
@@ -31,6 +33,9 @@ function dataReviver( key, value ) {
   if ( value === 'Infinity' ) return numericInfinity;
   if ( value === '-Infinity' ) return -numericInfinity;
   if ( value === 'NaN' ) return NaN;
+
+  if ( typeof value === 'string' && value.indexOf('function: ') === 0 )
+    return Function( 'return ' + value.substring(10) )();
 
   return value;
 

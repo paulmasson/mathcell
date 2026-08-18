@@ -93,8 +93,7 @@ function parametric( vector, xRange, yRange, options={} ) {
     vector = (x,y) => [ x, y, f(x,y) ];
   }
 
-  var vertices = [];
-  if ( 'colormap' in options ) options.colors = [];
+  var vertices = [], colors = [];
 
   for ( var i = 0 ; i <= stacks ; i++ ) {
     var y = yRange[0] + i * yStep;
@@ -120,14 +119,13 @@ function parametric( vector, xRange, yRange, options={} ) {
         }
       } else vertices.push( v );
 
-      if ( 'colormap' in options ) {
-        if ( options.colormap === 'complexArgument' )
-          options.colors.push( colorFromArg( v[2] ) );
-        if ( typeof( options.colormap ) === 'function' )
-          options.colors.push( options.colormap(x,y) );
-      }
+      if ( 'colormap' in options && options.colormap === 'complexArgument' )
+        colors.push( colorFromArg( v[2] ) );
+
     }
   }
+
+  if ( colors.length > 0 ) options.colors = colors;
 
   var faces = [], unused = [];
   var count = slices + 1;

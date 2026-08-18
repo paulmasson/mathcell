@@ -76,21 +76,21 @@ if ( config.axesLabels ) {
 
   var offset = offsetRatio * ( yMax - yMin );
   var xm = ( xMid/a[0] ).toFixed(d);
-  if ( /^-0.?0*$/.test(xm) ) xm = xm.substring(1);
+  if ( /^-0\.?0*$/.test(xm) ) xm = xm.substring(1);
   addLabel( al[0] + '=' + xm, xMid, yMax+offset, zMin );
   addLabel( ( xMin/a[0] ).toFixed(d), xMin, yMax+offset, zMin );
   addLabel( ( xMax/a[0] ).toFixed(d), xMax, yMax+offset, zMin );
 
   var offset = offsetRatio * ( xMax - xMin );
   var ym = ( yMid/a[1] ).toFixed(d);
-  if ( /^-0.?0*$/.test(ym) ) ym = ym.substring(1);
+  if ( /^-0\.?0*$/.test(ym) ) ym = ym.substring(1);
   addLabel( al[1] + '=' + ym, xMax+offset, yMid, zMin );
   addLabel( ( yMin/a[1] ).toFixed(d), xMax+offset, yMin, zMin );
   addLabel( ( yMax/a[1] ).toFixed(d), xMax+offset, yMax, zMin );
 
   var offset = offsetRatio * ( yMax - yMin );
   var zm = ( zMid/a[2] ).toFixed(d);
-  if ( /^-0.?0*$/.test(zm) ) zm = zm.substring(1);
+  if ( /^-0\.?0*$/.test(zm) ) zm = zm.substring(1);
   addLabel( al[2] + '=' + zm, xMax, yMin-offset, zMid );
   addLabel( ( zMin/a[2] ).toFixed(d), xMax, yMin-offset, zMin );
   addLabel( ( zMax/a[2] ).toFixed(d), xMax, yMin-offset, zMax );

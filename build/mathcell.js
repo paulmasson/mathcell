@@ -469,7 +469,12 @@ function dataReplacer( key, value ) {
   if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
-  if ( typeof value === 'function' ) return 'function: ' + value;
+  if ( typeof value === 'function' ) {
+    if ( key === 'colormap' ) return `function: ${value}`;
+    if ( key === 'path' ) return `${value}`;
+    // assign unknown sources to these options as appropriate
+    throw Error( `Unknown function source '${key}' in data` );
+  }
 
   return value;
 
@@ -3303,11 +3308,9 @@ function addSurface( s ) {
   }
 
   if ( s.options.translation ) {
-    var arg = s.options.translation.argument ? s.options.translation.argument : 't';
+    var path = Function( 'return ' + s.options.translation.path )();
     var step = Number.isFinite(s.options.translation.step) ? s.options.translation.step : .05;
-    mesh.userData.translation = { 
-      path: Function( arg, 'return ' + s.options.translation.path ),
-      step: step, t: 0 };
+    mesh.userData.translation = { path: path, step: step, arg: 0 };
   }
 
   if ( 'group' in s.options ) {
@@ -3350,9 +3353,9 @@ function render() {
       child.rotateOnAxis( child.userData.rotation.axis, child.userData.rotation.angle );
 
     if ( child.userData.translation && animate ) {
-      var v = child.userData.translation.path( child.userData.translation.t );
+      var v = child.userData.translation.path( child.userData.translation.arg );
       child.position.set( v[0], v[1], v[2] );
-      child.userData.translation.t += child.userData.translation.step;
+      child.userData.translation.arg += child.userData.translation.step;
     }
 
   } );
@@ -3481,8 +3484,8 @@ function threejs( id, data, config ) {
   config = JSON.stringify( config );
   texts = JSON.stringify( texts );
   points = JSON.stringify( points );
-  lines = JSON.stringify( lines, dataReplacer );
-  surfaces = JSON.stringify( surfaces, dataReplacer );
+  lines = JSON.stringify( lines );
+  surfaces = JSON.stringify( surfaces );
 
   var html = threejsTemplate( config, texts, points, lines, surfaces );
 

@@ -22,7 +22,12 @@ function dataReplacer( key, value ) {
   if ( value === undefined ) return 'NaN';
   if ( value !== value ) return 'NaN';
 
-  if ( typeof value === 'function' ) return 'function: ' + value;
+  if ( typeof value === 'function' ) {
+    if ( key === 'colormap' ) return `function: ${value}`;
+    if ( key === 'path' ) return `${value}`;
+    // assign unknown sources to these options as appropriate
+    throw Error( `Unknown function source '${key}' in data` );
+  }
 
   return value;
 

@@ -12,22 +12,22 @@
 <p>The situation with three-dimensional graphics is quite the opposite, since there is already significant overhead in initially loading scenes with current rendering options. The following animation options and suboptions are available for individual objects with the Three.js renderer:</p>
 
 <table style="width: 5.5in; margin-left: 1in"><tr><td>
-<code>rotation</code></td><td><code>axis</code></td><td>three-dimensional array of normal vector
+<code>rotation</code></td><td style="width: .5in">
+  <code>axis</code></td><td>three-dimensional array of normal vector
 </td></tr><tr><td/><td>
   <code>angle</code></td><td>number setting rotation rate
 </td></tr></table>
 
-<br/><table style="width: 5.5in; margin-left: 1in"><tr><td>
-<code>translation</code></td><td><code>path</code></td><td>string of three-dimensional array of functions
+<br/><table style="width: 5.5in; margin-left: .75in"><tr><td>
+<code>translation</code></td><td style="width: .5in">
+  <code>path</code></td><td>vector function or its string representation
 </td></tr><tr><td/><td>
   <code>step</code></td><td>number setting translation rate
-</td></tr><tr><td/><td>
-  <code>argument</code></td><td>defaults to 't'
 </td></tr></table>
 
 <p>Suboptions are input as JavaScript dictionaries under the given option.</p>
 
-<p>The vector determining the translation <code>path</code> must be entered as a string because JSON cannot process functions. The <code>argument</code> suboption can be used to specify a variable other than time.</p>
+<p>The vector determining the translation <code>path</code> can be entered either as a function of arbitrary argument or a string containing the function definition. The latter is useful for including dynamic constants via template strings.</p>
 
 <p>Functions that are not part of standard JavaScript can be included with this command after <code>evaluate()</code> in the cell template:</p>
 

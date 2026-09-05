@@ -32,8 +32,8 @@ parent.update = function( id ) {
 
   var a = 5;
 
-  var path = `[ ${a} * ( cos( findRoot( u => t-u+${e}*sin(u), t ) ) - ${e} ),
-                ${a} * sqrt(${1-e**2}) * sin( findRoot( u => t-u+${e}*sin(u), t ) ), 0 ]`;
+  var path = `t => [ ${a} * ( cos( findRoot( u => t-u+${e}*sin(u), t ) ) - ${e} ),
+                     ${a} * sqrt(1-${e}**2) * sin( findRoot( u => t-u+${e}*sin(u), t ) ), 0 ]`;
 
   var data = [ sphere( .1, { translation: { path: path }, color: 'cyan' } ),
                sphere( .5, { center: [0,0,0], color: 'yellow' } ) ];

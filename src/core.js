@@ -117,7 +117,10 @@ ${t}
 
 function interact( id, input ) {
 
+  id = String( id ).replace( /[^A-Za-z0-9_]/g, '' ); // restrict to safe identifier chars
+
   var name = 'name' in input ? input.name : '';
+  name = String( name ).replace( /[^A-Za-z0-9_]/g, '' ); // restrict to safe identifier chars
 
   switch ( input.type ) {
 

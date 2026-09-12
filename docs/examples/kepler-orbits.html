@@ -50,7 +50,7 @@ parent.update = function( id ) {
 
   evaluate( id, data, config );
 
-  injectFunctions( id, { cos: cos, sin: sin, sqrt: sqrt, findRoot: findRoot } );
+  injectFunctions( id, [ cos, sin, sqrt, findRoot ] );
 
 }
 

@@ -435,7 +435,7 @@ function evaluate( id, data, config ) {
 function injectFunctions( id, functions, n='' ) {
 
   function setFunctions() {
-    Object.keys( functions ).forEach( k => cw[k] = functions[k] );
+    functions.forEach( f => cw[f.name] = f );
   }
 
   var output = document.getElementById( id + 'output' + n );

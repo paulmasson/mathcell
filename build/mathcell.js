@@ -435,7 +435,10 @@ function evaluate( id, data, config ) {
 function injectFunctions( id, functions, n='' ) {
 
   function setFunctions() {
-    functions.forEach( f => cw[f.name] = f );
+    if ( typeof functions[0] === 'function' )
+      functions.forEach( f => cw[f.name] = f );
+    else
+      Object.keys( functions ).forEach( k => cw[k] = functions[k] );
   }
 
   var output = document.getElementById( id + 'output' + n );

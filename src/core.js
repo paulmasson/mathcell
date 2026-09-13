@@ -387,7 +387,6 @@ function evaluate( id, data, config ) {
 
     var output = outputs[0];
     output.innerHTML = graphic( id, data, config );
-    if ( config.type === 'threejs' ) iOSFix( output );
 
   } else {
 
@@ -401,7 +400,6 @@ function evaluate( id, data, config ) {
       c.no3DBorder = true;
 
       output.innerHTML = graphic( id, data[i], c );
-      if ( c.type === 'threejs' ) iOSFix( output );
 
       if ( c.type === 'svg' ) {
         var svg = output.children[0];
@@ -414,17 +412,6 @@ function evaluate( id, data, config ) {
         output.style.verticalAlign = 'text-bottom';
       }
 
-    }
-
-  }
-
-  function iOSFix( output ) {
-
-    var iframe = output.children[0];
-
-    if ( /(iPad|iPhone|iPod)/g.test( navigator.userAgent ) ) {
-      iframe.style.width = getComputedStyle( iframe ).width;
-      iframe.style.height = getComputedStyle( iframe ).height;
     }
 
   }

@@ -29,12 +29,13 @@
 
 <p>The vector determining the translation <code>path</code> can be entered either as a function of arbitrary argument or a string containing the function definition. The latter is useful for including dynamic constants via template strings.</p>
 
-<p>Functions that are not part of standard JavaScript can be included with this command after <code>evaluate()</code> in the cell template:</p>
+<p>Functions that are not part of standard JavaScript can be included with either form of this command after <code>evaluate()</code> in the cell template:</p>
 
-<p style="text-align: center">
-<code>injectFunctions( id, [ function1, function2, &hellip; ] )</code></p>
+<p style="margin-left: .5in">
+<code>injectFunctions( id, [ function1, function2, &hellip; ] )<br/><br/>
+injectFunctions( id, { name1: function1, name2: function2, &hellip; } )</code></p>
 
-<p>Only functions explicitly called need to be included: JavaScript automatically handles internal dependencies. For multiple outputs a third argument can specify the number of the target output.</p>
+<p>Only functions explicitly called need to be included: JavaScript automatically handles internal dependencies. The second form must be used when injecting arrays of functions, since JavaScript does not have names for objects and these need to be stated explicitly. For multiple outputs a third argument can specify the number of the target output.</p>
 
 <p>Animations are initiated by setting <code>animate</code> equal to <code>true</code> in the output configuration. Animations by default pause for five seconds when the user interacts with the scene, but this can be overridden by setting <code>animateOnInteraction</code> to <code>true</code>.</p>
 

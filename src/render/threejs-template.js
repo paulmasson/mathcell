@@ -40,6 +40,17 @@ if ( xMin === xMax ) { xMin -= 1; xMax += 1; }
 if ( yMin === yMax ) { yMin -= 1; yMax += 1; }
 if ( zMin === zMax ) { zMin -= 1; zMax += 1; }
 
+if ( config.equalLimits ) {
+
+  var min = Math.min( xMin, yMin, zMin );
+  xMin = yMin = zMin = min;
+
+  var max = Math.max( xMax, yMax, zMax );
+  xMax = yMax = zMax = max;
+
+}
+
+
 // apply aspect multipliers for convenience
 xMin *= a[0]; yMin *= a[1]; zMin *= a[2];
 xMax *= a[0]; yMax *= a[1]; zMax *= a[2];

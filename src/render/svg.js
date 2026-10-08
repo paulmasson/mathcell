@@ -82,11 +82,11 @@ function svg( id, data, config ) {
 
   if ( config.equalLimits ) {
 
-    if ( xMin < yMin ) yMin = xMin;
-    else xMin = yMin;
+    var min = Math.min( xMin, yMin );
+    xMin = yMin = min;
 
-    if ( xMax > yMax ) yMax = xMax;
-    else xMax = yMax;
+    var max = Math.max( xMax, yMax );
+    xMax = yMax = max;
 
   }
 

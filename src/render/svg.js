@@ -123,7 +123,7 @@ function svg( id, data, config ) {
   var ySig = significant( ticks[1] );
 
   // size of largest y-axis tick label
-  var yNumSize = 10 * Math.max( roundTo( yMin, yTickDecimals, ySig ).toString().length,
+  var yNumSize = 12 * Math.max( roundTo( yMin, yTickDecimals, ySig ).toString().length,
                                 roundTo( yMax, yTickDecimals, ySig ).toString().length,
                                 roundTo( 3*ticks[1], yTickDecimals, ySig ).toString().length  );
 

@@ -813,6 +813,22 @@ mathcellStyle.innerHTML = `
 
 }
 
+button {
+
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(250,250,250);
+
+}
+
+select {
+
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(250,250,250);
+
+}
+
 input[type=text] {
 
   -webkit-appearance: none;

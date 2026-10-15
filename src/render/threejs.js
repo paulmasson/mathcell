@@ -23,7 +23,7 @@ function threejs( id, data, config ) {
   var n = 'output' in config ? config.output : '';
   var output = document.getElementById( id + 'output' + n );
 
-  if ( output.children[0] ) {
+  if ( output.children[0] && !config.viewpointReset ) {
 
     var cw = output.children[0].contentWindow;
     var v = cw.camera.position;

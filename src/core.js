@@ -344,18 +344,18 @@ function getVariable( id, name ) {
 
     switch ( input.type ) {
 
-    case 'number':
-    case 'range':
+      case 'number':
+      case 'range':
 
-      return +input.value;
+        return +input.value;
 
-    case 'checkbox':
+      case 'checkbox':
 
-      return input.checked;
+        return input.checked;
 
-    case 'text':
+      case 'text':
 
-      return input.value;
+        return input.value;
 
     }
 

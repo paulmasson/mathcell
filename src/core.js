@@ -206,19 +206,22 @@ function interact( id, input ) {
 
     case 'iterator':
 
-      var value = 'default' in input ? input.default : 0;
+      var value = 'start' in input ? input.start : 0;
+      var step = 'step' in input ? input.step : 1;
 
       var width = '.75in', last = '';
 
       if ( input.reversible )
         last = `
-<button onclick="${id + name}.innerHTML--;window.id='${id}';${id}.update('${id}')"
+<button onclick="${id + name}.innerHTML-=${step};window.id='${id}';${id}.update('${id}')"
     style="width: ${width}">Last</button>`;
+
+      // concatenation takes precedence with +=, hence -=(-step)
 
       return `
 <div id=${id + name}
     style="display: inline-block; width: .5in; text-align: left">${value}</div> ${last}
-<button onclick="${id + name}.innerHTML++;window.id='${id}';${id}.update('${id}')"
+<button onclick="${id + name}.innerHTML-=${-step};window.id='${id}';${id}.update('${id}')"
     style="width: ${width}">Next</button>
 <button onclick="${id + name}.innerHTML=${value};window.id='${id}';${id}.update('${id}')"
     style="width: ${width}">Reset</button>`;

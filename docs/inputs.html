@@ -14,6 +14,7 @@
 <code>buttons</code><br>
 <code>number</code></td><td>
 <code>checkbox</code><br>
+<code>list</code><br>
 <code>text</code></td><td>
 <code>iterator</code><br>
 <code>action</code><br>
@@ -35,14 +36,14 @@
 <table style="width: 2in; margin-left: 2in"><tr><td>
   <code>min</code></td><td>0
 </td></tr><tr><td>
-  <code>max</code></td><td>1<br/>
+  <code>max</code></td><td>1<br>
 </td></tr><tr><td>
-  <code>step</code></td><td>.01<br/>
+  <code>step</code></td><td>.01<br>
 </td></tr><tr><td>
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
 
-<br/><p>A <code>buttons</code> input has four additional options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
+<br><p>A <code>buttons</code> input has four options: an array of numbers or strings, an optional array of string labels, a value in the first array and a CSS string with default values</p>
 
 <table style="width: 2.5in; margin-left: 2in"><tr><td>
   <code>values</code></td><td>[1,2,3]
@@ -51,7 +52,7 @@
 </td></tr><tr><td>
   <code>default</code></td><td><code>values[0]</code>
 </td></tr><tr><td>
-  <code>width</code></td><td>empty
+  <code>width</code></td><td>none
 </td></tr></table>
 
 <br><p>A <code>number</code> input has four numeric options with default values</p>
@@ -59,9 +60,9 @@
 <table style="width: 2in; margin-left: 2in"><tr><td>
   <code>min</code></td><td>0
 </td></tr><tr><td>
-  <code>max</code></td><td>1<br/>
+  <code>max</code></td><td>1<br>
 </td></tr><tr><td>
-  <code>step</code></td><td>.01<br/>
+  <code>step</code></td><td>.01<br>
 </td></tr><tr><td>
   <code>default</code></td><td><code>min</code>
 </td></tr></table>
@@ -73,22 +74,34 @@
 
 <p>where <code>end</code> is either <code>'min'</code> or <code>'max'</code>. This can be used to avoid invalid numerical input.</p>
 
-<br><p>A <code>checkbox</code> input has a single additional option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked.</p>
+<br><p>A <code>checkbox</code> input has a single option <code>default</code>, which can be set to either <code>'checked'</code> or <code>true</code> to have the box initially checked.</p>
 
-<p>A <code>text</code> input has two additional options: an initial string and a CSS string with the default values</p>
+<br><p>A <code>list</code> input has three options: an array of strings, a value in the first array and a CSS string with default values</p>
+
+<table style="width: 2.75in; margin-left: 2in"><tr><td>
+  <code>values</code></td><td>['One','Two','Three']
+</td></tr><tr><td>
+  <code>default</code></td><td><code>values[0]</code>
+</td></tr><tr><td>
+  <code>width</code></td><td>none
+</td></tr></table>
+
+<br><p>A <code>text</code> input has two options: an initial string and a CSS string with the default values</p>
 
 <table style="width: 2.5in; margin-left: 2in"><tr><td>
-  <code>default</code></td><td>empty
+  <code>default</code></td><td>none
 </td></tr><tr><td>
   <code>width</code></td><td>automatic
 </td></tr></table>
 
-<p>An <code>iterator</code> input allows one to step forward or backward numerically, and has two additional options width default values</p>
+<br><p>An <code>iterator</code> input allows one to step forward or backward numerically, and has three options width default values</p>
 
 <table style="width: 2.5in; margin-left: 1.75in"><tr><td>
-  <code>default</code></td><td>0
+  <code>start</code></td><td>0
 </td></tr><tr><td>
-  <code>reversible</code></td><td>false
+  <code>step</code></td><td>1
+</td></tr><tr><td>
+  <code>reversible</code></td><td><code>false</code>
 </td></tr></table>
 
 <br><p>An <code>action</code> input is a button that triggers a behavior. Its <code>label</code> is any valid HTML but is not italicized by default. The type of action is set by a <code>subtype</code> option and a corresponding <code>script</code> string. Currently there is one such <code>subtype</code>:</p>

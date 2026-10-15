@@ -176,6 +176,24 @@ function interact( id, input ) {
 <input id=${id + name} type=checkbox ${ checked ? 'checked' : '' }
        onchange="window.id='${id}';${id}.update('${id}')"/>`;
 
+    case 'list':
+
+      var values = 'values' in input ? input.values : ['One','Two','Three'];
+      var select = 'default' in input ? input.default : '';
+
+      var style = input.width ? 'style="width: ' + input.width + '"' : '';
+
+      var s = `
+<select id=${id + name} ${style}
+       onchange="window.id='${id}';${id}.update('${id}')"/>`;
+
+      for ( var i = 0 ; i < values.length ; i++ )
+        s += `
+<option value=${values[i]} ${ values[i] === select ? 'selected' : '' }> ${values[i]} </option>`;
+
+      return s +=`
+</select>`;
+
     case 'text':
 
       var value = 'default' in input ? input.default : '';
@@ -318,7 +336,11 @@ function getVariable( id, name ) {
 
   if ( input ) {
 
-    if ( input.innerHTML ) return +input.innerHTML; // iterator
+    if ( input.innerHTML ) {
+      if ( !isNaN( input.innerHTML ) )  // iterator
+        return +input.innerHTML;
+      return input.value;               // list
+    }
 
     switch ( input.type ) {
 

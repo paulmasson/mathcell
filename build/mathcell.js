@@ -823,6 +823,7 @@ button {
 
 select {
 
+  -webkit-appearanace: none;
   border: 1px solid black;
   border-radius: 5px;
   background-color: rgb(250,250,250);

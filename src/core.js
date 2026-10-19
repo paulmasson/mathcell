@@ -189,7 +189,7 @@ function interact( id, input ) {
 
       for ( var i = 0 ; i < values.length ; i++ )
         s += `
-<option value=${values[i]} ${ values[i] === select ? 'selected' : '' }> ${values[i]} </option>`;
+<option value="${values[i]}" ${ values[i] === select ? 'selected' : '' }> ${values[i]} </option>`;
 
       return s +=`
 </select>`;

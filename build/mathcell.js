@@ -3061,6 +3061,13 @@ var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHe
                                           config.cameraFar ? config.cameraFar : 1000 );
 camera.up.set( 0, 0, 1 );
 
+// simpler than OrthographicCamera
+if ( config.orthographicView ) {
+  camera.fov /= 100;
+  camera.far *= 100;
+  camera.updateProjectionMatrix();
+}
+
 // default auto position, followed by rotation to viewpoint direction
 camera.position.set( xMid, yMid, zMid );
 var defaultOffset = new THREE.Vector3( xRange, yRange, zRange );
@@ -3072,6 +3079,8 @@ if ( config.viewpoint !== 'auto' ) {
   var n = t.cross( defaultOffset ).normalize();
   defaultOffset.applyAxisAngle( n, -phi );
 }
+
+if ( config.orthographicView ) defaultOffset.multiplyScalar( 75 );
 
 camera.position.add( defaultOffset );
 scene.add( camera );
